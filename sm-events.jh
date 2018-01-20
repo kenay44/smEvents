@@ -1,0 +1,80 @@
+entity Event {
+	title String required,
+    startDate ZonedDateTime required,
+    endDate ZonedDateTime required,
+    location String required,
+    maxParticipants Integer,
+    description String,
+    hours Integer   
+}
+
+entity Person {
+	personType PersonType,
+	firstName String,
+    lastName String,
+  	phone String,
+    sex Sex,
+	tShirtSize String,
+    birthYear Integer,
+    info String
+}
+// child, parent and cadre extend from person
+entity Participant {
+	role Task,
+    participantType ParticipantType,
+    signedDate ZonedDateTime,
+    founding BigDecimal,
+    payed BigDecimal
+}
+
+entity Family {
+	name String required
+}
+
+entity EMail {
+	emailType EmailType,
+    status EMailStatus
+}
+
+enum Task {
+    COMANDOR, OFFICER, ROOK
+}
+
+enum PersonType {
+	USER, CADRE, CHILD
+}
+
+enum ParticipantType {
+	PRIMARY, RESERVE
+}
+
+enum EmailType {
+	PARTICIPANT_ADDED
+}
+
+enum EMailStatus {
+	PREPARED, SENT
+}
+
+enum Sex {
+	MALE, FEMALE
+}
+
+// defining multiple OneToMany relationships with comments
+relationship OneToMany {
+	Family to Person{family},
+    Person to Participant{person required},
+    Event to Participant{event required},
+    Event to EMail{event},
+	Person to EMail{person required}
+}
+
+// Set pagination options
+paginate Event, Person, Participant, Family with infinite-scroll
+
+dto * with mapstruct
+
+// Set service options to all except few
+service all with serviceImpl 
+// Set an angular suffix
+angularSuffix * with smEvent
