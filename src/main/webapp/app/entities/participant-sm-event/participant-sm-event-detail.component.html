@@ -1,0 +1,54 @@
+
+<div *ngIf="participant">
+    <h2><span jhiTranslate="smEventsApp.participant.detail.title">Participant</span> {{participant.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="smEventsApp.participant.role">Role</span></dt>
+        <dd>
+            <span jhiTranslate="{{'smEventsApp.Task.' + participant.role}}">{{participant.role}}</span>
+        </dd>
+        <dt><span jhiTranslate="smEventsApp.participant.participantType">Participant Type</span></dt>
+        <dd>
+            <span jhiTranslate="{{'smEventsApp.ParticipantType.' + participant.participantType}}">{{participant.participantType}}</span>
+        </dd>
+        <dt><span jhiTranslate="smEventsApp.participant.signedDate">Signed Date</span></dt>
+        <dd>
+            <span>{{participant.signedDate | date:'medium'}}</span>
+        </dd>
+        <dt><span jhiTranslate="smEventsApp.participant.founding">Founding</span></dt>
+        <dd>
+            <span>{{participant.founding}}</span>
+        </dd>
+        <dt><span jhiTranslate="smEventsApp.participant.payed">Payed</span></dt>
+        <dd>
+            <span>{{participant.payed}}</span>
+        </dd>
+        <dt><span jhiTranslate="smEventsApp.participant.person">Person</span></dt>
+        <dd>
+            <div *ngIf="participant.personId">
+                <a [routerLink]="['/person-sm-event', participant.personId]">{{participant.personId}}</a>
+            </div>
+        </dd>
+        <dt><span jhiTranslate="smEventsApp.participant.event">Event</span></dt>
+        <dd>
+            <div *ngIf="participant.eventId">
+                <a [routerLink]="['/event-sm-event', participant.eventId]">{{participant.eventId}}</a>
+            </div>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'participant-sm-event/'+ participant.id + '/edit'} }]"
+            replaceUrl="true"
+            queryParamsHandling="merge"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+    </button>
+</div>

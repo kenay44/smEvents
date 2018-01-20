@@ -1,0 +1,8 @@
+{
+    "smEventsApp": {
+        "EmailType" : {
+            "null": "",
+            "PARTICIPANT_ADDED": "PARTICIPANT_ADDED"
+        }
+    }
+}

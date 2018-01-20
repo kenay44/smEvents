@@ -1,0 +1,22 @@
+{
+    "smEventsApp": {
+        "family" : {
+            "home": {
+                "title": "Families",
+                "createLabel": "Dodaj Family",
+                "createOrEditLabel": "Dodaj lub edytuj: Family"
+            },
+            "created": "Utworzono nowy Family z identyfikatorem {{ param }}",
+            "updated": "Uaktualniono Family z identyfikatorem {{ param }}",
+            "deleted": "Usunięto Family z identyfikatorem {{ param }}",
+            "delete": {
+                "question": "Czy na pewno chcesz usunąć Family {{ id }}?"
+            },
+            "detail": {
+                "title": "Family"
+            },
+            "name": "Name",
+            "person": "Person"
+        }
+    }
+}

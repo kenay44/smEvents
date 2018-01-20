@@ -1,0 +1,9 @@
+{
+    "smEventsApp": {
+        "EMailStatus" : {
+            "null": "",
+            "PREPARED": "PREPARED",
+            "SENT": "SENT"
+        }
+    }
+}

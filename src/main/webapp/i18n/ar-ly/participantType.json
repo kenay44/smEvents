@@ -1,0 +1,9 @@
+{
+    "smEventsApp": {
+        "ParticipantType" : {
+            "null": "",
+            "PRIMARY": "PRIMARY",
+            "RESERVE": "RESERVE"
+        }
+    }
+}

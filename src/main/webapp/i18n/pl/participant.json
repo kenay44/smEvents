@@ -1,0 +1,27 @@
+{
+    "smEventsApp": {
+        "participant" : {
+            "home": {
+                "title": "Participants",
+                "createLabel": "Dodaj Participant",
+                "createOrEditLabel": "Dodaj lub edytuj: Participant"
+            },
+            "created": "Utworzono nowy Participant z identyfikatorem {{ param }}",
+            "updated": "Uaktualniono Participant z identyfikatorem {{ param }}",
+            "deleted": "Usunięto Participant z identyfikatorem {{ param }}",
+            "delete": {
+                "question": "Czy na pewno chcesz usunąć Participant {{ id }}?"
+            },
+            "detail": {
+                "title": "Participant"
+            },
+            "role": "Role",
+            "participantType": "Participant Type",
+            "signedDate": "Signed Date",
+            "founding": "Founding",
+            "payed": "Payed",
+            "person": "Person",
+            "event": "Event"
+        }
+    }
+}

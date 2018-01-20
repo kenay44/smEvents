@@ -43,6 +43,16 @@ public class CacheConfiguration {
             cm.createCache(org.sm.events.domain.Authority.class.getName(), jcacheConfiguration);
             cm.createCache(org.sm.events.domain.User.class.getName() + ".authorities", jcacheConfiguration);
             cm.createCache(org.sm.events.domain.SocialUserConnection.class.getName(), jcacheConfiguration);
+            cm.createCache(org.sm.events.domain.Event.class.getName(), jcacheConfiguration);
+            cm.createCache(org.sm.events.domain.Event.class.getName() + ".participants", jcacheConfiguration);
+            cm.createCache(org.sm.events.domain.Event.class.getName() + ".eMails", jcacheConfiguration);
+            cm.createCache(org.sm.events.domain.Person.class.getName(), jcacheConfiguration);
+            cm.createCache(org.sm.events.domain.Person.class.getName() + ".participants", jcacheConfiguration);
+            cm.createCache(org.sm.events.domain.Person.class.getName() + ".eMails", jcacheConfiguration);
+            cm.createCache(org.sm.events.domain.Participant.class.getName(), jcacheConfiguration);
+            cm.createCache(org.sm.events.domain.Family.class.getName(), jcacheConfiguration);
+            cm.createCache(org.sm.events.domain.Family.class.getName() + ".people", jcacheConfiguration);
+            cm.createCache(org.sm.events.domain.EMail.class.getName(), jcacheConfiguration);
             // jhipster-needle-ehcache-add-entry
         };
     }
