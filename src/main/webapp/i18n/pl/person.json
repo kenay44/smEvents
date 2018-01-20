@@ -1,0 +1,31 @@
+{
+    "smEventsApp": {
+        "person" : {
+            "home": {
+                "title": "People",
+                "createLabel": "Dodaj Person",
+                "createOrEditLabel": "Dodaj lub edytuj: Person"
+            },
+            "created": "Utworzono nowy Person z identyfikatorem {{ param }}",
+            "updated": "Uaktualniono Person z identyfikatorem {{ param }}",
+            "deleted": "Usunięto Person z identyfikatorem {{ param }}",
+            "delete": {
+                "question": "Czy na pewno chcesz usunąć Person {{ id }}?"
+            },
+            "detail": {
+                "title": "Person"
+            },
+            "personType": "Person Type",
+            "firstName": "First Name",
+            "lastName": "Last Name",
+            "phone": "Phone",
+            "sex": "Sex",
+            "tShirtSize": "T Shirt Size",
+            "birthYear": "Birth Year",
+            "info": "Info",
+            "participant": "Participant",
+            "eMail": "E Mail",
+            "family": "Family"
+        }
+    }
+}

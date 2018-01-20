@@ -1,0 +1,77 @@
+<form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+
+    <div class="modal-header">
+        <h4 class="modal-title" id="myPersonLabel" jhiTranslate="smEventsApp.person.home.createOrEditLabel">Create or edit a Person</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                (click)="clear()">&times;</button>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" [hidden]="!person.id">
+            <label for="id" jhiTranslate="global.field.id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                   [(ngModel)]="person.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="smEventsApp.person.personType" for="field_personType">Person Type</label>
+            <select class="form-control" name="personType" [(ngModel)]="person.personType" id="field_personType" >
+                <option value="USER">{{'smEventsApp.PersonType.USER' | translate}}</option>
+                <option value="CADRE">{{'smEventsApp.PersonType.CADRE' | translate}}</option>
+                <option value="CHILD">{{'smEventsApp.PersonType.CHILD' | translate}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="smEventsApp.person.firstName" for="field_firstName">First Name</label>
+            <input type="text" class="form-control" name="firstName" id="field_firstName"
+                [(ngModel)]="person.firstName" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="smEventsApp.person.lastName" for="field_lastName">Last Name</label>
+            <input type="text" class="form-control" name="lastName" id="field_lastName"
+                [(ngModel)]="person.lastName" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="smEventsApp.person.phone" for="field_phone">Phone</label>
+            <input type="text" class="form-control" name="phone" id="field_phone"
+                [(ngModel)]="person.phone" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="smEventsApp.person.sex" for="field_sex">Sex</label>
+            <select class="form-control" name="sex" [(ngModel)]="person.sex" id="field_sex" >
+                <option value="MALE">{{'smEventsApp.Sex.MALE' | translate}}</option>
+                <option value="FEMALE">{{'smEventsApp.Sex.FEMALE' | translate}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="smEventsApp.person.tShirtSize" for="field_tShirtSize">T Shirt Size</label>
+            <input type="text" class="form-control" name="tShirtSize" id="field_tShirtSize"
+                [(ngModel)]="person.tShirtSize" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="smEventsApp.person.birthYear" for="field_birthYear">Birth Year</label>
+            <input type="number" class="form-control" name="birthYear" id="field_birthYear"
+                [(ngModel)]="person.birthYear" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="smEventsApp.person.info" for="field_info">Info</label>
+            <input type="text" class="form-control" name="info" id="field_info"
+                [(ngModel)]="person.info" />
+        </div>
+
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="smEventsApp.person.family" for="field_family">Family</label>
+            <select class="form-control" id="field_family" name="family" [(ngModel)]="person.familyId" >
+                <option [ngValue]="null"></option>
+                <option [ngValue]="familyOption.id" *ngFor="let familyOption of families; trackBy: trackFamilyById">{{familyOption.id}}</option>
+            </select>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">
+            <span class="fa fa-ban"></span>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+        <button type="submit" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+            <span class="fa fa-save"></span>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+    </div>
+</form>

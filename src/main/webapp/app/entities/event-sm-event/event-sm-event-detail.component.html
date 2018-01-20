@@ -1,0 +1,50 @@
+
+<div *ngIf="event">
+    <h2><span jhiTranslate="smEventsApp.event.detail.title">Event</span> {{event.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="smEventsApp.event.title">Title</span></dt>
+        <dd>
+            <span>{{event.title}}</span>
+        </dd>
+        <dt><span jhiTranslate="smEventsApp.event.startDate">Start Date</span></dt>
+        <dd>
+            <span>{{event.startDate | date:'medium'}}</span>
+        </dd>
+        <dt><span jhiTranslate="smEventsApp.event.endDate">End Date</span></dt>
+        <dd>
+            <span>{{event.endDate | date:'medium'}}</span>
+        </dd>
+        <dt><span jhiTranslate="smEventsApp.event.location">Location</span></dt>
+        <dd>
+            <span>{{event.location}}</span>
+        </dd>
+        <dt><span jhiTranslate="smEventsApp.event.maxParticipants">Max Participants</span></dt>
+        <dd>
+            <span>{{event.maxParticipants}}</span>
+        </dd>
+        <dt><span jhiTranslate="smEventsApp.event.description">Description</span></dt>
+        <dd>
+            <span>{{event.description}}</span>
+        </dd>
+        <dt><span jhiTranslate="smEventsApp.event.hours">Hours</span></dt>
+        <dd>
+            <span>{{event.hours}}</span>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'event-sm-event/'+ event.id + '/edit'} }]"
+            replaceUrl="true"
+            queryParamsHandling="merge"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+    </button>
+</div>

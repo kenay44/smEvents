@@ -1,0 +1,83 @@
+<form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+
+    <div class="modal-header">
+        <h4 class="modal-title" id="myParticipantLabel" jhiTranslate="smEventsApp.participant.home.createOrEditLabel">Create or edit a Participant</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                (click)="clear()">&times;</button>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" [hidden]="!participant.id">
+            <label for="id" jhiTranslate="global.field.id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                   [(ngModel)]="participant.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="smEventsApp.participant.role" for="field_role">Role</label>
+            <select class="form-control" name="role" [(ngModel)]="participant.role" id="field_role" >
+                <option value="COMANDOR">{{'smEventsApp.Task.COMANDOR' | translate}}</option>
+                <option value="OFFICER">{{'smEventsApp.Task.OFFICER' | translate}}</option>
+                <option value="ROOK">{{'smEventsApp.Task.ROOK' | translate}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="smEventsApp.participant.participantType" for="field_participantType">Participant Type</label>
+            <select class="form-control" name="participantType" [(ngModel)]="participant.participantType" id="field_participantType" >
+                <option value="PRIMARY">{{'smEventsApp.ParticipantType.PRIMARY' | translate}}</option>
+                <option value="RESERVE">{{'smEventsApp.ParticipantType.RESERVE' | translate}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="smEventsApp.participant.signedDate" for="field_signedDate">Signed Date</label>
+            <div class="d-flex">
+                <input id="field_signedDate" type="datetime-local" class="form-control" name="signedDate" [(ngModel)]="participant.signedDate"
+                />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="smEventsApp.participant.founding" for="field_founding">Founding</label>
+            <input type="number" class="form-control" name="founding" id="field_founding"
+                [(ngModel)]="participant.founding" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="smEventsApp.participant.payed" for="field_payed">Payed</label>
+            <input type="number" class="form-control" name="payed" id="field_payed"
+                [(ngModel)]="participant.payed" />
+        </div>
+
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="smEventsApp.participant.person" for="field_person">Person</label>
+            <select class="form-control" id="field_person" name="person" [(ngModel)]="participant.personId"  required>
+                <option *ngIf="!editForm.value.person" [ngValue]="null" selected></option>
+                <option [ngValue]="personOption.id" *ngFor="let personOption of people; trackBy: trackPersonById">{{personOption.id}}</option>
+            </select>
+        </div>
+        <div [hidden]="!(editForm.controls.person?.dirty && editForm.controls.person?.invalid)">
+            <small class="form-text text-danger"
+                [hidden]="!editForm.controls.person?.errors?.required" jhiTranslate="entity.validation.required">
+                This field is required.
+            </small>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="smEventsApp.participant.event" for="field_event">Event</label>
+            <select class="form-control" id="field_event" name="event" [(ngModel)]="participant.eventId"  required>
+                <option *ngIf="!editForm.value.event" [ngValue]="null" selected></option>
+                <option [ngValue]="eventOption.id" *ngFor="let eventOption of events; trackBy: trackEventById">{{eventOption.id}}</option>
+            </select>
+        </div>
+        <div [hidden]="!(editForm.controls.event?.dirty && editForm.controls.event?.invalid)">
+            <small class="form-text text-danger"
+                [hidden]="!editForm.controls.event?.errors?.required" jhiTranslate="entity.validation.required">
+                This field is required.
+            </small>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">
+            <span class="fa fa-ban"></span>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+        <button type="submit" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+            <span class="fa fa-save"></span>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+    </div>
+</form>

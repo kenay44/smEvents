@@ -1,0 +1,24 @@
+{
+    "smEventsApp": {
+        "eMail" : {
+            "home": {
+                "title": "E Mails",
+                "createLabel": "Dodaj E Mail",
+                "createOrEditLabel": "Dodaj lub edytuj: E Mail"
+            },
+            "created": "Utworzono nowy E Mail z identyfikatorem {{ param }}",
+            "updated": "Uaktualniono E Mail z identyfikatorem {{ param }}",
+            "deleted": "Usunięto E Mail z identyfikatorem {{ param }}",
+            "delete": {
+                "question": "Czy na pewno chcesz usunąć E Mail {{ id }}?"
+            },
+            "detail": {
+                "title": "E Mail"
+            },
+            "emailType": "Email Type",
+            "status": "Status",
+            "event": "Event",
+            "person": "Person"
+        }
+    }
+}

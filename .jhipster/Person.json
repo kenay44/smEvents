@@ -1,0 +1,66 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "participant",
+            "otherEntityName": "participant",
+            "otherEntityRelationshipName": "person"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "eMail",
+            "otherEntityName": "eMail",
+            "otherEntityRelationshipName": "person"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "family",
+            "otherEntityName": "family",
+            "otherEntityField": "id"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "personType",
+            "fieldType": "PersonType",
+            "fieldValues": "USER,CADRE,CHILD"
+        },
+        {
+            "fieldName": "firstName",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "lastName",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "phone",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "sex",
+            "fieldType": "Sex",
+            "fieldValues": "MALE,FEMALE"
+        },
+        {
+            "fieldName": "tShirtSize",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "birthYear",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "info",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20180120190633",
+    "entityTableName": "person",
+    "dto": "mapstruct",
+    "pagination": "infinite-scroll",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "angularJSSuffix": "smEvent"
+}

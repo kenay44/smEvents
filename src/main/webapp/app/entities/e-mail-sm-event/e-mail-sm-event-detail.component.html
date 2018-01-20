@@ -1,0 +1,42 @@
+
+<div *ngIf="eMail">
+    <h2><span jhiTranslate="smEventsApp.eMail.detail.title">E Mail</span> {{eMail.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="smEventsApp.eMail.emailType">Email Type</span></dt>
+        <dd>
+            <span jhiTranslate="{{'smEventsApp.EmailType.' + eMail.emailType}}">{{eMail.emailType}}</span>
+        </dd>
+        <dt><span jhiTranslate="smEventsApp.eMail.status">Status</span></dt>
+        <dd>
+            <span jhiTranslate="{{'smEventsApp.EMailStatus.' + eMail.status}}">{{eMail.status}}</span>
+        </dd>
+        <dt><span jhiTranslate="smEventsApp.eMail.event">Event</span></dt>
+        <dd>
+            <div *ngIf="eMail.eventId">
+                <a [routerLink]="['/event-sm-event', eMail.eventId]">{{eMail.eventId}}</a>
+            </div>
+        </dd>
+        <dt><span jhiTranslate="smEventsApp.eMail.person">Person</span></dt>
+        <dd>
+            <div *ngIf="eMail.personId">
+                <a [routerLink]="['/person-sm-event', eMail.personId]">{{eMail.personId}}</a>
+            </div>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'e-mail-sm-event/'+ eMail.id + '/edit'} }]"
+            replaceUrl="true"
+            queryParamsHandling="merge"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+    </button>
+</div>

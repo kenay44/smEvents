@@ -1,0 +1,50 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": "required",
+            "relationshipName": "person",
+            "otherEntityName": "person",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": "required",
+            "relationshipName": "event",
+            "otherEntityName": "event",
+            "otherEntityField": "id"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "role",
+            "fieldType": "Task",
+            "fieldValues": "COMANDOR,OFFICER,ROOK"
+        },
+        {
+            "fieldName": "participantType",
+            "fieldType": "ParticipantType",
+            "fieldValues": "PRIMARY,RESERVE"
+        },
+        {
+            "fieldName": "signedDate",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "founding",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "payed",
+            "fieldType": "BigDecimal"
+        }
+    ],
+    "changelogDate": "20180120190634",
+    "entityTableName": "participant",
+    "dto": "mapstruct",
+    "pagination": "infinite-scroll",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "angularJSSuffix": "smEvent"
+}

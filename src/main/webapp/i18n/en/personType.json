@@ -1,0 +1,10 @@
+{
+    "smEventsApp": {
+        "PersonType" : {
+            "null": "",
+            "USER": "USER",
+            "CADRE": "CADRE",
+            "CHILD": "CHILD"
+        }
+    }
+}

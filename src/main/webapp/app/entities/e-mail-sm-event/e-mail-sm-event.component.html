@@ -1,0 +1,72 @@
+<div>
+    <h2>
+        <span jhiTranslate="smEventsApp.eMail.home.title">E Mails</span>
+        <button class="btn btn-primary float-right jh-create-entity create-e-mail-sm-event" [routerLink]="['/', { outlets: { popup: ['e-mail-sm-event-new'] } }]">
+            <span class="fa fa-plus"></span>
+            <span  jhiTranslate="smEventsApp.eMail.home.createLabel">
+            Create new E Mail
+            </span>
+        </button>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <div class="row">
+    </div>
+    <br/>
+    <div class="table-responsive" *ngIf="eMails">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+            <th><span jhiTranslate="global.field.id">ID</span></th>
+            <th><span jhiTranslate="smEventsApp.eMail.emailType">Email Type</span></th>
+            <th><span jhiTranslate="smEventsApp.eMail.status">Status</span></th>
+            <th><span jhiTranslate="smEventsApp.eMail.event">Event</span></th>
+            <th><span jhiTranslate="smEventsApp.eMail.person">Person</span></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let eMail of eMails ;trackBy: trackId">
+                <td><a [routerLink]="['../e-mail-sm-event', eMail.id ]">{{eMail.id}}</a></td>
+                <td jhiTranslate="{{'smEventsApp.EmailType.' + eMail.emailType}}">{{eMail.emailType}}</td>
+                <td jhiTranslate="{{'smEventsApp.EMailStatus.' + eMail.status}}">{{eMail.status}}</td>
+                <td>
+                    <div *ngIf="eMail.eventId">
+                        <a [routerLink]="['../event-sm-event', eMail.eventId  ]" >{{eMail.eventId}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="eMail.personId">
+                        <a [routerLink]="['../person-sm-event', eMail.personId  ]" >{{eMail.personId}}</a>
+                    </div>
+                </td>
+                <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                                [routerLink]="['../e-mail-sm-event', eMail.id ]"
+                                class="btn btn-info btn-sm">
+                            <span class="fa fa-eye"></span>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'e-mail-sm-event/'+ eMail.id + '/edit'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-primary btn-sm">
+                            <span class="fa fa-pencil"></span>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'e-mail-sm-event/'+ eMail.id + '/delete'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-danger btn-sm">
+                            <span class="fa fa-remove"></span>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

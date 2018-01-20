@@ -1,0 +1,10 @@
+{
+    "smEventsApp": {
+        "Task" : {
+            "null": "",
+            "COMANDOR": "COMANDOR",
+            "OFFICER": "OFFICER",
+            "ROOK": "ROOK"
+        }
+    }
+}

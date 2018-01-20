@@ -1,0 +1,58 @@
+<form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+
+    <div class="modal-header">
+        <h4 class="modal-title" id="myEMailLabel" jhiTranslate="smEventsApp.eMail.home.createOrEditLabel">Create or edit a E Mail</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                (click)="clear()">&times;</button>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" [hidden]="!eMail.id">
+            <label for="id" jhiTranslate="global.field.id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                   [(ngModel)]="eMail.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="smEventsApp.eMail.emailType" for="field_emailType">Email Type</label>
+            <select class="form-control" name="emailType" [(ngModel)]="eMail.emailType" id="field_emailType" >
+                <option value="PARTICIPANT_ADDED">{{'smEventsApp.EmailType.PARTICIPANT_ADDED' | translate}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="smEventsApp.eMail.status" for="field_status">Status</label>
+            <select class="form-control" name="status" [(ngModel)]="eMail.status" id="field_status" >
+                <option value="PREPARED">{{'smEventsApp.EMailStatus.PREPARED' | translate}}</option>
+                <option value="SENT">{{'smEventsApp.EMailStatus.SENT' | translate}}</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="smEventsApp.eMail.event" for="field_event">Event</label>
+            <select class="form-control" id="field_event" name="event" [(ngModel)]="eMail.eventId" >
+                <option [ngValue]="null"></option>
+                <option [ngValue]="eventOption.id" *ngFor="let eventOption of events; trackBy: trackEventById">{{eventOption.id}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="smEventsApp.eMail.person" for="field_person">Person</label>
+            <select class="form-control" id="field_person" name="person" [(ngModel)]="eMail.personId"  required>
+                <option *ngIf="!editForm.value.person" [ngValue]="null" selected></option>
+                <option [ngValue]="personOption.id" *ngFor="let personOption of people; trackBy: trackPersonById">{{personOption.id}}</option>
+            </select>
+        </div>
+        <div [hidden]="!(editForm.controls.person?.dirty && editForm.controls.person?.invalid)">
+            <small class="form-text text-danger"
+                [hidden]="!editForm.controls.person?.errors?.required" jhiTranslate="entity.validation.required">
+                This field is required.
+            </small>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">
+            <span class="fa fa-ban"></span>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+        <button type="submit" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+            <span class="fa fa-save"></span>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+    </div>
+</form>

@@ -1,0 +1,37 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "relationshipName": "event",
+            "otherEntityName": "event",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": "required",
+            "relationshipName": "person",
+            "otherEntityName": "person",
+            "otherEntityField": "id"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "emailType",
+            "fieldType": "EmailType",
+            "fieldValues": "PARTICIPANT_ADDED"
+        },
+        {
+            "fieldName": "status",
+            "fieldType": "EMailStatus",
+            "fieldValues": "PREPARED,SENT"
+        }
+    ],
+    "changelogDate": "20180120190636",
+    "entityTableName": "e_mail",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "angularJSSuffix": "smEvent"
+}
