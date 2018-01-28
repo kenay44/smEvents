@@ -8,6 +8,7 @@ import org.sm.events.repository.AuthorityRepository;
 import org.sm.events.repository.UserRepository;
 import org.sm.events.security.AuthoritiesConstants;
 import org.sm.events.service.MailService;
+import org.sm.events.service.PersonService;
 import org.sm.events.service.dto.UserDTO;
 import org.sm.events.web.rest.errors.ExceptionTranslator;
 import org.sm.events.web.rest.vm.KeyAndPasswordVM;
@@ -31,7 +32,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
-import java.time.LocalDate;
 
 import java.util.*;
 
@@ -76,6 +76,9 @@ public class AccountResourceIntTest {
     @Mock
     private MailService mockMailService;
 
+    @Mock
+    private PersonService mockPersonService;
+
     private MockMvc restMvc;
 
     private MockMvc restUserMockMvc;
@@ -84,11 +87,12 @@ public class AccountResourceIntTest {
     public void setup() {
         MockitoAnnotations.initMocks(this);
         doNothing().when(mockMailService).sendActivationEmail(anyObject());
+        doNothing().when(mockPersonService).findOneByUser(anyObject());
         AccountResource accountResource =
-            new AccountResource(userRepository, userService, mockMailService);
+            new AccountResource(userRepository, userService, mockMailService, mockPersonService);
 
         AccountResource accountUserMockResource =
-            new AccountResource(userRepository, mockUserService, mockMailService);
+            new AccountResource(userRepository, mockUserService, mockMailService, mockPersonService);
         this.restMvc = MockMvcBuilders.standaloneSetup(accountResource)
             .setMessageConverters(httpMessageConverters)
             .setControllerAdvice(exceptionTranslator)

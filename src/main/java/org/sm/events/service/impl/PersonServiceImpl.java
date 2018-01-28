@@ -1,5 +1,6 @@
 package org.sm.events.service.impl;
 
+import org.sm.events.domain.User;
 import org.sm.events.service.PersonService;
 import org.sm.events.domain.Person;
 import org.sm.events.repository.PersonRepository;
@@ -73,6 +74,14 @@ public class PersonServiceImpl implements PersonService {
         return personMapper.toDto(person);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public PersonDTO findOneByUser(User user) {
+        log.debug("Request to get Person for user : {}", user);
+        Person person = personRepository.findOneByUser(user);
+        return personMapper.toDto(person);
+    }
+
     /**
      * Delete the person by id.
      *
@@ -83,4 +92,5 @@ public class PersonServiceImpl implements PersonService {
         log.debug("Request to delete Person : {}", id);
         personRepository.delete(id);
     }
+
 }

@@ -6,7 +6,9 @@ import org.sm.events.domain.User;
 import org.sm.events.repository.UserRepository;
 import org.sm.events.security.SecurityUtils;
 import org.sm.events.service.MailService;
+import org.sm.events.service.PersonService;
 import org.sm.events.service.UserService;
+import org.sm.events.service.dto.PersonDTO;
 import org.sm.events.service.dto.UserDTO;
 import org.sm.events.web.rest.errors.*;
 import org.sm.events.web.rest.vm.KeyAndPasswordVM;
@@ -37,11 +39,14 @@ public class AccountResource {
 
     private final MailService mailService;
 
-    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService) {
+    private final PersonService personService;
+
+    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService, PersonService personService) {
 
         this.userRepository = userRepository;
         this.userService = userService;
         this.mailService = mailService;
+        this.personService = personService;
     }
 
     /**
@@ -103,7 +108,14 @@ public class AccountResource {
     @Timed
     public UserDTO getAccount() {
         return userService.getUserWithAuthorities()
-            .map(UserDTO::new)
+            .map(u -> {
+                UserDTO userDTO = new UserDTO(u);
+                PersonDTO personDTO = personService.findOneByUser(u);
+                if(personDTO != null) {
+                    userDTO.setPhoneNumber(personDTO.getPhone());
+                }
+                return userDTO;
+            })
             .orElseThrow(() -> new InternalServerErrorException("User could not be found"));
     }
 
@@ -127,7 +139,7 @@ public class AccountResource {
             throw new InternalServerErrorException("User could not be found");
         }
         userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
-            userDTO.getLangKey(), userDTO.getImageUrl());
+            userDTO.getLangKey(), userDTO.getImageUrl(), userDTO.getPhoneNumber());
    }
 
     /**

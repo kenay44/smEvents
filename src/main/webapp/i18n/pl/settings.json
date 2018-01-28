@@ -6,6 +6,8 @@
             "firstname.placeholder": "Twoje imię",
             "lastname": "Nazwisko",
             "lastname.placeholder": "Twoje nazwisko",
+            "phonenumber": "Numer telefonu",
+            "phonenumber.placeholder": "Twój numer telefonu",
             "language": "Język",
             "button": "Zapisz"
         },
@@ -25,6 +27,11 @@
                     "required": "Twoje nazwisko jest wymagane.",
                     "minlength": "Twoje nazwisko musi mieć przynajmniej 1 literę",
                     "maxlength": "Twoje nazwisko nie może być dłuższe niż 50 liter"
+                },
+                "phonenumber": {
+                    "required": "Twój numer telefonu jest wymagany",
+                    "minlength": "Twój numer telefonu musi mieć przynajmniej 9 znaków",
+                    "maxlength": "Twój numer telefonu nie może być dłuższy niż 15 znaków"
                 }
             }
         }

@@ -32,9 +32,9 @@ spring:
         serialization.indent_output: true
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
-        url: jdbc:mysql://localhost:3306/smEvents?useUnicode=true&characterEncoding=utf8&useSSL=false
-        username: root
-        password:
+        url: jdbc:mysql://localhost:3306/smevents?useUnicode=true&characterEncoding=utf8&useSSL=false
+        username: smadm
+        password: sm_adm
         hikari:
             data-source-properties:
                 cachePrepStmts: true
@@ -52,10 +52,17 @@ spring:
             hibernate.generate_statistics: true
             hibernate.cache.region.factory_class: io.github.jhipster.config.jcache.NoDefaultJCacheRegionFactory
     mail:
-        host: localhost
-        port: 25
-        username:
-        password:
+        host: smtp.gmail.com
+        port: 587
+        username: smnewevents@gmail.com
+        password: 13EllA24
+        protocol: smtp
+        properties.mail.smtp.starttls.enable: true
+        properties.mail.smtp.starttls.required: true
+        properties.mail.smtp.auth: true
+        properties.mail.socketFactory.port: 587
+        properties.mail.socketFactory.class: javax.net.ssl.SSLSocketFactory
+        properties.mail.socketFactory.fallback: false
     messages:
         cache-seconds: 1
     thymeleaf:

@@ -12,8 +12,8 @@ import org.mapstruct.*;
 public interface EventMapper extends EntityMapper<EventDTO, Event> {
 
 
-    @Mapping(target = "participants", ignore = true)
-    @Mapping(target = "eMails", ignore = true)
+//    @Mapping(target = "participants", ignore = true)
+//    @Mapping(target = "eMails", ignore = true)
     Event toEntity(EventDTO eventDTO);
 
     default Event fromId(Long id) {

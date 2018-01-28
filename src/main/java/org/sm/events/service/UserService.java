@@ -1,10 +1,12 @@
 package org.sm.events.service;
 
-import org.sm.events.config.CacheConfiguration;
 import org.sm.events.domain.Authority;
+import org.sm.events.domain.Person;
 import org.sm.events.domain.User;
+import org.sm.events.domain.enumeration.PersonType;
 import org.sm.events.repository.AuthorityRepository;
 import org.sm.events.config.Constants;
+import org.sm.events.repository.PersonRepository;
 import org.sm.events.repository.UserRepository;
 import org.sm.events.security.AuthoritiesConstants;
 import org.sm.events.security.SecurityUtils;
@@ -45,12 +47,15 @@ public class UserService {
 
     private final CacheManager cacheManager;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, SocialService socialService, AuthorityRepository authorityRepository, CacheManager cacheManager) {
+    private final PersonRepository personRepository;
+
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, SocialService socialService, AuthorityRepository authorityRepository, CacheManager cacheManager, PersonRepository personRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.socialService = socialService;
         this.authorityRepository = authorityRepository;
         this.cacheManager = cacheManager;
+        this.personRepository = personRepository;
     }
 
     public Optional<User> activateRegistration(String key) {
@@ -159,8 +164,9 @@ public class UserService {
      * @param email email id of user
      * @param langKey language key
      * @param imageUrl image URL of user
+     * @param phoneNumber phone number of user
      */
-    public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl) {
+    public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl, String phoneNumber) {
         SecurityUtils.getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
             .ifPresent(user -> {
@@ -172,6 +178,20 @@ public class UserService {
                 cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(user.getLogin());
                 cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).evict(user.getEmail());
                 log.debug("Changed Information for User: {}", user);
+                Person person = personRepository.findOneByUser(user);
+                if(person == null){
+                    person = new Person();
+                    person.setUser(user);
+                    person.setFirstName(firstName);
+                    person.setLastName(lastName);
+                    person.setPhone(phoneNumber);
+                    person.setPersonType(PersonType.USER);
+                    personRepository.save(person);
+                } else {
+                    person.setFirstName(firstName);
+                    person.setLastName(lastName);
+                    person.setPhone(phoneNumber);
+                }
             });
     }
 

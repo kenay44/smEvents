@@ -1,9 +1,11 @@
 package org.sm.events.service.mapper;
 
+import org.mapstruct.DecoratedWith;
 import org.sm.events.domain.Authority;
 import org.sm.events.domain.User;
 import org.sm.events.service.dto.UserDTO;
 
+import org.sm.events.service.mapper.decorators.UserMapperDecorator;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -16,6 +18,7 @@ import java.util.stream.Collectors;
  * support is still in beta, and requires a manual step with an IDE.
  */
 @Service
+@DecoratedWith(UserMapperDecorator.class)
 public class UserMapper {
 
     public UserDTO userToUserDTO(User user) {
