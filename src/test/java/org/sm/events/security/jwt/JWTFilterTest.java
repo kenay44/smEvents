@@ -1,5 +1,6 @@
 package org.sm.events.security.jwt;
 
+import org.mockito.Mock;
 import org.sm.events.security.AuthoritiesConstants;
 import io.github.jhipster.config.JHipsterProperties;
 import org.junit.Before;
@@ -11,6 +12,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.Collections;
@@ -23,13 +25,16 @@ public class JWTFilterTest {
 
     private JWTFilter jwtFilter;
 
+    @Mock
+    private UserDetailsService userDetailsService;
+
     @Before
     public void setup() {
         JHipsterProperties jHipsterProperties = new JHipsterProperties();
         tokenProvider = new TokenProvider(jHipsterProperties);
         ReflectionTestUtils.setField(tokenProvider, "secretKey", "test secret");
         ReflectionTestUtils.setField(tokenProvider, "tokenValidityInMilliseconds", 60000);
-        jwtFilter = new JWTFilter(tokenProvider);
+        jwtFilter = new JWTFilter(tokenProvider, userDetailsService);
         SecurityContextHolder.getContext().setAuthentication(null);
     }
 

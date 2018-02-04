@@ -1,9 +1,18 @@
 package org.sm.events.service;
 
+import io.undertow.util.BadRequestException;
+import org.sm.events.domain.Family;
+import org.sm.events.domain.Person;
 import org.sm.events.domain.User;
+import org.sm.events.domain.enumeration.PersonType;
+import org.sm.events.service.dto.FamilyDTO;
 import org.sm.events.service.dto.PersonDTO;
+import org.sm.events.web.rest.errors.BadRequestAlertException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Service Interface for managing Person.
@@ -42,4 +51,12 @@ public interface PersonService {
     void delete(Long id);
 
     PersonDTO findOneByUser(User user);
+
+    PersonDTO findOneByCurrentUser();
+
+    PersonDTO createChild(PersonDTO personDTO) throws BadRequestAlertException;
+
+    Page<PersonDTO> findAllByFamilyId(Pageable pageable, Long familyId);
+
+    List<PersonDTO> findAllByFamilyIdAndPersonTypeOrderByFirstName(Long familyId, PersonType personType);
 }

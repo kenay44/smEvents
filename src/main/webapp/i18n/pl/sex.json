@@ -2,8 +2,8 @@
     "smEventsApp": {
         "Sex" : {
             "null": "",
-            "MALE": "MALE",
-            "FEMALE": "FEMALE"
+            "MALE": "Mężczyzna",
+            "FEMALE": "Kobieta"
         }
     }
 }

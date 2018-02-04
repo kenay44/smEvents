@@ -11,6 +11,10 @@
             "language": "Język",
             "button": "Zapisz"
         },
+        "familyform": {
+            "familyname": "Rodzina",
+            "familyname.placeholder": "Podaj nazwę dla Twojej rodziny"
+        },
         "messages": {
             "error": {
                 "fail": "<strong>Wystąpił błąd!</strong> Ustawienia nie zostały zapisane.",
@@ -32,6 +36,11 @@
                     "required": "Twój numer telefonu jest wymagany",
                     "minlength": "Twój numer telefonu musi mieć przynajmniej 9 znaków",
                     "maxlength": "Twój numer telefonu nie może być dłuższy niż 15 znaków"
+                },
+                "familyname": {
+                    "required": "Nazwa rodziny jest wymagana",
+                    "minlength": "Nazwa rodziny nie może być krutsza niż 3 znaki",
+                    "maxlength": "Nazwa rodziny nie może być dłuższa niż 50 znaków"
                 }
             }
         }

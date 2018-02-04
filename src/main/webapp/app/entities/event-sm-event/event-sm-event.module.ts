@@ -11,6 +11,7 @@ import {
     EventSmEventPopupComponent,
     EventSmEventDeletePopupComponent,
     EventSmEventDeleteDialogComponent,
+    EventSmEventSigningComponent,
     eventRoute,
     eventPopupRoute,
 } from './';
@@ -32,6 +33,7 @@ const ENTITY_STATES = [
         EventSmEventDeleteDialogComponent,
         EventSmEventPopupComponent,
         EventSmEventDeletePopupComponent,
+        EventSmEventSigningComponent,
     ],
     entryComponents: [
         EventSmEventComponent,
@@ -39,6 +41,7 @@ const ENTITY_STATES = [
         EventSmEventPopupComponent,
         EventSmEventDeleteDialogComponent,
         EventSmEventDeletePopupComponent,
+        EventSmEventSigningComponent,
     ],
     providers: [
         EventSmEventService,

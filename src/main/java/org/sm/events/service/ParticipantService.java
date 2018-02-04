@@ -4,6 +4,8 @@ import org.sm.events.service.dto.ParticipantDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 /**
  * Service Interface for managing Participant.
  */
@@ -24,6 +26,13 @@ public interface ParticipantService {
      * @return the list of entities
      */
     Page<ParticipantDTO> findAll(Pageable pageable);
+
+    /**
+     * Get all participants for the event.
+     *
+     * @return the list of entities
+     */
+    List<ParticipantDTO> findAllForEvent(Long id);
 
     /**
      * Get the "id" participant.

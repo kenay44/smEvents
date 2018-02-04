@@ -14,4 +14,8 @@ export class AccountService  {
     save(account: any): Observable<Response> {
         return this.http.post(SERVER_API_URL + 'api/account', account);
     }
+
+    saveFamily(account: any): Observable<Response> {
+        return this.http.post(SERVER_API_URL + 'api/account/family', account.familyName);
+    }
 }

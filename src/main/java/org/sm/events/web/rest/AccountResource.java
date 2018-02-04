@@ -2,12 +2,19 @@ package org.sm.events.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 
+import org.sm.events.domain.Authority;
+import org.sm.events.domain.Family;
+import org.sm.events.domain.Person;
 import org.sm.events.domain.User;
+import org.sm.events.repository.PersonRepository;
 import org.sm.events.repository.UserRepository;
+import org.sm.events.security.AuthoritiesConstants;
 import org.sm.events.security.SecurityUtils;
+import org.sm.events.service.FamilyService;
 import org.sm.events.service.MailService;
 import org.sm.events.service.PersonService;
 import org.sm.events.service.UserService;
+import org.sm.events.service.dto.FamilyDTO;
 import org.sm.events.service.dto.PersonDTO;
 import org.sm.events.service.dto.UserDTO;
 import org.sm.events.web.rest.errors.*;
@@ -18,11 +25,20 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserCache;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * REST controller for managing the current user's account.
@@ -41,12 +57,15 @@ public class AccountResource {
 
     private final PersonService personService;
 
-    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService, PersonService personService) {
+    private final FamilyService familyService;
+
+    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService, PersonService personService, FamilyService familyService) {
 
         this.userRepository = userRepository;
         this.userService = userService;
         this.mailService = mailService;
         this.personService = personService;
+        this.familyService = familyService;
     }
 
     /**
@@ -113,6 +132,10 @@ public class AccountResource {
                 PersonDTO personDTO = personService.findOneByUser(u);
                 if(personDTO != null) {
                     userDTO.setPhoneNumber(personDTO.getPhone());
+                    if(personDTO.getFamilyId() != null) {
+                        FamilyDTO familyDTO = familyService.findOne(personDTO.getFamilyId());
+                        userDTO.setFamilyName(familyDTO.getName());
+                    }
                 }
                 return userDTO;
             })
@@ -197,5 +220,24 @@ public class AccountResource {
         return !StringUtils.isEmpty(password) &&
             password.length() >= ManagedUserVM.PASSWORD_MIN_LENGTH &&
             password.length() <= ManagedUserVM.PASSWORD_MAX_LENGTH;
+    }
+
+    /**
+     * Create family for the user and set the user parent
+     *
+     * @param familyName new family name
+     * @return the ResponseEntity with status 200 (OK)
+     */
+
+    @PostMapping(path = "/account/family")
+    @Timed
+    public void createFamily(@RequestBody String familyName) {
+        log.debug("REST request to create a new family for the user");
+        User user = userService.getUserWithAuthorities().orElseThrow(() -> new InternalServerErrorException("Current user login not found"));
+        familyService.createFamilyForUser(user, familyName);
+        UserDTO userDTO = new UserDTO(user);
+        userDTO.getAuthorities().add(AuthoritiesConstants.PARENT);
+        userService.updateUser(userDTO);
+        userService.refreshAuthorities(userDTO.getAuthorities());
     }
 }

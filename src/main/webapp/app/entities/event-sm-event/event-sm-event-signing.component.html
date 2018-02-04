@@ -1,0 +1,16 @@
+<h1>Event Title</h1>
+<h3>Children</h3>
+<ul class="list-group">
+    <li *ngFor="let child of children; trackBy: trackId" class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text">
+                <input type="checkbox" aria-label="Checkbox for following text input">
+            </span>
+            <span class="input-group-text flex">{{child.firstName}} {{child.birthYear}}</span>
+        </div>
+        <button type="button" class="form-control btn btn-info">Zapisz</button>
+    </li>
+</ul>
+<button type="button" class="btn btn-info">Zapisz zaznaczonych</button>
+<h1>Participants</h1>
+

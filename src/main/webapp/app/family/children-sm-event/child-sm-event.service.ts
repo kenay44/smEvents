@@ -3,35 +3,33 @@ import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { SERVER_API_URL } from '../../app.constants';
 
-import { JhiDateUtils } from 'ng-jhipster';
-
-import { ParticipantSmEvent } from './participant-sm-event.model';
+import { ChildSmEvent } from './child-sm-event.model';
 import { ResponseWrapper, createRequestOption } from '../../shared';
 
 @Injectable()
-export class ParticipantSmEventService {
+export class ChildSmEventService {
 
-    private resourceUrl =  SERVER_API_URL + 'api/participants';
+    private resourceUrl =  SERVER_API_URL + 'api/people/family';
 
-    constructor(private http: Http, private dateUtils: JhiDateUtils) { }
+    constructor(private http: Http) { }
 
-    create(participant: ParticipantSmEvent): Observable<ParticipantSmEvent> {
-        const copy = this.convert(participant);
+    create(person: ChildSmEvent): Observable<ChildSmEvent> {
+        const copy = this.convert(person);
         return this.http.post(this.resourceUrl, copy).map((res: Response) => {
             const jsonResponse = res.json();
             return this.convertItemFromServer(jsonResponse);
         });
     }
 
-    update(participant: ParticipantSmEvent): Observable<ParticipantSmEvent> {
-        const copy = this.convert(participant);
+    update(person: ChildSmEvent): Observable<ChildSmEvent> {
+        const copy = this.convert(person);
         return this.http.put(this.resourceUrl, copy).map((res: Response) => {
             const jsonResponse = res.json();
             return this.convertItemFromServer(jsonResponse);
         });
     }
 
-    find(id: number): Observable<ParticipantSmEvent> {
+    find(id: number): Observable<ChildSmEvent> {
         return this.http.get(`${this.resourceUrl}/${id}`).map((res: Response) => {
             const jsonResponse = res.json();
             return this.convertItemFromServer(jsonResponse);
@@ -58,27 +56,18 @@ export class ParticipantSmEventService {
     }
 
     /**
-     * Convert a returned JSON object to ParticipantSmEvent.
+     * Convert a returned JSON object to PersonSmEvent.
      */
-    private convertItemFromServer(json: any): ParticipantSmEvent {
-        const entity: ParticipantSmEvent = Object.assign(new ParticipantSmEvent(), json);
-        entity.signedDate = this.dateUtils
-            .convertDateTimeFromServer(json.signedDate);
+    private convertItemFromServer(json: any): ChildSmEvent {
+        const entity: ChildSmEvent = Object.assign(new ChildSmEvent(), json);
         return entity;
     }
 
     /**
-     * Convert a ParticipantSmEvent to a JSON which can be sent to the server.
+     * Convert a PersonSmEvent to a JSON which can be sent to the server.
      */
-    private convert(participant: ParticipantSmEvent): ParticipantSmEvent {
-        const copy: ParticipantSmEvent = Object.assign({}, participant);
-
-        copy.signedDate = this.dateUtils.toDate(participant.signedDate);
+    private convert(person: ChildSmEvent): ChildSmEvent {
+        const copy: ChildSmEvent = Object.assign({}, person);
         return copy;
-    }
-
-    findAllForEvent(eventId: number) : Observable<ResponseWrapper> {
-        return this.http.get(`${this.resourceUrl}/event/${eventId}`)
-            .map((res: Response) => this.convertResponse(res));
     }
 }

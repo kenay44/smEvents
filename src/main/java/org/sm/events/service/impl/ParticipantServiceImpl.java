@@ -12,6 +12,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 /**
  * Service Implementation for managing Participant.
@@ -57,6 +60,14 @@ public class ParticipantServiceImpl implements ParticipantService {
         log.debug("Request to get all Participants");
         return participantRepository.findAll(pageable)
             .map(participantMapper::toDto);
+    }
+
+    @Override
+    public List<ParticipantDTO> findAllForEvent(Long id) {
+        log.debug("Request to get all participants for the event: {}", id);
+        return participantRepository.findAllByEventId(id)
+            .stream().map(participantMapper::toDto)
+            .collect(Collectors.toList());
     }
 
     /**

@@ -17,6 +17,7 @@
             "account": {
                 "main": "Konto",
                 "settings": "Ustawienia",
+                "family": "Rodzina",
                 "password": "Hasło",
                 "sessions": "Sesje",
                 "login": "Autoryzacja",

@@ -1,5 +1,6 @@
 package org.sm.events.service;
 
+import io.undertow.servlet.handlers.security.ServletSingleSignOnAuthenticationMechanism;
 import org.sm.events.domain.Authority;
 import org.sm.events.domain.Person;
 import org.sm.events.domain.User;
@@ -19,10 +20,20 @@ import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sun.plugin.liveconnect.SecurityContextHelper;
 
+import javax.servlet.http.HttpSession;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -290,4 +301,14 @@ public class UserService {
         return authorityRepository.findAll().stream().map(Authority::getName).collect(Collectors.toList());
     }
 
+    public void refreshAuthorities(Set<String> authorities) {
+        Authentication _authentication = SecurityContextHolder.getContext().getAuthentication();
+        Authentication authentication = new UsernamePasswordAuthenticationToken(_authentication.getPrincipal(), _authentication.getCredentials(),
+            authorities.stream().map(u -> new SimpleGrantedAuthority(u)).collect(Collectors.toSet()));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        if(SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.PARENT)) {
+            log.debug("it's ok");
+        }
+
+    }
 }

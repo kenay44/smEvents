@@ -2,9 +2,10 @@
     "smEventsApp": {
         "PersonType" : {
             "null": "",
-            "USER": "USER",
-            "CADRE": "CADRE",
-            "CHILD": "CHILD"
+            "USER": "Użytkownik",
+            "CADRE": "Kadra",
+            "CHILD": "Dziecko",
+            "PARENT": "Rodzic"
         }
     }
 }

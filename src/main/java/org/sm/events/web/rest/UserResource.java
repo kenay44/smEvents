@@ -5,6 +5,7 @@ import com.codahale.metrics.annotation.Timed;
 import org.sm.events.domain.User;
 import org.sm.events.repository.UserRepository;
 import org.sm.events.security.AuthoritiesConstants;
+import org.sm.events.service.FamilyService;
 import org.sm.events.service.MailService;
 import org.sm.events.service.UserService;
 import org.sm.events.service.dto.UserDTO;

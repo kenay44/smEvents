@@ -1,5 +1,9 @@
 package org.sm.events.service.impl;
 
+import org.sm.events.domain.Person;
+import org.sm.events.domain.User;
+import org.sm.events.domain.enumeration.PersonType;
+import org.sm.events.repository.PersonRepository;
 import org.sm.events.service.FamilyService;
 import org.sm.events.domain.Family;
 import org.sm.events.repository.FamilyRepository;
@@ -26,9 +30,12 @@ public class FamilyServiceImpl implements FamilyService {
 
     private final FamilyMapper familyMapper;
 
-    public FamilyServiceImpl(FamilyRepository familyRepository, FamilyMapper familyMapper) {
+    private final PersonRepository personRepository;
+
+    public FamilyServiceImpl(FamilyRepository familyRepository, FamilyMapper familyMapper, PersonRepository personRepository) {
         this.familyRepository = familyRepository;
         this.familyMapper = familyMapper;
+        this.personRepository = personRepository;
     }
 
     /**
@@ -82,5 +89,21 @@ public class FamilyServiceImpl implements FamilyService {
     public void delete(Long id) {
         log.debug("Request to delete Family : {}", id);
         familyRepository.delete(id);
+    }
+
+    @Override
+    public Family createFamilyForUser(User user, String familyName) {
+        Person person = personRepository.findOneByUser(user);
+        Family family = person.getFamily();
+        if(family == null)
+            family = new Family();
+        family.setName(familyName);
+        family = familyRepository.save(family);
+        person.setFamily(family);
+        person.setPersonType(PersonType.PARENT);
+        personRepository.save(person);
+        family.getPeople().add(person);
+        family = familyRepository.save(family);
+        return family;
     }
 }

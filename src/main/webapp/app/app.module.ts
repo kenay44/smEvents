@@ -10,6 +10,7 @@ import { SmEventsHomeModule } from './home/home.module';
 import { SmEventsAdminModule } from './admin/admin.module';
 import { SmEventsAccountModule } from './account/account.module';
 import { SmEventsEntityModule } from './entities/entity.module';
+import { SmEventsFamilyModule } from './family/family.module';
 import { customHttpProvider } from './blocks/interceptor/http.provider';
 import { PaginationConfig } from './blocks/config/uib-pagination.config';
 
@@ -35,6 +36,7 @@ import {
         SmEventsAdminModule,
         SmEventsAccountModule,
         SmEventsEntityModule,
+        SmEventsFamilyModule,
         // jhipster-needle-angular-add-module JHipster will add new module here
     ],
     declarations: [

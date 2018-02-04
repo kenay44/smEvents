@@ -5,6 +5,7 @@ import { EventSmEventComponent } from './event-sm-event.component';
 import { EventSmEventDetailComponent } from './event-sm-event-detail.component';
 import { EventSmEventPopupComponent } from './event-sm-event-dialog.component';
 import { EventSmEventDeletePopupComponent } from './event-sm-event-delete-dialog.component';
+import {EventSmEventSigningComponent} from './event-sm-event-signing.component';
 
 export const eventRoute: Routes = [
     {
@@ -21,6 +22,14 @@ export const eventRoute: Routes = [
         data: {
             authorities: ['ROLE_USER'],
             pageTitle: 'smEventsApp.event.home.title'
+        },
+        canActivate: [UserRouteAccessService]
+    }, {
+        path: 'event-sm-event/:id/signing',
+        component: EventSmEventSigningComponent,
+        data: {
+            authorities: ['ROLE_PARENT'],
+            pageTitle: 'smEventsApp.event.signing.title'
         },
         canActivate: [UserRouteAccessService]
     }

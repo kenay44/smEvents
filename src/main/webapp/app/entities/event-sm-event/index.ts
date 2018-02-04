@@ -5,4 +5,5 @@ export * from './event-sm-event-dialog.component';
 export * from './event-sm-event-delete-dialog.component';
 export * from './event-sm-event-detail.component';
 export * from './event-sm-event.component';
+export * from './event-sm-event-signing.component';
 export * from './event-sm-event.route';

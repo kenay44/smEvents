@@ -55,6 +55,8 @@ public class UserDTO {
 
     private String phoneNumber;
 
+    private String familyName;
+
     public UserDTO() {
         // Empty constructor needed for Jackson.
     }
@@ -189,6 +191,15 @@ public class UserDTO {
         this.phoneNumber = phoneNumber;
     }
 
+    public void setFamilyName(String familyName) {
+        this.familyName = familyName;
+    }
+
+    public String getFamilyName() {
+        return familyName;
+    }
+
+
     @Override
     public String toString() {
         return "UserDTO{" +
@@ -204,6 +215,9 @@ public class UserDTO {
             ", lastModifiedBy='" + lastModifiedBy + '\'' +
             ", lastModifiedDate=" + lastModifiedDate +
             ", authorities=" + authorities +
+            ", phoneNumber=" + phoneNumber +
+            ", familyName=" + familyName +
             "}";
     }
+
 }

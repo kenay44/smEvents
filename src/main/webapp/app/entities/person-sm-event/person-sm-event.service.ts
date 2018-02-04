@@ -70,4 +70,9 @@ export class PersonSmEventService {
         const copy: PersonSmEvent = Object.assign({}, person);
         return copy;
     }
+
+    getUserChildren(): Observable<ResponseWrapper> {
+        return this.http.get(`${this.resourceUrl}/family/children`)
+            .map((res: Response) => this.convertResponse(res));
+    }
 }

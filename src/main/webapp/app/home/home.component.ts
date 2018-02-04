@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { JhiEventManager } from 'ng-jhipster';
+import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
 
-import { Account, LoginModalService, Principal } from '../shared';
+import { EventSmEvent, EventSmEventService } from '../entities/event-sm-event';
+
+import {Account, ITEMS_PER_PAGE, LoginModalService, Principal, ResponseWrapper} from '../shared';
 
 @Component({
     selector: 'jhi-home',
@@ -15,12 +17,39 @@ import { Account, LoginModalService, Principal } from '../shared';
 export class HomeComponent implements OnInit {
     account: Account;
     modalRef: NgbModalRef;
+    totalItems: number;
+    events: EventSmEvent[];
+    itemsPerPage: number;
+    links: any;
+    page: any;
+    predicate: any;
+    queryCount: any;
+    reverse: any;
 
     constructor(
         private principal: Principal,
         private loginModalService: LoginModalService,
-        private eventManager: JhiEventManager
+        private eventManager: JhiEventManager,
+        private jhiAlertService: JhiAlertService,
+        private eventSmEventService: EventSmEventService,
+        private parseLinks: JhiParseLinks
     ) {
+        this.events = [];
+        this.itemsPerPage = ITEMS_PER_PAGE;
+        this.page = 0;
+        this.links = {
+            last: 0
+        };
+        this.predicate = 'id';
+        this.reverse = true;
+    }
+
+    loadAll() {
+        this.eventSmEventService.query()
+            .subscribe(
+                (res: ResponseWrapper) => this.onSuccess(res.json, res.headers),
+                (res: ResponseWrapper) => this.onError(res.json)
+            );
     }
 
     ngOnInit() {
@@ -28,6 +57,7 @@ export class HomeComponent implements OnInit {
             this.account = account;
         });
         this.registerAuthenticationSuccess();
+        this.loadAll();
     }
 
     registerAuthenticationSuccess() {
@@ -44,5 +74,36 @@ export class HomeComponent implements OnInit {
 
     login() {
         this.modalRef = this.loginModalService.open();
+    }
+
+    private onSuccess(data, headers) {
+        this.links = this.parseLinks.parse(headers.get('link'));
+        this.totalItems = headers.get('X-Total-Count');
+        for (let i = 0; i < data.length; i++) {
+            this.events.push(data[i]);
+        }
+    }
+
+    private onError(error) {
+        this.jhiAlertService.error(error.message, null, null);
+    }
+
+    reset() {
+        this.page = 0;
+        this.events = [];
+        this.loadAll();
+    }
+
+    loadPage(page) {
+        this.page = page;
+        this.loadAll();
+    }
+
+    sort() {
+        const result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
+        if (this.predicate !== 'id') {
+            result.push('id');
+        }
+        return result;
     }
 }

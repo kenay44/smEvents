@@ -98,6 +98,19 @@ public class ParticipantResource {
     }
 
     /**
+     * GET  /participants/event/{id} : get all participants for the event.
+     *
+     * @return the ResponseEntity with status 200 (OK) and the list of participants in body
+     */
+    @GetMapping("/participants")
+    @Timed
+    public ResponseEntity<List<ParticipantDTO>> getAllParticipants(@PathVariable Long id) {
+        log.debug("REST request to get all of Participants for the event id: {}", id);
+        List<ParticipantDTO> participants = participantService.findAllForEvent(id);
+        return new ResponseEntity<>(participants,  HttpStatus.OK);
+    }
+
+    /**
      * GET  /participants/:id : get the "id" participant.
      *
      * @param id the id of the participantDTO to retrieve

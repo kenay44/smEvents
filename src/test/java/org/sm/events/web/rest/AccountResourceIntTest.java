@@ -7,6 +7,7 @@ import org.sm.events.domain.User;
 import org.sm.events.repository.AuthorityRepository;
 import org.sm.events.repository.UserRepository;
 import org.sm.events.security.AuthoritiesConstants;
+import org.sm.events.service.FamilyService;
 import org.sm.events.service.MailService;
 import org.sm.events.service.PersonService;
 import org.sm.events.service.dto.UserDTO;
@@ -79,6 +80,9 @@ public class AccountResourceIntTest {
     @Mock
     private PersonService mockPersonService;
 
+    @Mock
+    private FamilyService familyService;
+
     private MockMvc restMvc;
 
     private MockMvc restUserMockMvc;
@@ -89,10 +93,10 @@ public class AccountResourceIntTest {
         doNothing().when(mockMailService).sendActivationEmail(anyObject());
         doNothing().when(mockPersonService).findOneByUser(anyObject());
         AccountResource accountResource =
-            new AccountResource(userRepository, userService, mockMailService, mockPersonService);
+            new AccountResource(userRepository, userService, mockMailService, mockPersonService, familyService);
 
         AccountResource accountUserMockResource =
-            new AccountResource(userRepository, mockUserService, mockMailService, mockPersonService);
+            new AccountResource(userRepository, mockUserService, mockMailService, mockPersonService, familyService);
         this.restMvc = MockMvcBuilders.standaloneSetup(accountResource)
             .setMessageConverters(httpMessageConverters)
             .setControllerAdvice(exceptionTranslator)

@@ -1,6 +1,7 @@
 package org.sm.events.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import org.sm.events.domain.enumeration.PersonType;
 import org.sm.events.service.PersonService;
 import org.sm.events.web.rest.errors.BadRequestAlertException;
 import org.sm.events.web.rest.util.HeaderUtil;
@@ -60,6 +61,27 @@ public class PersonResource {
     }
 
     /**
+     * POST  /people/family : Create a new child.
+     *
+     * @param personDTO the personDTO to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new personDTO, or with status 400 (Bad Request) if the person has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping("/people/family")
+    @Timed
+    public ResponseEntity<PersonDTO> createChild(@RequestBody PersonDTO personDTO) throws URISyntaxException {
+        log.debug("REST request to save Person : {}", personDTO);
+        if (personDTO.getId() != null) {
+            throw new BadRequestAlertException("A new person cannot already have an ID", ENTITY_NAME, "idexists");
+        }
+        personDTO = personService.createChild(personDTO);
+
+        return ResponseEntity.created(new URI("/api/people/family" + personDTO.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, personDTO.getId().toString()))
+            .body(personDTO);
+    }
+
+    /**
      * PUT  /people : Updates an existing person.
      *
      * @param personDTO the personDTO to update
@@ -97,6 +119,39 @@ public class PersonResource {
     }
 
     /**
+     * GET  /people/family : get all the people in family of current user.
+     *
+     * @param pageable the pagination information
+     * @return the ResponseEntity with status 200 (OK) and the list of people in body
+     */
+    @GetMapping("/people/family")
+    @Timed
+    public ResponseEntity<List<PersonDTO>> getAllPeopleInFamily(Pageable pageable) {
+        log.debug("REST request to get a page of People in family");
+        PersonDTO personDTO = personService.findOneByCurrentUser();
+
+        Page<PersonDTO> page = personService.findAllByFamilyId(pageable, personDTO.getFamilyId());
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/people");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
+    /**
+     * GET  /people/family/children : get all children in family of current user.
+     *
+     * @return the ResponseEntity with status 200 (OK) and the list of people in body
+     */
+    @GetMapping("/people/family/children")
+    @Timed
+    public ResponseEntity<List<PersonDTO>> getAllChildrenInFamily() {
+        log.debug("REST request to get all children in family");
+        PersonDTO personDTO = personService.findOneByCurrentUser();
+
+        List<PersonDTO> children = personService.findAllByFamilyIdAndPersonTypeOrderByFirstName(personDTO.getFamilyId(), PersonType.CHILD);
+
+        return new ResponseEntity<>(children, HttpStatus.OK);
+    }
+
+    /**
      * GET  /people/:id : get the "id" person.
      *
      * @param id the id of the personDTO to retrieve
@@ -123,4 +178,6 @@ public class PersonResource {
         personService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
+
+
 }

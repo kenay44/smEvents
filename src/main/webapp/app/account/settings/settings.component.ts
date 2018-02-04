@@ -48,6 +48,19 @@ export class SettingsComponent implements OnInit {
         });
     }
 
+    saveFamily() {
+        this.account.saveFamily(this.settingsAccount).subscribe(() => {
+            this.error = null;
+            this.success = 'OK';
+            this.principal.identity(true).then((account) => {
+                this.settingsAccount = this.copyAccount(account);
+            });
+        }, () => {
+            this.success = null;
+            this.error = 'ERROR';
+        })
+    }
+
     copyAccount(account) {
         return {
             activated: account.activated,
@@ -57,7 +70,8 @@ export class SettingsComponent implements OnInit {
             lastName: account.lastName,
             login: account.login,
             imageUrl: account.imageUrl,
-            phoneNumber: account.phoneNumber
+            phoneNumber: account.phoneNumber,
+            familyName: account.familyName
         };
     }
 }
