@@ -40,9 +40,12 @@ public class JWTFilter extends GenericFilterBean {
         String jwt = resolveToken(httpServletRequest);
         if (StringUtils.hasText(jwt) && this.tokenProvider.validateToken(jwt)) {
             Authentication authentication = this.tokenProvider.getAuthentication(jwt);
-            Collection<? extends GrantedAuthority> authorities = userDetailsService.loadUserByUsername(authentication.getName()).getAuthorities();
-            if(!authentication.getAuthorities().containsAll(authorities)) {
-                authentication = new UsernamePasswordAuthenticationToken(authentication.getPrincipal(), jwt, authorities);
+            UserDetails userDetails = userDetailsService.loadUserByUsername(authentication.getName());
+            if(userDetails != null) {
+                Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
+                if (!authentication.getAuthorities().containsAll(authorities)) {
+                    authentication = new UsernamePasswordAuthenticationToken(authentication.getPrincipal(), jwt, authorities);
+                }
             }
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }

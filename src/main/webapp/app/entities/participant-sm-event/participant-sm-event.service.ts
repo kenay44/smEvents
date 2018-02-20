@@ -23,6 +23,10 @@ export class ParticipantSmEventService {
         });
     }
 
+    addChildren(participants: ParticipantSmEvent[]): Observable<ResponseWrapper> {
+        return this.http.post(`${this.resourceUrl}/sign/children`, participants);
+    }
+
     update(participant: ParticipantSmEvent): Observable<ParticipantSmEvent> {
         const copy = this.convert(participant);
         return this.http.put(this.resourceUrl, copy).map((res: Response) => {
@@ -45,7 +49,7 @@ export class ParticipantSmEventService {
     }
 
     delete(id: number): Observable<Response> {
-        return this.http.delete(`${this.resourceUrl}/${id}`);
+        return this.http.delete(`${this.resourceUrl}/${id}/child`);
     }
 
     private convertResponse(res: Response): ResponseWrapper {
@@ -77,7 +81,7 @@ export class ParticipantSmEventService {
         return copy;
     }
 
-    findAllForEvent(eventId: number) : Observable<ResponseWrapper> {
+    getEvenParticipants(eventId: number): Observable<ResponseWrapper> {
         return this.http.get(`${this.resourceUrl}/event/${eventId}`)
             .map((res: Response) => this.convertResponse(res));
     }

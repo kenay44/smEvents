@@ -1,7 +1,9 @@
 package org.sm.events.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import org.sm.events.domain.enumeration.ParticipantStatus;
 import org.sm.events.domain.enumeration.PersonType;
+import org.sm.events.service.ParticipantService;
 import org.sm.events.service.PersonService;
 import org.sm.events.web.rest.errors.BadRequestAlertException;
 import org.sm.events.web.rest.util.HeaderUtil;
@@ -22,6 +24,7 @@ import java.net.URISyntaxException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * REST controller for managing Person.
@@ -36,8 +39,11 @@ public class PersonResource {
 
     private final PersonService personService;
 
-    public PersonResource(PersonService personService) {
+    private final ParticipantService participantService;
+
+    public PersonResource(PersonService personService, ParticipantService participantService) {
         this.personService = personService;
+        this.participantService = participantService;
     }
 
     /**
@@ -149,6 +155,25 @@ public class PersonResource {
         List<PersonDTO> children = personService.findAllByFamilyIdAndPersonTypeOrderByFirstName(personDTO.getFamilyId(), PersonType.CHILD);
 
         return new ResponseEntity<>(children, HttpStatus.OK);
+    }
+
+    /**
+     * GET  /people/family/children/event/{eventId} : get all children in family of current user available for event (eventId).
+     *
+     * @param eventId id of the event
+     * @return the ResponseEntity with status 200 (OK) and the list of people in body
+     */
+    @GetMapping("/people/family/children/event/{eventId}")
+    @Timed
+    public ResponseEntity<List<PersonDTO>> getAllChildrenInFamilyForEvent(@PathVariable Long eventId) {
+        log.debug("REST request to get all children in family available for the event");
+        PersonDTO personDTO = personService.findOneByCurrentUser();
+
+        List<PersonDTO> children = personService.findAllByFamilyIdAndPersonTypeOrderByFirstName(personDTO.getFamilyId(), PersonType.CHILD);
+
+        return new ResponseEntity<>(children.stream()
+            .filter(u -> participantService.findOneByPersonIdAndEventIdAndStatus(u.getId(), eventId, ParticipantStatus.SIGNED) == null)
+            .collect(Collectors.toList()), HttpStatus.OK);
     }
 
     /**

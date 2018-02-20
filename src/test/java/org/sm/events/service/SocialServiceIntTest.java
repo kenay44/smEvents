@@ -4,9 +4,9 @@ import org.sm.events.SmEventsApp;
 import org.sm.events.domain.Authority;
 import org.sm.events.domain.User;
 import org.sm.events.repository.AuthorityRepository;
+import org.sm.events.repository.PersonRepository;
 import org.sm.events.repository.UserRepository;
 import org.sm.events.security.AuthoritiesConstants;
-import org.sm.events.service.MailService;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -41,6 +41,9 @@ public class SocialServiceIntTest {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PersonRepository personRepository;
+
     @Mock
     private MailService mockMailService;
 
@@ -60,7 +63,7 @@ public class SocialServiceIntTest {
         when(mockUsersConnectionRepository.createConnectionRepository(anyString())).thenReturn(mockConnectionRepository);
 
         socialService = new SocialService(mockUsersConnectionRepository, authorityRepository,
-                passwordEncoder, userRepository, mockMailService);
+                passwordEncoder, userRepository, personRepository, mockMailService);
     }
 
     @Test

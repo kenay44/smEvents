@@ -1,6 +1,8 @@
 package org.sm.events.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import org.sm.events.domain.enumeration.ParticipantStatus;
+import org.sm.events.service.EventService;
 import org.sm.events.service.ParticipantService;
 import org.sm.events.web.rest.errors.BadRequestAlertException;
 import org.sm.events.web.rest.util.HeaderUtil;
@@ -20,6 +22,7 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,8 +39,38 @@ public class ParticipantResource {
 
     private final ParticipantService participantService;
 
-    public ParticipantResource(ParticipantService participantService) {
+    private final EventService eventService;
+
+    public ParticipantResource(ParticipantService participantService, EventService eventService) {
         this.participantService = participantService;
+        this.eventService = eventService;
+    }
+
+    /**
+     * POST  /participants/sign/children : Create a new participants.
+     *
+     * @param participantDTOs the participantDTOs to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new participantDTO, or with status 400 (Bad Request) if the participant has already an ID
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PostMapping("/participants/sign/children")
+    @Timed
+    public ResponseEntity<Void> createParticipant(@RequestBody Collection<ParticipantDTO> participantDTOs) throws URISyntaxException {
+        log.debug("REST request to save Participants : {}", participantDTOs);
+        if(participantDTOs.size() == 0)
+            throw new BadRequestAlertException("No children selected for the event ", ENTITY_NAME, "");
+
+        for(ParticipantDTO participantDTO: participantDTOs) {
+            if (participantDTO.getId() != null) {
+                throw new BadRequestAlertException("A new participant cannot already have an ID", ENTITY_NAME, "idexists");
+            }
+
+        }
+        Long eventId = participantService.createParticipants(participantDTOs);
+
+        return ResponseEntity.created(new URI(String.format("/api/event-sm-event/%s/signing", eventId)))
+            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, eventId.toString()))
+            .build();
     }
 
     /**
@@ -54,10 +87,11 @@ public class ParticipantResource {
         if (participantDTO.getId() != null) {
             throw new BadRequestAlertException("A new participant cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        ParticipantDTO result = participantService.save(participantDTO);
+
+        ParticipantDTO result = participantService.saveDto(participantDTO);
         return ResponseEntity.created(new URI("/api/participants/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
-            .body(result);
+            .build();
     }
 
     /**
@@ -76,7 +110,7 @@ public class ParticipantResource {
         if (participantDTO.getId() == null) {
             return createParticipant(participantDTO);
         }
-        ParticipantDTO result = participantService.save(participantDTO);
+        ParticipantDTO result = participantService.saveDto(participantDTO);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, participantDTO.getId().toString()))
             .body(result);
@@ -102,11 +136,11 @@ public class ParticipantResource {
      *
      * @return the ResponseEntity with status 200 (OK) and the list of participants in body
      */
-    @GetMapping("/participants")
+    @GetMapping("/participants/event/{id}")
     @Timed
     public ResponseEntity<List<ParticipantDTO>> getAllParticipants(@PathVariable Long id) {
         log.debug("REST request to get all of Participants for the event id: {}", id);
-        List<ParticipantDTO> participants = participantService.findAllForEvent(id);
+        List<ParticipantDTO> participants = participantService.findAllForEvent(id, ParticipantStatus.SIGNED);
         return new ResponseEntity<>(participants,  HttpStatus.OK);
     }
 
@@ -135,6 +169,20 @@ public class ParticipantResource {
     public ResponseEntity<Void> deleteParticipant(@PathVariable Long id) {
         log.debug("REST request to delete Participant : {}", id);
         participantService.delete(id);
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
+    }
+
+    /**
+     * DELETE  /participants/:id : delete the "id" participant.
+     *
+     * @param id the id of the participantDTO to delete
+     * @return the ResponseEntity with status 200 (OK)
+     */
+    @DeleteMapping("/participants/{id}/child")
+    @Timed
+    public ResponseEntity<Void> removeChildFromEvent(@PathVariable Long id) {
+        log.debug("REST request to remove child form event : {}", id);
+        participantService.removeChildFromEvent(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 }

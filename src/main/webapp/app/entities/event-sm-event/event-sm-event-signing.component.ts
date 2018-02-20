@@ -1,9 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
-import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
+import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 import { ActivatedRoute } from '@angular/router';
 
 import { PersonSmEvent, PersonSmEventService } from '../person-sm-event';
+import { EventSmEvent, EventSmEventService} from '../event-sm-event';
 import { Principal, ResponseWrapper } from '../../shared';
 import {ParticipantSmEvent} from '../participant-sm-event/participant-sm-event.model';
 import {ParticipantSmEventService} from '../participant-sm-event/participant-sm-event.service';
@@ -16,17 +17,19 @@ export class EventSmEventSigningComponent implements OnInit, OnDestroy {
 
     children: PersonSmEvent[];
     participants: ParticipantSmEvent[];
+    event: EventSmEvent;
     currentAccount: any;
     eventSubscriber: Subscription;
     subscription: Subscription;
+    isSigningFor: boolean;
     queryCount: any;
 
     constructor(
         private participantService: ParticipantSmEventService,
         private personService: PersonSmEventService,
+        private eventService: EventSmEventService,
         private jhiAlertService: JhiAlertService,
         private eventManager: JhiEventManager,
-        private parseLinks: JhiParseLinks,
         private principal: Principal,
         private route: ActivatedRoute
     ) {
@@ -35,39 +38,44 @@ export class EventSmEventSigningComponent implements OnInit, OnDestroy {
     }
 
     loadAll() {
-        this.personService.getUserChildren()
-        .subscribe(
-            (res: ResponseWrapper) => this.onSuccess(res.json),
-            (res: ResponseWrapper) => this.onError(res.json)
-        );
-
-        this.participantService.getEvenParticipants().subscribe(
-            (res: ResponseWrapper) => this.onSuccess(res.json, res.headers),
-            (res: ResponseWrapper) => this.onError(res.json)
-        );
+        this.route.params.subscribe((params) => {
+            this.load(params['id']);
+        });
     }
 
     reset() {
+        this.children = [];
+        this.participants = [];
         this.loadAll();
     }
 
     ngOnInit() {
-        this.loadAll();
+        this.isSigningFor = false;
         this.principal.identity().then((account) => {
             this.currentAccount = account;
         });
-        this.registerChangeInPeople();
-        this.subscription = this.route.params.subscribe((params) => {
-            this.load(params['id']);
-        });
+        this.loadAll();
+        // this.subscription = this.route.params.subscribe((params) => {
+        //     this.load(params['id']);
+        // });
         this.registerChangeInPeople();
     }
 
     load(eventId) {
-        this.participantService.findAllForEvent(eventId).subscribe((participants) => {
-        this.participants = participants;
-    });
-}
+        this.personService.getUserChildrenForEvent(eventId)
+            .subscribe(
+                (res: ResponseWrapper) => this.onSuccess(this.children, res.json),
+                (res: ResponseWrapper) => this.onError(res.json)
+            );
+        this.participantService.getEvenParticipants(eventId)
+            .subscribe(
+                (res: ResponseWrapper) => this.onSuccess(this.participants, res.json),
+                (res: ResponseWrapper) => this.onError(res.json)
+            );
+        this.eventService.find(eventId).subscribe((event) => {
+            this.event = event;
+        });
+    }
 
     ngOnDestroy() {
         this.eventManager.destroy(this.eventSubscriber);
@@ -78,12 +86,51 @@ export class EventSmEventSigningComponent implements OnInit, OnDestroy {
     }
 
     registerChangeInPeople() {
-        this.eventSubscriber = this.eventManager.subscribe('personListModification', (response) => this.reset());
+        this.eventSubscriber = this.eventManager.subscribe('participantListModification', (response) => this.reset());
     }
 
-    private onSuccess(data) {
+    select(childId) {
+        this.children.filter((child) => child.id === childId).every((child) => child.selected = !child.selected);
+    }
+
+    signInSelected() {
+        this.isSigningFor = true;
+        this.subscribeForSaveResponse(
+            this.participantService.addChildren(this.prepareParticipants()));
+    }
+
+    private subscribeForSaveResponse(result) {
+        result.subscribe((res: ResponseWrapper) =>
+            this.onSignForSuccess(res), (res: Response) => this.onSignForError());
+    }
+
+    private onSignForSuccess(result: ResponseWrapper) {
+        this.eventManager.broadcast({name: 'participantListModification', content: 'OK'});
+        this.isSigningFor = false;
+    }
+
+    private onSignForError() {
+
+    }
+
+    private prepareParticipants(): ParticipantSmEvent[] {
+        const newParticipants: ParticipantSmEvent[] = [];
+        this.children
+            .filter((child) => child.selected)
+            .forEach((child) => newParticipants.push(this.newParticipant(child)));
+        return newParticipants;
+    }
+
+    private newParticipant(child): ParticipantSmEvent {
+        const participant: ParticipantSmEvent = new ParticipantSmEvent();
+        participant.eventId = this.event.id;
+        participant.personId = child.id;
+        return participant;
+    }
+
+    private onSuccess(result, data) {
         for (let i = 0; i < data.length; i++) {
-            this.children.push(data[i]);
+            result.push(data[i]);
         }
     }
 

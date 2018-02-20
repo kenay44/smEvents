@@ -25,4 +25,6 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
     Page<Person> findAllByFamilyId(Long familyId, Pageable pageable);
 
     List<Person> findAllByFamilyIdAndPersonType(Long familyId, PersonType personType);
+
+    Person findOneByUserLogin(String login);
 }

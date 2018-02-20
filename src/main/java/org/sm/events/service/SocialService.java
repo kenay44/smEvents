@@ -1,8 +1,11 @@
 package org.sm.events.service;
 
 import org.sm.events.domain.Authority;
+import org.sm.events.domain.Person;
 import org.sm.events.domain.User;
+import org.sm.events.domain.enumeration.PersonType;
 import org.sm.events.repository.AuthorityRepository;
+import org.sm.events.repository.PersonRepository;
 import org.sm.events.repository.UserRepository;
 import org.sm.events.security.AuthoritiesConstants;
 
@@ -35,16 +38,19 @@ public class SocialService {
 
     private final UserRepository userRepository;
 
+    private final PersonRepository personRepository;
+
     private final MailService mailService;
 
     public SocialService(UsersConnectionRepository usersConnectionRepository, AuthorityRepository authorityRepository,
-            PasswordEncoder passwordEncoder, UserRepository userRepository,
-            MailService mailService) {
+                         PasswordEncoder passwordEncoder, UserRepository userRepository,
+                         PersonRepository personRepository, MailService mailService) {
 
         this.usersConnectionRepository = usersConnectionRepository;
         this.authorityRepository = authorityRepository;
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
+        this.personRepository = personRepository;
         this.mailService = mailService;
     }
 
@@ -66,8 +72,21 @@ public class SocialService {
         String providerId = connection.getKey().getProviderId();
         String imageUrl = connection.getImageUrl();
         User user = createUserIfNotExist(userProfile, langKey, providerId, imageUrl);
+        createPersonIfNotExists(user);
         createSocialConnection(user.getLogin(), connection);
         mailService.sendSocialRegistrationValidationEmail(user, providerId);
+    }
+
+    private Person createPersonIfNotExists(User user) {
+        Person person = personRepository.findOneByUser(user);
+        if(person != null)
+            return person;
+        person = new Person();
+        person.setPersonType(PersonType.USER);
+        person.setUser(user);
+        person.setFirstName(user.getFirstName());
+        person.setLastName(user.getLastName());
+        return personRepository.save(person);
     }
 
     private User createUserIfNotExist(UserProfile userProfile, String langKey, String providerId, String imageUrl) {

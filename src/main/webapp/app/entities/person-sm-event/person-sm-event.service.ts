@@ -75,4 +75,10 @@ export class PersonSmEventService {
         return this.http.get(`${this.resourceUrl}/family/children`)
             .map((res: Response) => this.convertResponse(res));
     }
+
+    getUserChildrenForEvent(eventId): Observable<ResponseWrapper> {
+        return this.http.get(`${this.resourceUrl}/family/children/event/${eventId}`)
+            .map((res: Response) => this.convertResponse(res));
+    }
+
 }

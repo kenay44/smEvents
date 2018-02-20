@@ -2,6 +2,7 @@ package org.sm.events.service;
 
 import io.undertow.util.BadRequestException;
 import org.sm.events.domain.Family;
+import org.sm.events.domain.Participant;
 import org.sm.events.domain.Person;
 import org.sm.events.domain.User;
 import org.sm.events.domain.enumeration.PersonType;
@@ -59,4 +60,6 @@ public interface PersonService {
     Page<PersonDTO> findAllByFamilyId(Pageable pageable, Long familyId);
 
     List<PersonDTO> findAllByFamilyIdAndPersonTypeOrderByFirstName(Long familyId, PersonType personType);
+
+    boolean isCurrentUserParentOf(Participant participant);
 }

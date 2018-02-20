@@ -2,18 +2,16 @@ package org.sm.events.domain;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.sm.events.domain.enumeration.ParticipantStatus;
+import org.sm.events.domain.enumeration.ParticipantType;
+import org.sm.events.domain.enumeration.Task;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
-
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.Objects;
-
-import org.sm.events.domain.enumeration.Task;
-
-import org.sm.events.domain.enumeration.ParticipantType;
 
 /**
  * A Participant.
@@ -45,6 +43,17 @@ public class Participant implements Serializable {
 
     @Column(name = "payed", precision=10, scale=2)
     private BigDecimal payed;
+
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private ParticipantStatus status;
+
+    @Column(name = "status_changed")
+    private ZonedDateTime statusChanged;
+
+    @ManyToOne
+    @JoinColumn(name = "changed_by_user_id")
+    private User changedBy;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -155,6 +164,46 @@ public class Participant implements Serializable {
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
+
+    public ParticipantStatus getStatus() {
+        return status;
+    }
+
+    public Participant status(ParticipantStatus status) {
+        this.status = status;
+        return  this;
+    }
+
+    public void setStatus(ParticipantStatus status) {
+        this.status = status;
+    }
+
+    public ZonedDateTime getStatusChanged() {
+        return statusChanged;
+    }
+
+    public void setStatusChanged(ZonedDateTime statusChanged) {
+        this.statusChanged = statusChanged;
+    }
+
+    public Participant statusChanged(ZonedDateTime statusChanged) {
+        this.statusChanged = statusChanged;
+        return this;
+    }
+
+    public User getChangedBy() {
+        return changedBy;
+    }
+
+    public void setChangedBy(User changedBy) {
+        this.changedBy = changedBy;
+    }
+
+    public Participant changedBy(User user) {
+        this.changedBy = user;
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -178,12 +227,17 @@ public class Participant implements Serializable {
     @Override
     public String toString() {
         return "Participant{" +
-            "id=" + getId() +
-            ", role='" + getRole() + "'" +
-            ", participantType='" + getParticipantType() + "'" +
-            ", signedDate='" + getSignedDate() + "'" +
-            ", founding=" + getFounding() +
-            ", payed=" + getPayed() +
-            "}";
+            "id=" + id +
+            ", role=" + role +
+            ", participantType=" + participantType +
+            ", signedDate=" + signedDate +
+            ", founding=" + founding +
+            ", payed=" + payed +
+            ", status=" + status +
+            ", statusChanged=" + statusChanged +
+            ", changedBy=" + changedBy +
+            ", person=" + person +
+            ", event=" + event +
+            '}';
     }
 }

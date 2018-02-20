@@ -6,6 +6,7 @@ import org.sm.events.domain.Participant;
 import org.sm.events.domain.Person;
 import org.sm.events.domain.Event;
 import org.sm.events.repository.ParticipantRepository;
+import org.sm.events.service.EventService;
 import org.sm.events.service.ParticipantService;
 import org.sm.events.service.dto.ParticipantDTO;
 import org.sm.events.service.mapper.ParticipantMapper;
@@ -76,6 +77,9 @@ public class ParticipantResourceIntTest {
     private ParticipantService participantService;
 
     @Autowired
+    private EventService eventService;
+
+    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -94,7 +98,7 @@ public class ParticipantResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final ParticipantResource participantResource = new ParticipantResource(participantService);
+        final ParticipantResource participantResource = new ParticipantResource(participantService, eventService);
         this.restParticipantMockMvc = MockMvcBuilders.standaloneSetup(participantResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

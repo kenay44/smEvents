@@ -28,8 +28,8 @@ spring:
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
         url: jdbc:mysql://localhost:3306/smEvents?useUnicode=true&characterEncoding=utf8&useSSL=false
-        username: root
-        password:
+        username: smadm
+        password: bBy2TVTs70DBp8WuA9bN
         hikari:
             data-source-properties:
                 cachePrepStmts: true
@@ -47,10 +47,17 @@ spring:
             hibernate.generate_statistics: false
             hibernate.cache.region.factory_class: io.github.jhipster.config.jcache.NoDefaultJCacheRegionFactory
     mail:
-        host: localhost
-        port: 25
-        username:
-        password:
+        host: smtp.gmail.com
+        port: 587
+        username: smnewevents@gmail.com
+        password: 13EllA24
+        protocol: smtp
+        properties.mail.smtp.starttls.enable: true
+        properties.mail.smtp.starttls.required: true
+        properties.mail.smtp.auth: true
+        properties.mail.socketFactory.port: 587
+        properties.mail.socketFactory.class: javax.net.ssl.SSLSocketFactory
+        properties.mail.socketFactory.fallback: false
     thymeleaf:
         cache: true
 
@@ -107,7 +114,7 @@ jhipster:
                 token-validity-in-seconds-for-remember-me: 2592000
     mail: # specific JHipster mail property, for standard properties see MailProperties
         from: smEvents@localhost
-        base-url: http://my-server-url-to-change # Modify according to your server's URL
+        base-url: http://zapisy.santa-maria.pl # Modify according to your server's URL
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration
         jmx.enabled: true
         graphite:

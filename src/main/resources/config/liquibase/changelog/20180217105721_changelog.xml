@@ -1,0 +1,21 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <changeSet author="kenay (generated)" id="1518865045891-1">
+        <addColumn tableName="participant">
+            <column name="changed_by_user_id" type="bigint"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="kenay (generated)" id="1518865045891-2">
+        <addColumn tableName="participant">
+            <column name="status" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="kenay (generated)" id="1518865045891-3">
+        <addColumn tableName="participant">
+            <column name="status_changed" type="timestamp"/>
+        </addColumn>
+    </changeSet>
+    <changeSet author="kenay (generated)" id="1518865045891-4">
+        <addForeignKeyConstraint baseColumnNames="changed_by_user_id" baseTableName="participant" constraintName="FK8qxr7sx7r2mnwkpdggdv0x00a" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="jhi_user"/>
+    </changeSet>
+</databaseChangeLog>

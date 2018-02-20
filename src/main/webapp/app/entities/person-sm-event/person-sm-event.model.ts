@@ -25,6 +25,7 @@ export class PersonSmEvent implements BaseEntity {
         public participants?: BaseEntity[],
         public eMails?: BaseEntity[],
         public familyId?: number,
+        public selected?: boolean,
     ) {
     }
 }

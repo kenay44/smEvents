@@ -1,6 +1,7 @@
 package org.sm.events.security.jwt;
 
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.sm.events.security.AuthoritiesConstants;
 import io.github.jhipster.config.JHipsterProperties;
 import org.junit.Before;
@@ -10,14 +11,18 @@ import org.springframework.mock.web.MockFilterChain;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
 
 public class JWTFilterTest {
 
@@ -30,6 +35,8 @@ public class JWTFilterTest {
 
     @Before
     public void setup() {
+        MockitoAnnotations.initMocks(this);
+        doReturn(null).when(userDetailsService).loadUserByUsername(anyString());
         JHipsterProperties jHipsterProperties = new JHipsterProperties();
         tokenProvider = new TokenProvider(jHipsterProperties);
         ReflectionTestUtils.setField(tokenProvider, "secretKey", "test secret");

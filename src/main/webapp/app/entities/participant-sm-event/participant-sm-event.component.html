@@ -16,33 +16,29 @@
         <table class="table table-striped">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="reset.bind(this)">
-            <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="role"><span jhiTranslate="smEventsApp.participant.role">Role</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="participantType"><span jhiTranslate="smEventsApp.participant.participantType">Participant Type</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="signedDate"><span jhiTranslate="smEventsApp.participant.signedDate">Signed Date</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="founding"><span jhiTranslate="smEventsApp.participant.founding">Founding</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="payed"><span jhiTranslate="smEventsApp.participant.payed">Payed</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="personId"><span jhiTranslate="smEventsApp.participant.person">Person</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="eventId"><span jhiTranslate="smEventsApp.participant.event">Event</span> <span class="fa fa-sort"></span></th>
-            <th></th>
+                <th jhiSortBy="role"><span jhiTranslate="smEventsApp.participant.role">Role</span> <span class="fa fa-sort"></span></th>
+                <th jhiSortBy="signedDate"><span jhiTranslate="smEventsApp.participant.signedDate">Signed Date</span> <span class="fa fa-sort"></span></th>
+                <th jhiSortBy="founding"><span jhiTranslate="smEventsApp.participant.founding">Founding</span> <span class="fa fa-sort"></span></th>
+                <th jhiSortBy="payed"><span jhiTranslate="smEventsApp.participant.payed">Payed</span> <span class="fa fa-sort"></span></th>
+                <th jhiSortBy="personId"><span jhiTranslate="smEventsApp.participant.person">Person</span> <span class="fa fa-sort"></span></th>
+                <th jhiSortBy="eventId"><span jhiTranslate="smEventsApp.participant.event">Event</span> <span class="fa fa-sort"></span></th>
+                <th></th>
             </tr>
             </thead>
             <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
             <tr *ngFor="let participant of participants ;trackBy: trackId">
-                <td><a [routerLink]="['../participant-sm-event', participant.id ]">{{participant.id}}</a></td>
                 <td jhiTranslate="{{'smEventsApp.Task.' + participant.role}}">{{participant.role}}</td>
-                <td jhiTranslate="{{'smEventsApp.ParticipantType.' + participant.participantType}}">{{participant.participantType}}</td>
                 <td>{{participant.signedDate | date:'medium'}}</td>
                 <td>{{participant.founding}}</td>
                 <td>{{participant.payed}}</td>
                 <td>
                     <div *ngIf="participant.personId">
-                        <a [routerLink]="['../person-sm-event', participant.personId  ]" >{{participant.personId}}</a>
+                        <a [routerLink]="['../person-sm-event', participant.personId  ]" >{{participant.lastName}} {{participant.firstName}}</a>
                     </div>
                 </td>
                 <td>
                     <div *ngIf="participant.eventId">
-                        <a [routerLink]="['../event-sm-event', participant.eventId  ]" >{{participant.eventId}}</a>
+                        <a [routerLink]="['../event-sm-event', participant.eventId  ]" >{{participant.eventName}}</a>
                     </div>
                 </td>
                 <td class="text-right">

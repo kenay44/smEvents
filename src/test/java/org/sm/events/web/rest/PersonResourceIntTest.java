@@ -4,6 +4,7 @@ import org.sm.events.SmEventsApp;
 
 import org.sm.events.domain.Person;
 import org.sm.events.repository.PersonRepository;
+import org.sm.events.service.ParticipantService;
 import org.sm.events.service.PersonService;
 import org.sm.events.service.dto.PersonDTO;
 import org.sm.events.service.mapper.PersonMapper;
@@ -77,6 +78,9 @@ public class PersonResourceIntTest {
     private PersonService personService;
 
     @Autowired
+    private ParticipantService participantService;
+
+    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -95,7 +99,7 @@ public class PersonResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final PersonResource personResource = new PersonResource(personService);
+        final PersonResource personResource = new PersonResource(personService, participantService);
         this.restPersonMockMvc = MockMvcBuilders.standaloneSetup(personResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

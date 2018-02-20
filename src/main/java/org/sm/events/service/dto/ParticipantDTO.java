@@ -1,15 +1,14 @@
 package org.sm.events.service.dto;
 
 
-import java.time.ZonedDateTime;
-import javax.validation.constraints.*;
+import org.sm.events.domain.enumeration.ParticipantStatus;
+import org.sm.events.domain.enumeration.ParticipantType;
+import org.sm.events.domain.enumeration.Task;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.Set;
+import java.time.ZonedDateTime;
 import java.util.Objects;
-import org.sm.events.domain.enumeration.Task;
-import org.sm.events.domain.enumeration.ParticipantType;
 
 /**
  * A DTO for the Participant entity.
@@ -31,6 +30,20 @@ public class ParticipantDTO implements Serializable {
     private Long personId;
 
     private Long eventId;
+
+    private String eventName;
+
+    private String firstName;
+
+    private String lastName;
+
+    private ParticipantStatus status;
+
+    private ZonedDateTime statusChanged;
+
+    private String changedBy;
+
+    private Boolean canRemove;
 
     public Long getId() {
         return id;
@@ -96,6 +109,62 @@ public class ParticipantDTO implements Serializable {
         this.eventId = eventId;
     }
 
+    public ParticipantStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ParticipantStatus status) {
+        this.status = status;
+    }
+
+    public ZonedDateTime getStatusChanged() {
+        return statusChanged;
+    }
+
+    public void setStatusChanged(ZonedDateTime statusChanged) {
+        this.statusChanged = statusChanged;
+    }
+
+    public String getChangedBy() {
+        return changedBy;
+    }
+
+    public void setChangedBy(String changedBy) {
+        this.changedBy = changedBy;
+    }
+
+    public Boolean getCanRemove() {
+        return canRemove;
+    }
+
+    public void setCanRemove(Boolean canRemove) {
+        this.canRemove = canRemove;
+    }
+
+    public String getEventName() {
+        return eventName;
+    }
+
+    public void setEventName(String eventName) {
+        this.eventName = eventName;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -120,12 +189,21 @@ public class ParticipantDTO implements Serializable {
     @Override
     public String toString() {
         return "ParticipantDTO{" +
-            "id=" + getId() +
-            ", role='" + getRole() + "'" +
-            ", participantType='" + getParticipantType() + "'" +
-            ", signedDate='" + getSignedDate() + "'" +
-            ", founding=" + getFounding() +
-            ", payed=" + getPayed() +
-            "}";
+            "id=" + id +
+            ", role=" + role +
+            ", participantType=" + participantType +
+            ", signedDate=" + signedDate +
+            ", founding=" + founding +
+            ", payed=" + payed +
+            ", personId=" + personId +
+            ", eventId=" + eventId +
+            ", eventName='" + eventName + '\'' +
+            ", firstName='" + firstName + '\'' +
+            ", lastName='" + lastName + '\'' +
+            ", status=" + status +
+            ", statusChanged=" + statusChanged +
+            ", changedBy='" + changedBy + '\'' +
+            ", canRemove=" + canRemove +
+            '}';
     }
 }

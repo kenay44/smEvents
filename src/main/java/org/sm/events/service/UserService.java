@@ -1,42 +1,37 @@
 package org.sm.events.service;
 
-import io.undertow.servlet.handlers.security.ServletSingleSignOnAuthenticationMechanism;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.sm.events.config.Constants;
 import org.sm.events.domain.Authority;
 import org.sm.events.domain.Person;
 import org.sm.events.domain.User;
 import org.sm.events.domain.enumeration.PersonType;
 import org.sm.events.repository.AuthorityRepository;
-import org.sm.events.config.Constants;
 import org.sm.events.repository.PersonRepository;
 import org.sm.events.repository.UserRepository;
 import org.sm.events.security.AuthoritiesConstants;
 import org.sm.events.security.SecurityUtils;
-import org.sm.events.service.util.RandomUtil;
 import org.sm.events.service.dto.UserDTO;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.sm.events.service.util.RandomUtil;
 import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sun.plugin.liveconnect.SecurityContextHelper;
 
-import javax.servlet.http.HttpSession;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -134,6 +129,15 @@ public class UserService {
         cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(newUser.getLogin());
         cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE).evict(newUser.getEmail());
         log.debug("Created Information for User: {}", newUser);
+
+        // creating person for the new user;
+        Person person = new Person();
+        person.setUser(newUser);
+        person.setFirstName(newUser.getFirstName());
+        person.setLastName(newUser.getLastName());
+        person.setPersonType(PersonType.USER);
+        personRepository.save(person);
+
         return newUser;
     }
 

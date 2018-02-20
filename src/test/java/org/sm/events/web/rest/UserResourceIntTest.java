@@ -1,7 +1,6 @@
 package org.sm.events.web.rest;
 
 import org.sm.events.SmEventsApp;
-import org.sm.events.config.CacheConfiguration;
 import org.sm.events.domain.Authority;
 import org.sm.events.domain.User;
 import org.sm.events.repository.UserRepository;
@@ -506,7 +505,9 @@ public class UserResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$").isArray())
-            .andExpect(jsonPath("$").value(containsInAnyOrder(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN)));
+            .andExpect(jsonPath("$").value(containsInAnyOrder(AuthoritiesConstants.USER, AuthoritiesConstants.ADMIN,
+                AuthoritiesConstants.PARENT, AuthoritiesConstants.CADRE
+            )));
     }
 
     @Test

@@ -1,6 +1,7 @@
 package org.sm.events.service.impl;
 
 import org.sm.events.domain.Family;
+import org.sm.events.domain.Participant;
 import org.sm.events.domain.User;
 import org.sm.events.domain.enumeration.PersonType;
 import org.sm.events.security.AuthoritiesConstants;
@@ -135,5 +136,17 @@ public class PersonServiceImpl implements PersonService {
         return personRepository.findAllByFamilyIdAndPersonType(familyId, personType)
             .stream().map(personMapper::toDto)
             .collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean isCurrentUserParentOf(Participant participant) {
+        if(!SecurityUtils.isAuthenticated() || !SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.PARENT))
+            return false;
+
+        Person parent = personRepository.findOneByUserLogin(SecurityUtils.getCurrentUserLogin().get());
+        if(parent.getFamily().getId().equals(participant.getPerson().getFamily().getId()))
+            return true;
+
+        return false;
     }
 }

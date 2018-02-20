@@ -86,6 +86,9 @@
   "engines": {
     "node": ">=6.9.0"
   },
+  "resolutions": {
+    "remap-istanbul": "0.9.6"
+  },
   "scripts": {
     "lint": "tslint --project tsconfig.json -e 'node_modules/**'",
     "lint:fix": "yarn run lint -- --fix",
