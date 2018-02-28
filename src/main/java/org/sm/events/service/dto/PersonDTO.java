@@ -3,8 +3,11 @@ package org.sm.events.service.dto;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.Objects;
+
+import org.sm.events.domain.enumeration.ClothingSize;
 import org.sm.events.domain.enumeration.PersonType;
 import org.sm.events.domain.enumeration.Sex;
 
@@ -25,13 +28,15 @@ public class PersonDTO implements Serializable {
 
     private Sex sex;
 
-    private String tShirtSize;
+    private ClothingSize tShirtSize;
 
     private Integer birthYear;
 
     private String info;
 
     private Long familyId;
+
+    private List<String> otherEvents;
 
     public Long getId() {
         return id;
@@ -81,11 +86,11 @@ public class PersonDTO implements Serializable {
         this.sex = sex;
     }
 
-    public String gettShirtSize() {
+    public ClothingSize gettShirtSize() {
         return tShirtSize;
     }
 
-    public void settShirtSize(String tShirtSize) {
+    public void settShirtSize(ClothingSize tShirtSize) {
         this.tShirtSize = tShirtSize;
     }
 
@@ -113,6 +118,14 @@ public class PersonDTO implements Serializable {
         this.familyId = familyId;
     }
 
+    public List<String> getOtherEvents() {
+        return otherEvents;
+    }
+
+    public void setOtherEvents(List<String> otherEvents) {
+        this.otherEvents = otherEvents;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -137,15 +150,17 @@ public class PersonDTO implements Serializable {
     @Override
     public String toString() {
         return "PersonDTO{" +
-            "id=" + getId() +
-            ", personType='" + getPersonType() + "'" +
-            ", firstName='" + getFirstName() + "'" +
-            ", lastName='" + getLastName() + "'" +
-            ", phone='" + getPhone() + "'" +
-            ", sex='" + getSex() + "'" +
-            ", tShirtSize='" + gettShirtSize() + "'" +
-            ", birthYear=" + getBirthYear() +
-            ", info='" + getInfo() + "'" +
-            "}";
+            "id=" + id +
+            ", personType=" + personType +
+            ", firstName='" + firstName + '\'' +
+            ", lastName='" + lastName + '\'' +
+            ", phone='" + phone + '\'' +
+            ", sex=" + sex +
+            ", tShirtSize=" + tShirtSize +
+            ", birthYear=" + birthYear +
+            ", info='" + info + '\'' +
+            ", familyId=" + familyId +
+            ", otherEvents=" + otherEvents +
+            '}';
     }
 }

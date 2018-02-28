@@ -16,33 +16,40 @@
         <table class="table table-striped">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="reset.bind(this)">
-            <th jhiSortBy="firstName"><span jhiTranslate="smEventsApp.person.firstName">First Name</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="lastName"><span jhiTranslate="smEventsApp.person.lastName">Last Name</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="sex"><span jhiTranslate="smEventsApp.person.sex">Sex</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="tShirtSize"><span jhiTranslate="smEventsApp.person.tShirtSize">T Shirt Size</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="birthYear"><span jhiTranslate="smEventsApp.person.birthYear">Birth Year</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="info"><span jhiTranslate="smEventsApp.person.info">Info</span> <span class="fa fa-sort"></span></th>
-            <th></th>
+                <th class="d-md-none">
+                    <span jhiTranslate="smEventsApp.person.firstName">First Name</span>
+                    <span jhiTranslate="smEventsApp.person.lastName">Last Name</span>
+                </th>
+                <th class="d-none d-md-table-cell"><span jhiTranslate="smEventsApp.person.firstName">First Name</span> </th>
+                <th class="d-none d-md-table-cell"><span jhiTranslate="smEventsApp.person.lastName">Last Name</span> </th>
+                <th class="d-none d-md-table-cell"><span jhiTranslate="smEventsApp.person.sex">Sex</span> </th>
+                <th class="d-none d-md-table-cell"><span jhiTranslate="smEventsApp.person.tShirtSize">T Shirt Size</span> </th>
+                <th class="d-none d-md-table-cell"><span jhiTranslate="smEventsApp.person.birthYear">Birth Year</span> </th>
+                <th class="d-none d-md-table-cell"><span jhiTranslate="smEventsApp.person.info">Info</span> </th>
+                <th></th>
             </tr>
             </thead>
             <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
             <tr *ngFor="let person of people ;trackBy: trackId">
-                <td><a [routerLink]="['../person-sm-event', person.id ]">{{person.firstName}}</a></td>
-                <td>{{person.lastName}}</td>
-                <td jhiTranslate="{{'smEventsApp.Sex.' + person.sex}}">{{person.sex}}</td>
-                <td>{{person.tShirtSize}}</td>
-                <td>{{person.birthYear}}</td>
-                <td>{{person.info}}</td>
+                <td class="d-md-none">
+                    <a [routerLink]="['../child-sm-event', person.id ]">{{person.firstName}} {{person.lastName}}</a>
+                </td>
+                <td class="d-none d-md-table-cell"><a [routerLink]="['../child-sm-event', person.id ]">{{person.firstName}}</a></td>
+                <td class="d-none d-md-table-cell">{{person.lastName}}</td>
+                <td class="d-none d-md-table-cell" jhiTranslate="{{'smEventsApp.Sex.' + person.sex}}">{{person.sex}}</td>
+                <td class="d-none d-md-table-cell">{{person.tShirtSize}}</td>
+                <td class="d-none d-md-table-cell">{{person.birthYear}}</td>
+                <td class="d-none d-md-table-cell">{{person.info}}</td>
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"
-                                [routerLink]="['../person-sm-event', person.id ]"
+                                [routerLink]="['../child-sm-event', person.id ]"
                                 class="btn btn-info btn-sm">
                             <span class="fa fa-eye"></span>
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
                         </button>
                         <button type="submit"
-                                [routerLink]="['/', { outlets: { popup: 'person-sm-event/'+ person.id + '/edit'} }]"
+                                [routerLink]="['/', { outlets: { popup: 'child-sm-event/'+ person.id + '/edit'} }]"
                                 replaceUrl="true"
                                 queryParamsHandling="merge"
                                 class="btn btn-primary btn-sm">
@@ -50,7 +57,7 @@
                             <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
                         </button>
                         <button type="submit"
-                                [routerLink]="['/', { outlets: { popup: 'person-sm-event/'+ person.id + '/delete'} }]"
+                                [routerLink]="['/', { outlets: { popup: 'child-sm-event/'+ person.id + '/delete'} }]"
                                 replaceUrl="true"
                                 queryParamsHandling="merge"
                                 class="btn btn-danger btn-sm">

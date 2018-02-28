@@ -81,7 +81,7 @@ export class ParticipantSmEventService {
         return copy;
     }
 
-    getEvenParticipants(eventId: number): Observable<ResponseWrapper> {
+    getEventParticipants(eventId: number): Observable<ResponseWrapper> {
         return this.http.get(`${this.resourceUrl}/event/${eventId}`)
             .map((res: Response) => this.convertResponse(res));
     }

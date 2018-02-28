@@ -20,6 +20,8 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,7 +58,7 @@ public class EventResource {
         }
         EventDTO result = eventService.save(eventDTO);
         return ResponseEntity.created(new URI("/api/events/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getTitle()))
             .body(result);
     }
 
@@ -93,6 +95,21 @@ public class EventResource {
     public ResponseEntity<List<EventDTO>> getAllEvents(Pageable pageable) {
         log.debug("REST request to get a page of Events");
         Page<EventDTO> page = eventService.findAll(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/events");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
+    /**
+     * GET  /events : get all the events.
+     *
+     * @param pageable the pagination information
+     * @return the ResponseEntity with status 200 (OK) and the list of events in body
+     */
+    @GetMapping("/events/published")
+    @Timed
+    public ResponseEntity<List<EventDTO>> getAllPublishedEvents(Pageable pageable) {
+        log.debug("REST request to get a page of Events");
+        Page<EventDTO> page = eventService.findAllPublished(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/events");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }

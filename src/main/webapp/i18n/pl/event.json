@@ -2,28 +2,45 @@
     "smEventsApp": {
         "event" : {
             "home": {
-                "title": "Events",
-                "createLabel": "Dodaj Event",
-                "createOrEditLabel": "Dodaj lub edytuj: Event"
+                "title": "Wydarzenia",
+                "createLabel": "Dodaj wydarzenie",
+                "createOrEditLabel": "Wydarzenie"
             },
-            "created": "Utworzono nowy Event z identyfikatorem {{ param }}",
-            "updated": "Uaktualniono Event z identyfikatorem {{ param }}",
-            "deleted": "Usunięto Event z identyfikatorem {{ param }}",
+            "created": "Utworzono nowe wydarzenie {{ param }}",
+            "updated": "Uaktualniono wydarzenie {{ param }}",
+            "deleted": "Usunięto wydarzenie {{ param }}",
             "delete": {
-                "question": "Czy na pewno chcesz usunąć Event {{ id }}?"
+                "question": "Czy na pewno chcesz usunąć wydarzenie {{ id }}?"
             },
             "detail": {
-                "title": "Event"
+                "title": "Wydarzenie"
             },
-            "title": "Title",
-            "startDate": "Start Date",
-            "endDate": "End Date",
-            "location": "Location",
-            "maxParticipants": "Max Participants",
-            "description": "Description",
-            "hours": "Hours",
-            "participant": "Participant",
-            "eMail": "E Mail"
+            "title": "Nazwa",
+            "startDate": "Data rozpoczęcia",
+            "endDate": "Data zakończenia",
+            "location": "Lokalizacja",
+            "maxParticipants": "Limit uczestników",
+            "maxParticipants.validation": {
+                "min": "Limit uczestników nie może być mniejszy niż zero"
+            },
+            "description": "Opis wydarzenia",
+            "hours": "Liczba godzin",
+            "commander": "Komandor",
+            "commander.email": "Email",
+            "commander.phone": "Telefon",
+            "signing.children": "Twoje dzieci:",
+            "participants": "Zapisani",
+            "signing": "Zapisy",
+            "eventType": "Rodzaj wydarzenia",
+            "ageFrom": "Wiek od",
+            "ageFrom.validation.min": "Minimalny wiek 'od' to 7 lat",
+            "ageTo": "Wiek do",
+            "ageTo.validation.max": "Maxymalny wiek dla dzieci to 17 lat",
+            "firstRateDate": "Data pierwszej raty",
+            "secondRateDate": "Data drugiej raty",
+            "signUpStartDate": "Data rozpoczęcia zapisów",
+            "signUpStartTime": "Czas"
+
         }
     }
 }

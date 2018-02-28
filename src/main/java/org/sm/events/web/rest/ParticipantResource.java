@@ -64,7 +64,6 @@ public class ParticipantResource {
             if (participantDTO.getId() != null) {
                 throw new BadRequestAlertException("A new participant cannot already have an ID", ENTITY_NAME, "idexists");
             }
-
         }
         Long eventId = participantService.createParticipants(participantDTOs);
 
@@ -173,7 +172,7 @@ public class ParticipantResource {
     }
 
     /**
-     * DELETE  /participants/:id : delete the "id" participant.
+     * DELETE  /participants/:id/child : delete the "id" participant.
      *
      * @param id the id of the participantDTO to delete
      * @return the ResponseEntity with status 200 (OK)

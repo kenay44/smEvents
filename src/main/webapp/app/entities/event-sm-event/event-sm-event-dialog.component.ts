@@ -1,14 +1,97 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Directive, Input, OnChanges } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Response } from '@angular/http';
 
 import { Observable } from 'rxjs/Observable';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbTimepickerConfig } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager } from 'ng-jhipster';
 
 import { EventSmEvent } from './event-sm-event.model';
 import { EventSmEventPopupService } from './event-sm-event-popup.service';
 import { EventSmEventService } from './event-sm-event.service';
+import { NG_VALIDATORS, FormControl, ValidatorFn, Validators } from '@angular/forms';
+
+class MyValidators {
+    static min(minValue: Number) {
+        return function(control: FormControl) {
+            const currentValue = control.value;
+            if (minValue > Number(currentValue)) {
+                return {
+                    min: {
+                        value: currentValue,
+                        required: minValue
+                    }
+                }
+            }
+            return null;
+        }
+    }
+
+    static max(maxValue: Number) {
+        return function(control: FormControl) {
+            const currentValue = control.value;
+            if (maxValue < Number(currentValue)) {
+                return {
+                    max: {
+                        value: currentValue,
+                        required: maxValue
+                    }
+                }
+            }
+            return null;
+        }
+    }
+}
+
+@Directive({
+    selector: '[jhiMin][ngModel]',
+    providers: [{
+        provide: NG_VALIDATORS,
+        useExisting: MinValueValidatorDirective,
+        multi: true
+    }]
+})
+export class MinValueValidatorDirective implements OnChanges {
+    @Input('jhiMin') jhiMin: string;
+    private valFn: ValidatorFn;
+
+    ngOnChanges(): void {
+        if (this.jhiMin) {
+            this.valFn = MyValidators.min(Number(this.jhiMin));
+        } else {
+            this.valFn = Validators.nullValidator;
+        }
+    }
+
+    validate(control: FormControl) {
+        return this.valFn(control);
+    }
+}
+
+@Directive({
+    selector: '[jhiMax][ngModel]',
+    providers: [{
+        provide: NG_VALIDATORS,
+        useExisting: MaxValueValidatorDirective,
+        multi: true
+    }]
+})
+export class MaxValueValidatorDirective implements OnChanges {
+    @Input('jhiMax') jhiMax: string;
+    private valFn: ValidatorFn;
+
+    ngOnChanges(): void {
+        if (this.jhiMax) {
+            this.valFn = MyValidators.max(Number(this.jhiMax));
+        } else {
+            this.valFn = Validators.nullValidator;
+        }
+    }
+
+    validate(control: FormControl) {
+        return this.valFn(control);
+    }
+}
 
 @Component({
     selector: 'jhi-event-sm-event-dialog',
@@ -18,16 +101,21 @@ export class EventSmEventDialogComponent implements OnInit {
 
     event: EventSmEvent;
     isSaving: boolean;
+    eventTypes: string[];
 
     constructor(
         public activeModal: NgbActiveModal,
+        private timePickerConfig: NgbTimepickerConfig,
         private eventService: EventSmEventService,
-        private eventManager: JhiEventManager
+        private eventManager: JhiEventManager,
     ) {
+        timePickerConfig.spinners = false;
+        timePickerConfig.size = 'small';
     }
 
     ngOnInit() {
         this.isSaving = false;
+        this.eventTypes = ['CRUISE', 'FIRST_TACK', 'BOSUN_WORKS'];
     }
 
     clear() {

@@ -16,7 +16,6 @@
         <table class="table table-striped">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="reset.bind(this)">
-            <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="title"><span jhiTranslate="smEventsApp.event.title">Title</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="startDate"><span jhiTranslate="smEventsApp.event.startDate">Start Date</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="endDate"><span jhiTranslate="smEventsApp.event.endDate">End Date</span> <span class="fa fa-sort"></span></th>
@@ -29,10 +28,9 @@
             </thead>
             <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
             <tr *ngFor="let event of events ;trackBy: trackId">
-                <td><a [routerLink]="['../event-sm-event', event.id ]">{{event.id}}</a></td>
-                <td>{{event.title}}</td>
-                <td>{{event.startDate | date:'medium'}}</td>
-                <td>{{event.endDate | date:'medium'}}</td>
+                <td><a [routerLink]="['../event-sm-event', event.id ]">{{event.title}}</a></td>
+                <td>{{event.startDate | date: 'dd-MM-yyyy'}}</td>
+                <td>{{event.endDate | date: 'dd-MM-yyyy'}}</td>
                 <td>{{event.location}}</td>
                 <td>{{event.maxParticipants}}</td>
                 <td>{{event.description}}</td>

@@ -6,11 +6,11 @@
                 "createLabel": "Dodaj osobę",
                 "createOrEditLabel": "Osoba"
             },
-            "created": "Dodano nową osobę z identyfikatorem {{ param }}",
-            "updated": "Uaktualniono osobę z identyfikatorem {{ param }}",
-            "deleted": "Usunięto osobę z identyfikatorem {{ param }}",
+            "created": "Dodano {{ param }}",
+            "updated": "Uaktualniono {{ param }}",
+            "deleted": "Usunięto {{ param }}",
             "delete": {
-                "question": "Czy na pewno chcesz usunąć osobę {{ id }}?"
+                "question": "Czy na pewno chcesz usunąć {{ param }}?"
             },
             "detail": {
                 "title": "Osoba"
@@ -20,7 +20,7 @@
             "lastName": "Nazwisko",
             "phone": "Telefon",
             "sex": "Płeć",
-            "tShirtSize": "Rozmiar",
+            "tShirtSize": "Rozmiar koszulki",
             "birthYear": "Rok urodzenia",
             "info": "Informacje dodatkowe",
             "participant": "Uczestnik",
@@ -29,13 +29,13 @@
         },
         "child": {
             "home": {
-                "title": "Rodzina",
+                "title": "Dzieci",
                 "createLabel": "Dodaj dziecko",
                 "createOrEditLabel": "Dziecko"
             },
-            "created": "Dodano nowe dziecko z identyfikatorem {{ param }}",
-            "updated": "Uaktualniono dziecko z identyfikatorem {{ param }}",
-            "deleted": "Usunięto dziecko z identyfikatorem {{ param }}",
+            "created": "Dodano nowe dziecko {{ param }}",
+            "updated": "Uaktualniono dane dziecka {{ param }}",
+            "deleted": "Usunięto dziecko {{ param }}",
             "delete": {
                 "question": "Czy na pewno chcesz usunąć dziecko {{ id }}?"
             },

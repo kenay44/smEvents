@@ -44,6 +44,12 @@ export class EventSmEventService {
             .map((res: Response) => this.convertResponse(res));
     }
 
+    queryPublished(req?: any): Observable<ResponseWrapper> {
+        const options = createRequestOption(req);
+        return this.http.get(`${this.resourceUrl}/published`, options)
+            .map((res: Response) => this.convertResponse(res));
+    }
+
     delete(id: number): Observable<Response> {
         return this.http.delete(`${this.resourceUrl}/${id}`);
     }
@@ -63,9 +69,15 @@ export class EventSmEventService {
     private convertItemFromServer(json: any): EventSmEvent {
         const entity: EventSmEvent = Object.assign(new EventSmEvent(), json);
         entity.startDate = this.dateUtils
-            .convertDateTimeFromServer(json.startDate);
+            .convertLocalDateFromServer(json.startDate);
         entity.endDate = this.dateUtils
-            .convertDateTimeFromServer(json.endDate);
+            .convertLocalDateFromServer(json.endDate);
+        entity.firstRateDate = this.dateUtils
+            .convertLocalDateFromServer(json.firstRateDate);
+        entity.secondRateDate = this.dateUtils
+            .convertLocalDateFromServer(json.secondRateDate);
+        entity.signUpStartDate = this.dateUtils
+            .convertLocalDateFromServer(json.signUpStartDate);
         return entity;
     }
 
@@ -75,9 +87,24 @@ export class EventSmEventService {
     private convert(event: EventSmEvent): EventSmEvent {
         const copy: EventSmEvent = Object.assign({}, event);
 
-        copy.startDate = this.dateUtils.toDate(event.startDate);
-
-        copy.endDate = this.dateUtils.toDate(event.endDate);
+        copy.startDate = this.dateUtils
+            .convertLocalDateToServer(event.startDate);
+        copy.endDate = this.dateUtils
+            .convertLocalDateToServer(event.endDate);
+        copy.firstRateDate = this.dateUtils
+            .convertLocalDateToServer(event.firstRateDate);
+        copy.secondRateDate = this.dateUtils
+            .convertLocalDateToServer(event.secondRateDate);
+        copy.signUpStartDate = this.dateUtils
+            .convertLocalDateToServer(event.signUpStartDate);
+        copy.signUpStartTime = event.signUpStartTime.hour + ':'
+            + (event.signUpStartTime.minute < 10 ? '0' + event.signUpStartTime.minute : event.signUpStartTime.minute)
+            + ':00';
         return copy;
     }
+    /*
+    private convertTimePart(time, part: string): string {
+        time.
+        return
+    }*/
 }

@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
 
@@ -95,10 +96,51 @@ public class TestUtil {
     }
 
     /**
+     * A matcher that tests that the examined string represents the same instant as the reference datetime.
+     */
+    public static class LocalDateMatcher extends TypeSafeDiagnosingMatcher<String> {
+
+        private final LocalDate date;
+
+        public LocalDateMatcher(LocalDate date) {
+            this.date = date;
+        }
+
+        @Override
+        protected boolean matchesSafely(String item, Description mismatchDescription) {
+            try {
+                if (!date.isEqual(LocalDate.parse(item))) {
+                    mismatchDescription.appendText("was ").appendValue(item);
+                    return false;
+                }
+                return true;
+            } catch (DateTimeParseException e) {
+                mismatchDescription.appendText("was ").appendValue(item)
+                    .appendText(", which could not be parsed as a ZonedDateTime");
+                return false;
+            }
+
+        }
+
+        @Override
+        public void describeTo(Description description) {
+            description.appendText("a String representing the same Instant as ").appendValue(date);
+        }
+    }
+
+    /**
      * Creates a matcher that matches when the examined string reprensents the same instant as the reference datetime
      * @param date the reference datetime against which the examined string is checked
      */
-    public static ZonedDateTimeMatcher sameInstant(ZonedDateTime date) {
+    public static LocalDateMatcher sameInstant(LocalDate date) {
+        return new LocalDateMatcher(date);
+    }
+
+    /**
+     * Creates a matcher that matches when the examined string reprensents the same instant as the reference datetime
+     * @param date the reference datetime against which the examined string is checked
+     */
+    public static ZonedDateTimeMatcher sameZoneInstant(ZonedDateTime date) {
         return new ZonedDateTimeMatcher(date);
     }
 

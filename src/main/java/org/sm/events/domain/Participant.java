@@ -236,8 +236,6 @@ public class Participant implements Serializable {
             ", status=" + status +
             ", statusChanged=" + statusChanged +
             ", changedBy=" + changedBy +
-            ", person=" + person +
-            ", event=" + event +
             '}';
     }
 }

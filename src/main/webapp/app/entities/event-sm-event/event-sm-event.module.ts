@@ -14,6 +14,8 @@ import {
     EventSmEventSigningComponent,
     eventRoute,
     eventPopupRoute,
+    MinValueValidatorDirective,
+    MaxValueValidatorDirective,
 } from './';
 
 const ENTITY_STATES = [
@@ -34,6 +36,8 @@ const ENTITY_STATES = [
         EventSmEventPopupComponent,
         EventSmEventDeletePopupComponent,
         EventSmEventSigningComponent,
+        MinValueValidatorDirective,
+        MaxValueValidatorDirective,
     ],
     entryComponents: [
         EventSmEventComponent,

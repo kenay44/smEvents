@@ -1,0 +1,10 @@
+{
+    "smEventsApp": {
+        "EventType" : {
+            "null": "",
+            "CRUISE": "Rejs",
+            "FIRST_TACK": "Pierwsze halsy",
+            "BOSUN_WORKS": "Prace bosmańskie"
+        }
+    }
+}

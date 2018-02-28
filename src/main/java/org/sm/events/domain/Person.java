@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Objects;
 
+import org.sm.events.domain.enumeration.ClothingSize;
 import org.sm.events.domain.enumeration.PersonType;
 
 import org.sm.events.domain.enumeration.Sex;
@@ -46,8 +47,9 @@ public class Person implements Serializable {
     @Column(name = "sex")
     private Sex sex;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "t_shirt_size")
-    private String tShirtSize;
+    private ClothingSize tShirtSize;
 
     @Column(name = "birth_year")
     private Integer birthYear;
@@ -145,16 +147,16 @@ public class Person implements Serializable {
         this.sex = sex;
     }
 
-    public String gettShirtSize() {
+    public ClothingSize gettShirtSize() {
         return tShirtSize;
     }
 
-    public Person tShirtSize(String tShirtSize) {
+    public Person tShirtSize(ClothingSize tShirtSize) {
         this.tShirtSize = tShirtSize;
         return this;
     }
 
-    public void settShirtSize(String tShirtSize) {
+    public void settShirtSize(ClothingSize tShirtSize) {
         this.tShirtSize = tShirtSize;
     }
 

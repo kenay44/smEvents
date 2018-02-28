@@ -4,6 +4,7 @@ import org.sm.events.domain.Participant;
 import org.sm.events.domain.enumeration.ParticipantStatus;
 import org.sm.events.service.dto.EventDTO;
 import org.sm.events.service.dto.ParticipantDTO;
+import org.sm.events.service.dto.PersonDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -53,7 +54,7 @@ public interface ParticipantService {
      */
     void delete(Long id);
 
-    List<Participant> findAllOthersForPersonEndEventTimeFrame(Long personId, EventDTO eventDto, Long participantId);
+    List<Participant> findAllOthersForPersonEndEventTimeFrame(Long personId, EventDTO eventDto);
 
     void removeChildFromEvent(Long participantId);
 
@@ -62,4 +63,6 @@ public interface ParticipantService {
     ParticipantDTO saveDto(ParticipantDTO participantDTO);
 
     Participant findOneByPersonIdAndEventIdAndStatus(Long id, Long eventId, ParticipantStatus signed);
+
+    List<PersonDTO> validateParticipants(List<PersonDTO> children, Long eventId);
 }

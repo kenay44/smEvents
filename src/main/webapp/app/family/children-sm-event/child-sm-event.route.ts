@@ -11,7 +11,7 @@ export const childRoute: Routes = [
         path: 'child-sm-event',
         component: ChildSmEventComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_PARENT'],
             pageTitle: 'smEventsApp.child.home.title'
         },
         canActivate: [UserRouteAccessService]
@@ -19,7 +19,7 @@ export const childRoute: Routes = [
         path: 'child-sm-event/:id',
         component: ChildSmEventDetailComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_PARENT'],
             pageTitle: 'smEventsApp.child.home.title'
         },
         canActivate: [UserRouteAccessService]
@@ -41,7 +41,7 @@ export const childPopupRoute: Routes = [
         path: 'child-sm-event/:id/edit',
         component: ChildSmEventPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_PARENT'],
             pageTitle: 'smEventsApp.child.home.title'
         },
         canActivate: [UserRouteAccessService],

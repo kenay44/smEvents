@@ -45,11 +45,15 @@ export class HomeComponent implements OnInit {
     }
 
     loadAll() {
-        this.eventSmEventService.query()
-            .subscribe(
-                (res: ResponseWrapper) => this.onSuccess(res.json, res.headers),
-                (res: ResponseWrapper) => this.onError(res.json)
-            );
+        this.eventSmEventService.queryPublished({
+            page: this.page,
+            size: this.itemsPerPage,
+            sort: this.sort()
+        })
+        .subscribe(
+            (res: ResponseWrapper) => this.onSuccess(res.json, res.headers),
+            (res: ResponseWrapper) => this.onError(res.json)
+        );
     }
 
     ngOnInit() {

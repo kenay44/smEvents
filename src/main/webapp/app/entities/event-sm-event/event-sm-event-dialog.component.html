@@ -7,54 +7,175 @@
     </div>
     <div class="modal-body">
         <jhi-alert-error></jhi-alert-error>
-        <div class="form-group" [hidden]="!event.id">
-            <label for="id" jhiTranslate="global.field.id">ID</label>
-            <input type="text" class="form-control" id="id" name="id"
-                   [(ngModel)]="event.id" readonly />
-        </div>
-        <div class="form-group">
-            <label class="form-control-label" jhiTranslate="smEventsApp.event.title" for="field_title">Title</label>
-            <input type="text" class="form-control" name="title" id="field_title"
-                [(ngModel)]="event.title" required/>
-            <div [hidden]="!(editForm.controls.title?.dirty && editForm.controls.title?.invalid)">
-                <small class="form-text text-danger"
-                   [hidden]="!editForm.controls.title?.errors?.required" jhiTranslate="entity.validation.required">
-                   This field is required.
-                </small>
+        <div class="row">
+            <div class="col-md-12 form-group">
+                <label class="form-control-label" jhiTranslate="smEventsApp.event.title" for="field_title">Title</label>
+                <input type="text" class="form-control" name="title" id="field_title"
+                    [(ngModel)]="event.title" required/>
+                <div [hidden]="!(editForm.controls.title?.dirty && editForm.controls.title?.invalid)">
+                    <small class="form-text text-danger"
+                       [hidden]="!editForm.controls.title?.errors?.required" jhiTranslate="entity.validation.required">
+                       This field is required.
+                    </small>
+                </div>
             </div>
         </div>
-        <div class="form-group">
-            <label class="form-control-label" jhiTranslate="smEventsApp.event.startDate" for="field_startDate">Start Date</label>
-            <div class="d-flex">
-                <input id="field_startDate" type="datetime-local" class="form-control" name="startDate" [(ngModel)]="event.startDate"
-                required/>
+        <div class="row">
+            <div class="col-md-4 form-group">
+                <label class="form-control-label" jhiTranslate="smEventsApp.event.eventType" for="field_eventType">Event type</label>
+                <select class="form-control" name="eventType" [(ngModel)]="event.eventType" id="field_eventType" required>
+                    <option *ngFor="let eventType of eventTypes" [value]="eventType" jhiTranslate="{{'smEventsApp.EventType.' + eventType}}">{{eventType}}</option>
+                </select>
             </div>
-            <div [hidden]="!(editForm.controls.startDate?.dirty && editForm.controls.startDate?.invalid)">
-                <small class="form-text text-danger"
-                   [hidden]="!editForm.controls.startDate?.errors?.required" jhiTranslate="entity.validation.required">
-                   This field is required.
-                </small>
-                <small class="form-text text-danger"
-                    [hidden]="!editForm.controls.startDate?.errors?.ZonedDateTimelocal" jhiTranslate="entity.validation.ZonedDateTimelocal">
-                    This field should be a date and time.
-                </small>
+            <div class="col-md-4 form-group">
+                <label class="form-control-label" jhiTranslate="smEventsApp.event.signUpStartDate" for="field_signUpStartDate">Sign up start date</label>
+                <div class="d-flex input-group">
+                    <input class="form-control" id="field_signUpStartDate" placeholder="dd-mm-yyyy"
+                           name="signUpStartDate" [(ngModel)]="event.signUpStartDate" ngbDatepicker #signUp="ngbDatepicker" required/>
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary fa fa-calendar" (click)="signUp.toggle()" type="button"></button>
+                    </div>
+                </div>
+                <div [hidden]="!(editForm.controls.signUpStartDate?.dirty && editForm.controls.signUpStartDate?.invalid)">
+                    <small class="form-text text-danger"
+                           [hidden]="!editForm.controls.signUpStartDate?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                    </small>
+                </div>
+            </div>
+            <div class="col-md-4 form-group">
+                <label class="form-control-label" jhiTranslate="smEventsApp.event.signUpStartTime" >Sign up start date</label>
+                <div class="d-flex input-group">
+                    <ngb-timepicker class="form-control" id="field_signUpStartTime" name="signUpStartTime"
+                                    [(ngModel)]="event.signUpStartTime" required></ngb-timepicker>
+                </div>
+                <div [hidden]="!(editForm.controls.signUpStartTime?.dirty && editForm.controls.signUpStartTime?.invalid)">
+                    <small class="form-text text-danger"
+                           [hidden]="!editForm.controls.signUpStartTime?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                    </small>
+                </div>
             </div>
         </div>
-        <div class="form-group">
-            <label class="form-control-label" jhiTranslate="smEventsApp.event.endDate" for="field_endDate">End Date</label>
-            <div class="d-flex">
-                <input id="field_endDate" type="datetime-local" class="form-control" name="endDate" [(ngModel)]="event.endDate"
-                required/>
+        <div class="row">
+            <div class="col-md-4 form-group">
+                <label class="form-control-label" jhiTranslate="smEventsApp.event.maxParticipants" for="field_maxParticipants">Max Participants</label>
+                <input type="number" class="form-control" name="maxParticipants" id="field_maxParticipants" [jhiMin]="'0'"
+                    [(ngModel)]="event.maxParticipants" #maxParticipants="ngModel" required />
+                <div *ngIf="maxParticipants.invalid && (maxParticipants.dirty || maxParticipants.touched)"
+                     class="alert alert-danger">
+                    <small *ngIf="maxParticipants.errors.min" class="form-text text-danger"
+                         jhiTranslate="smEventsApp.event.maxParticipants.validation.min">
+                    </small>
+                </div>
             </div>
-            <div [hidden]="!(editForm.controls.endDate?.dirty && editForm.controls.endDate?.invalid)">
-                <small class="form-text text-danger"
-                   [hidden]="!editForm.controls.endDate?.errors?.required" jhiTranslate="entity.validation.required">
-                   This field is required.
-                </small>
-                <small class="form-text text-danger"
-                    [hidden]="!editForm.controls.endDate?.errors?.ZonedDateTimelocal" jhiTranslate="entity.validation.ZonedDateTimelocal">
-                    This field should be a date and time.
-                </small>
+            <div class="col-md-4 form-group">
+                <label class="form-control-label" jhiTranslate="smEventsApp.event.ageFrom" for="field_ageFrom">Age from</label>
+                <input type="number" class="form-control" name="ageFrom" id="field_ageFrom" [jhiMin]="'7'" [jhiMax]="'17'"
+                       [(ngModel)]="event.ageFrom" #ageFrom="ngModel" required />
+                <div *ngIf="ageFrom.invalid && (ageFrom.dirty || ageFrom.touched)"
+                     class="alert alert-danger">
+                    <small *ngIf="ageFrom.errors.min" class="form-text text-danger"
+                           jhiTranslate="smEventsApp.event.ageFrom.validation.min">
+                    </small>
+                    <small *ngIf="ageFrom.errors.max" class="form-text text-danger"
+                           jhiTranslate="smEventsApp.event.ageTo.validation.max">
+                    </small>
+                </div>
+            </div>
+            <div class="col-md-4 form-group">
+                <label class="form-control-label" jhiTranslate="smEventsApp.event.ageTo" for="field_ageTo">Age to</label>
+                <input type="number" class="form-control" name="ageTo" id="field_ageTo" [jhiMin]="'7'" [jhiMax]="'17'"
+                       [(ngModel)]="event.ageTo" #ageTo="ngModel" required />
+                <div *ngIf="ageTo.invalid && (ageTo.dirty || ageTo.touched)"
+                     class="alert alert-danger">
+                    <small *ngIf="ageTo.errors.min" class="form-text text-danger"
+                           jhiTranslate="smEventsApp.event.ageFrom.validation.min">
+                    </small>
+                    <small *ngIf="ageTo.errors.max" class="form-text text-danger"
+                           jhiTranslate="smEventsApp.event.ageTo.validation.max">
+                    </small>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 form-group">
+                <label class="form-control-label" jhiTranslate="smEventsApp.event.firstRateDate" for="field_firstRateDate">Start Date</label>
+                <div class="d-flex input-group">
+                    <input class="form-control" id="field_firstRateDate" placeholder="yyyy-mm-dd"
+                           name="firstRateDate" [(ngModel)]="event.firstRateDate" ngbDatepicker #rate1="ngbDatepicker" required/>
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary fa fa-calendar" (click)="rate1.toggle()" type="button"></button>
+                    </div>
+                </div>
+                <div [hidden]="!(editForm.controls.firstRateDate?.dirty && editForm.controls.firstRateDate?.invalid)">
+                    <small class="form-text text-danger"
+                           [hidden]="!editForm.controls.firstRateDate?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                    </small>
+                </div>
+            </div>
+            <div class="col-md-4 form-group">
+                <label class="form-control-label" jhiTranslate="smEventsApp.event.secondRateDate" for="field_secondRateDate">End Date</label>
+                <div class="d-flex input-group">
+                    <input class="form-control" id="field_secondRateDate" placeholder="dd-mm-yyyy"
+                           name="secondRateDate" [(ngModel)]="event.secondRateDate" ngbDatepicker #rate2="ngbDatepicker" required/>
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary fa fa-calendar" (click)="rate2.toggle()" type="button"></button>
+                    </div>
+                </div>
+                <div [hidden]="!(editForm.controls.secondRateDate?.dirty && editForm.controls.secondRateDate?.invalid)">
+                    <small class="form-text text-danger"
+                       [hidden]="!editForm.controls.secondRateDate?.errors?.required" jhiTranslate="entity.validation.required">
+                       This field is required.
+                    </small>
+                </div>
+            </div>
+
+            <!--<div class="col-md-3">
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="smEventsApp.event.hours" for="field_hours">Hours</label>
+                    <input type="number" class="form-control" name="hours" id="field_hours"
+                           [(ngModel)]="event.hours" />
+                </div>
+            </div>-->
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="smEventsApp.event.startDate" for="field_startDate">Start Date</label>
+                    <div class="d-flex input-group">
+                        <input class="form-control" id="field_startDate" placeholder="yyyy-mm-dd"
+                               name="startDate" [(ngModel)]="event.startDate" ngbDatepicker #d="ngbDatepicker" required/>
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary fa fa-calendar" (click)="d.toggle()" type="button"></button>
+                        </div>
+                    </div>
+                    <div [hidden]="!(editForm.controls.startDate?.dirty && editForm.controls.startDate?.invalid)">
+                        <small class="form-text text-danger"
+                               [hidden]="!editForm.controls.startDate?.errors?.required" jhiTranslate="entity.validation.required">
+                            This field is required.
+                        </small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="smEventsApp.event.endDate" for="field_endDate">End Date</label>
+                    <div class="d-flex input-group">
+                        <input class="form-control" id="field_endDate" placeholder="dd-mm-yyyy"
+                               name="endDate" [(ngModel)]="event.endDate" ngbDatepicker #d2="ngbDatepicker" required/>
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary fa fa-calendar" (click)="d2.toggle()" type="button"></button>
+                        </div>
+                    </div>
+                    <div [hidden]="!(editForm.controls.endDate?.dirty && editForm.controls.endDate?.invalid)">
+                        <small class="form-text text-danger"
+                               [hidden]="!editForm.controls.endDate?.errors?.required" jhiTranslate="entity.validation.required">
+                            This field is required.
+                        </small>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="form-group">
@@ -68,29 +189,54 @@
                 </small>
             </div>
         </div>
-        <div class="form-group">
-            <label class="form-control-label" jhiTranslate="smEventsApp.event.maxParticipants" for="field_maxParticipants">Max Participants</label>
-            <input type="number" class="form-control" name="maxParticipants" id="field_maxParticipants"
-                [(ngModel)]="event.maxParticipants" />
+        <div class="row">
+            <div class="col-md-4">
+                <label class="form-control-label" jhiTranslate="smEventsApp.event.commander" for="field_commander">Commander</label>
+                <input type="text" class="form-control" name="commander" id="field_commander"
+                    [(ngModel)]="event.commander" required/>
+                <div [hidden]="!(editForm.controls.commander?.dirty && editForm.controls.commander?.invalid)">
+                    <small class="form-text text-danger"
+                           [hidden]="!editForm.controls.commander?.errors?.required" jhiTrasnlate="entity.validation.required">
+                        This field is requiered
+                    </small>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <label class="form-control-label" jhiTranslate="smEventsApp.event.commander.email" for="field_commanderEmail">Commander email</label>
+                <input type="text" class="form-control" name="commanderEmail" id="field_commanderEmail"
+                       [(ngModel)]="event.commanderEmail" required/>
+                <div [hidden]="!(editForm.controls.commanderEmail?.dirty && editForm.controls.commanderEmail?.invalid)">
+                    <small class="form-text text-danger"
+                           [hidden]="!editForm.controls.commanderEmail?.errors?.required" jhiTrasnlate="entity.validation.required">
+                        This field is requiered
+                    </small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <label class="form-control-label" jhiTranslate="smEventsApp.event.commander.phone" for="field_commanderPhone">Commander email</label>
+                <input type="text" class="form-control" name="commanderPhone" id="field_commanderPhone"
+                       [(ngModel)]="event.commanderPhone" required/>
+                <div [hidden]="!(editForm.controls.commanderPhone?.dirty && editForm.controls.commanderPhone?.invalid)">
+                    <small class="form-text text-danger"
+                           [hidden]="!editForm.controls.commanderPhone?.errors?.required" jhiTrasnlate="entity.validation.required">
+                        This field is requiered
+                    </small>
+                </div>
+            </div>
         </div>
         <div class="form-group">
             <label class="form-control-label" jhiTranslate="smEventsApp.event.description" for="field_description">Description</label>
-            <input type="text" class="form-control" name="description" id="field_description"
-                [(ngModel)]="event.description" />
-        </div>
-        <div class="form-group">
-            <label class="form-control-label" jhiTranslate="smEventsApp.event.hours" for="field_hours">Hours</label>
-            <input type="number" class="form-control" name="hours" id="field_hours"
-                [(ngModel)]="event.hours" />
+            <textarea rows="4" cols="50" class="form-control" name="description" id="field_description"
+                      [(ngModel)]="event.description" ></textarea>
         </div>
 
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">
-            <span class="fa fa-ban"></span>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
-        </button>
-        <button type="submit" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
-            <span class="fa fa-save"></span>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
-        </button>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">
+                <span class="fa fa-ban"></span>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+            </button>
+            <button type="submit" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+                <span class="fa fa-save"></span>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+            </button>
+        </div>
     </div>
 </form>

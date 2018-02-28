@@ -62,4 +62,8 @@ public interface PersonService {
     List<PersonDTO> findAllByFamilyIdAndPersonTypeOrderByFirstName(Long familyId, PersonType personType);
 
     boolean isCurrentUserParentOf(Participant participant);
+
+    PersonDTO findOneWithCurrentUserAsParent(Long id);
+
+    PersonDTO updateChild(PersonDTO personDTO);
 }

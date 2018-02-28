@@ -8,6 +8,7 @@ import { EventSmEvent, EventSmEventService} from '../event-sm-event';
 import { Principal, ResponseWrapper } from '../../shared';
 import {ParticipantSmEvent} from '../participant-sm-event/participant-sm-event.model';
 import {ParticipantSmEventService} from '../participant-sm-event/participant-sm-event.service';
+import {ParticipantType} from '../participant-sm-event';
 
 @Component({
     selector: 'jhi-event-sm-event-signing',
@@ -55,9 +56,6 @@ export class EventSmEventSigningComponent implements OnInit, OnDestroy {
             this.currentAccount = account;
         });
         this.loadAll();
-        // this.subscription = this.route.params.subscribe((params) => {
-        //     this.load(params['id']);
-        // });
         this.registerChangeInPeople();
     }
 
@@ -67,7 +65,7 @@ export class EventSmEventSigningComponent implements OnInit, OnDestroy {
                 (res: ResponseWrapper) => this.onSuccess(this.children, res.json),
                 (res: ResponseWrapper) => this.onError(res.json)
             );
-        this.participantService.getEvenParticipants(eventId)
+        this.participantService.getEventParticipants(eventId)
             .subscribe(
                 (res: ResponseWrapper) => this.onSuccess(this.participants, res.json),
                 (res: ResponseWrapper) => this.onError(res.json)
@@ -97,6 +95,10 @@ export class EventSmEventSigningComponent implements OnInit, OnDestroy {
         this.isSigningFor = true;
         this.subscribeForSaveResponse(
             this.participantService.addChildren(this.prepareParticipants()));
+    }
+
+    isPrimary(participant: ParticipantSmEvent) {
+        return ParticipantType.PRIMARY === participant.participantType;
     }
 
     private subscribeForSaveResponse(result) {

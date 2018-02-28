@@ -4,6 +4,7 @@ import org.sm.events.SmEventsApp;
 import org.sm.events.domain.Authority;
 import org.sm.events.domain.User;
 import org.sm.events.repository.AuthorityRepository;
+import org.sm.events.repository.FamilyRepository;
 import org.sm.events.repository.PersonRepository;
 import org.sm.events.repository.UserRepository;
 import org.sm.events.security.AuthoritiesConstants;
@@ -53,6 +54,9 @@ public class SocialServiceIntTest {
     @Mock
     private ConnectionRepository mockConnectionRepository;
 
+    @Mock
+    private FamilyRepository familyRepository;
+
     private SocialService socialService;
 
     @Before
@@ -63,7 +67,7 @@ public class SocialServiceIntTest {
         when(mockUsersConnectionRepository.createConnectionRepository(anyString())).thenReturn(mockConnectionRepository);
 
         socialService = new SocialService(mockUsersConnectionRepository, authorityRepository,
-                passwordEncoder, userRepository, personRepository, mockMailService);
+                passwordEncoder, userRepository, personRepository, familyRepository, mockMailService);
     }
 
     @Test
@@ -194,7 +198,8 @@ public class SocialServiceIntTest {
         assertThat(user.getActivated()).isEqualTo(true);
         assertThat(user.getPassword()).isNotEmpty();
         Authority userAuthority = authorityRepository.findOne(AuthoritiesConstants.USER);
-        assertThat(user.getAuthorities().toArray()).containsExactly(userAuthority);
+        Authority parentAuthority = authorityRepository.findOne(AuthoritiesConstants.PARENT);
+        assertThat(user.getAuthorities().toArray()).containsExactly(userAuthority, parentAuthority);
 
         // Teardown
         userRepository.delete(user);

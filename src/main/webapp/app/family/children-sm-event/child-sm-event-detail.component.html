@@ -4,43 +4,42 @@
     <hr>
     <jhi-alert-error></jhi-alert-error>
     <dl class="row-md jh-entity-details">
-        <dt><span jhiTranslate="smEventsApp.person.personType">Person Type</span></dt>
-        <dd>
-            <span jhiTranslate="{{'smEventsApp.PersonType.' + person.personType}}">{{person.personType}}</span>
-        </dd>
-        <dt><span jhiTranslate="smEventsApp.person.firstName">First Name</span></dt>
+        <dt>
+            <span jhiTranslate="smEventsApp.person.firstName">First Name</span>
+            <span jhiTranslate="smEventsApp.person.lastName">Last Name</span>
+            <span>:</span>
+        </dt>
         <dd>
             <span>{{person.firstName}}</span>
-        </dd>
-        <dt><span jhiTranslate="smEventsApp.person.lastName">Last Name</span></dt>
-        <dd>
             <span>{{person.lastName}}</span>
         </dd>
-        <dt><span jhiTranslate="smEventsApp.person.phone">Phone</span></dt>
-        <dd>
-            <span>{{person.phone}}</span>
-        </dd>
-        <dt><span jhiTranslate="smEventsApp.person.sex">Sex</span></dt>
+        <dt>
+            <span jhiTranslate="smEventsApp.person.sex">Sex</span>
+            <span>:</span>
+        </dt>
         <dd>
             <span jhiTranslate="{{'smEventsApp.Sex.' + person.sex}}">{{person.sex}}</span>
         </dd>
-        <dt><span jhiTranslate="smEventsApp.person.tShirtSize">T Shirt Size</span></dt>
+        <dt>
+            <span jhiTranslate="smEventsApp.person.tShirtSize">T Shirt Size</span>
+            <span>:</span>
+        </dt>
         <dd>
             <span>{{person.tShirtSize}}</span>
         </dd>
-        <dt><span jhiTranslate="smEventsApp.person.birthYear">Birth Year</span></dt>
+        <dt>
+            <span jhiTranslate="smEventsApp.person.birthYear">Birth Year</span>
+            <span>:</span>
+        </dt>
         <dd>
             <span>{{person.birthYear}}</span>
         </dd>
-        <dt><span jhiTranslate="smEventsApp.person.info">Info</span></dt>
+        <dt>
+            <span jhiTranslate="smEventsApp.person.info">Info</span>
+            <span>:</span>
+        </dt>
         <dd>
             <span>{{person.info}}</span>
-        </dd>
-        <dt><span jhiTranslate="smEventsApp.person.family">Family</span></dt>
-        <dd>
-            <div *ngIf="person.familyId">
-                <a [routerLink]="['/family-sm-event', person.familyId]">{{person.familyId}}</a>
-            </div>
         </dd>
     </dl>
 
@@ -51,7 +50,7 @@
     </button>
 
     <button type="button"
-            [routerLink]="['/', { outlets: { popup: 'person-sm-event/'+ person.id + '/edit'} }]"
+            [routerLink]="['/', { outlets: { popup: 'child-sm-event/'+ person.id + '/edit'} }]"
             replaceUrl="true"
             queryParamsHandling="merge"
             class="btn btn-primary">

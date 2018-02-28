@@ -1,10 +1,12 @@
 package org.sm.events.service;
 
 import org.sm.events.domain.Authority;
+import org.sm.events.domain.Family;
 import org.sm.events.domain.Person;
 import org.sm.events.domain.User;
 import org.sm.events.domain.enumeration.PersonType;
 import org.sm.events.repository.AuthorityRepository;
+import org.sm.events.repository.FamilyRepository;
 import org.sm.events.repository.PersonRepository;
 import org.sm.events.repository.UserRepository;
 import org.sm.events.security.AuthoritiesConstants;
@@ -40,17 +42,20 @@ public class SocialService {
 
     private final PersonRepository personRepository;
 
+    private final FamilyRepository familyRepository;
+
     private final MailService mailService;
 
     public SocialService(UsersConnectionRepository usersConnectionRepository, AuthorityRepository authorityRepository,
                          PasswordEncoder passwordEncoder, UserRepository userRepository,
-                         PersonRepository personRepository, MailService mailService) {
+                         PersonRepository personRepository, FamilyRepository familyRepository, MailService mailService) {
 
         this.usersConnectionRepository = usersConnectionRepository;
         this.authorityRepository = authorityRepository;
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.personRepository = personRepository;
+        this.familyRepository = familyRepository;
         this.mailService = mailService;
     }
 
@@ -82,11 +87,22 @@ public class SocialService {
         if(person != null)
             return person;
         person = new Person();
-        person.setPersonType(PersonType.USER);
+        person.setPersonType(PersonType.PARENT);
         person.setUser(user);
         person.setFirstName(user.getFirstName());
         person.setLastName(user.getLastName());
-        return personRepository.save(person);
+        person = personRepository.save(person);
+
+        //create family for user;
+        if(person.getFamily() == null) {
+            Family family = new Family();
+            family.setName(Optional.ofNullable(user.getLastName()).orElse(user.getLogin()));
+            family.addPerson(person);
+            family = familyRepository.save(family);
+            person.setFamily(family);
+            personRepository.save(person);
+        }
+        return person;
     }
 
     private User createUserIfNotExist(UserProfile userProfile, String langKey, String providerId, String imageUrl) {
@@ -115,7 +131,7 @@ public class SocialService {
         String encryptedPassword = passwordEncoder.encode(RandomStringUtils.random(10));
         Set<Authority> authorities = new HashSet<>(1);
         authorities.add(authorityRepository.findOne(AuthoritiesConstants.USER));
-
+        authorities.add(authorityRepository.findOne(AuthoritiesConstants.PARENT));
         User newUser = new User();
         newUser.setLogin(login);
         newUser.setPassword(encryptedPassword);

@@ -1,9 +1,12 @@
 package org.sm.events.web.rest;
 
+import org.mockito.Mock;
 import org.sm.events.SmEventsApp;
 
 import org.sm.events.domain.Person;
+import org.sm.events.domain.enumeration.ClothingSize;
 import org.sm.events.repository.PersonRepository;
+import org.sm.events.service.EventService;
 import org.sm.events.service.ParticipantService;
 import org.sm.events.service.PersonService;
 import org.sm.events.service.dto.PersonDTO;
@@ -59,8 +62,8 @@ public class PersonResourceIntTest {
     private static final Sex DEFAULT_SEX = Sex.MALE;
     private static final Sex UPDATED_SEX = Sex.FEMALE;
 
-    private static final String DEFAULT_T_SHIRT_SIZE = "AAAAAAAAAA";
-    private static final String UPDATED_T_SHIRT_SIZE = "BBBBBBBBBB";
+    private static final ClothingSize DEFAULT_T_SHIRT_SIZE = ClothingSize.S;
+    private static final ClothingSize UPDATED_T_SHIRT_SIZE = ClothingSize.M;
 
     private static final Integer DEFAULT_BIRTH_YEAR = 1;
     private static final Integer UPDATED_BIRTH_YEAR = 2;
@@ -96,10 +99,13 @@ public class PersonResourceIntTest {
 
     private Person person;
 
+    @Mock
+    private EventService eventService;
+
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        final PersonResource personResource = new PersonResource(personService, participantService);
+        final PersonResource personResource = new PersonResource(personService, participantService, eventService);
         this.restPersonMockMvc = MockMvcBuilders.standaloneSetup(personResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

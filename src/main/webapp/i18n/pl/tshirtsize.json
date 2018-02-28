@@ -1,0 +1,20 @@
+{
+    "smEventsApp": {
+        "TShirtSize" : {
+            "null": "",
+            "XS_KIDS": "Dziecięcy XS",
+            "S_KIDS": "Dziecięcy S",
+            "M_KIDS": "Dziecięcy M",
+            "L_KIDS": "Dziecięcy L",
+            "XL_KIDS": "Dziecięcy XL",
+            "XS": "XS",
+            "S": "S",
+            "M": "M",
+            "L": "L",
+            "XL": "XL",
+            "COMANDOR": "COMANDOR",
+            "OFFICER": "OFFICER",
+            "ROOK": "ROOK"
+        }
+    }
+}

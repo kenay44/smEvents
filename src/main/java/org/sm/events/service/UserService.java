@@ -4,10 +4,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sm.events.config.Constants;
 import org.sm.events.domain.Authority;
+import org.sm.events.domain.Family;
 import org.sm.events.domain.Person;
 import org.sm.events.domain.User;
 import org.sm.events.domain.enumeration.PersonType;
 import org.sm.events.repository.AuthorityRepository;
+import org.sm.events.repository.FamilyRepository;
 import org.sm.events.repository.PersonRepository;
 import org.sm.events.repository.UserRepository;
 import org.sm.events.security.AuthoritiesConstants;
@@ -55,13 +57,16 @@ public class UserService {
 
     private final PersonRepository personRepository;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, SocialService socialService, AuthorityRepository authorityRepository, CacheManager cacheManager, PersonRepository personRepository) {
+    private final FamilyRepository familyRepository;
+
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, SocialService socialService, AuthorityRepository authorityRepository, CacheManager cacheManager, PersonRepository personRepository, FamilyRepository familyRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.socialService = socialService;
         this.authorityRepository = authorityRepository;
         this.cacheManager = cacheManager;
         this.personRepository = personRepository;
+        this.familyRepository = familyRepository;
     }
 
     public Optional<User> activateRegistration(String key) {
@@ -108,7 +113,8 @@ public class UserService {
     public User registerUser(UserDTO userDTO, String password) {
 
         User newUser = new User();
-        Authority authority = authorityRepository.findOne(AuthoritiesConstants.USER);
+        Authority userUuthority = authorityRepository.findOne(AuthoritiesConstants.USER);
+        Authority parentAuthority = authorityRepository.findOne(AuthoritiesConstants.PARENT);
         Set<Authority> authorities = new HashSet<>();
         String encryptedPassword = passwordEncoder.encode(password);
         newUser.setLogin(userDTO.getLogin());
@@ -123,7 +129,8 @@ public class UserService {
         newUser.setActivated(false);
         // new user gets registration key
         newUser.setActivationKey(RandomUtil.generateActivationKey());
-        authorities.add(authority);
+        authorities.add(userUuthority);
+        authorities.add(parentAuthority);
         newUser.setAuthorities(authorities);
         userRepository.save(newUser);
         cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).evict(newUser.getLogin());
@@ -135,7 +142,15 @@ public class UserService {
         person.setUser(newUser);
         person.setFirstName(newUser.getFirstName());
         person.setLastName(newUser.getLastName());
-        person.setPersonType(PersonType.USER);
+        person.setPersonType(PersonType.PARENT);
+        personRepository.save(person);
+
+        //create family for the person
+        Family family = new Family();
+        family.setName(Optional.ofNullable(person.getLastName()).orElse(newUser.getLogin()));
+        family.addPerson(person);
+        family = familyRepository.save(family);
+        person.setFamily(family);
         personRepository.save(person);
 
         return newUser;

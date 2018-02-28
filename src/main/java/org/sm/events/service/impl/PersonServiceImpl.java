@@ -1,13 +1,11 @@
 package org.sm.events.service.impl;
 
-import org.sm.events.domain.Family;
-import org.sm.events.domain.Participant;
-import org.sm.events.domain.User;
+import org.sm.events.domain.*;
 import org.sm.events.domain.enumeration.PersonType;
+import org.sm.events.repository.EventRepository;
 import org.sm.events.security.AuthoritiesConstants;
 import org.sm.events.security.SecurityUtils;
 import org.sm.events.service.PersonService;
-import org.sm.events.domain.Person;
 import org.sm.events.repository.PersonRepository;
 import org.sm.events.service.UserService;
 import org.sm.events.service.dto.PersonDTO;
@@ -119,6 +117,17 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
+    public PersonDTO updateChild(PersonDTO childDto) {
+        PersonDTO parent = findOneByCurrentUser();
+        PersonDTO child = findOne(childDto.getId());
+        if(!parent.getFamilyId().equals(child.getFamilyId()))
+            return null;
+
+        Person updatedChild = personRepository.save(personMapper.toEntity(childDto));
+        return personMapper.toDto(updatedChild);
+    }
+
+    @Override
     public PersonDTO findOneByCurrentUser() {
         User user = userService.getUserWithAuthorities().get();
         Person person = personRepository.findOneByUser(user);
@@ -133,9 +142,10 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public List<PersonDTO> findAllByFamilyIdAndPersonTypeOrderByFirstName(Long familyId, PersonType personType) {
-        return personRepository.findAllByFamilyIdAndPersonType(familyId, personType)
+        List<PersonDTO> children = personRepository.findAllByFamilyIdAndPersonType(familyId, personType)
             .stream().map(personMapper::toDto)
             .collect(Collectors.toList());
+        return children;
     }
 
     @Override
@@ -148,5 +158,14 @@ public class PersonServiceImpl implements PersonService {
             return true;
 
         return false;
+    }
+
+    @Override
+    public PersonDTO findOneWithCurrentUserAsParent(Long id) {
+        PersonDTO parentDto = findOneByCurrentUser();
+        PersonDTO child = findOne(id);
+        if(child.getFamilyId().equals(parentDto.getFamilyId()))
+            return child;
+        return null;
     }
 }

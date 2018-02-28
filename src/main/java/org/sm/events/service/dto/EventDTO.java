@@ -1,11 +1,12 @@
 package org.sm.events.service.dto;
 
 
-import java.time.ZonedDateTime;
-import javax.validation.constraints.*;
+import org.sm.events.domain.enumeration.EventType;
+
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Objects;
 
 /**
@@ -19,10 +20,10 @@ public class EventDTO implements Serializable {
     private String title;
 
     @NotNull
-    private ZonedDateTime startDate;
+    private LocalDate startDate;
 
     @NotNull
-    private ZonedDateTime endDate;
+    private LocalDate endDate;
 
     @NotNull
     private String location;
@@ -32,6 +33,26 @@ public class EventDTO implements Serializable {
     private String description;
 
     private Integer hours;
+
+    private String commander;
+
+    private String commanderEmail;
+
+    private String commanderPhone;
+
+    private EventType eventType;
+
+    private Integer ageFrom;
+
+    private Integer ageTo;
+
+    private LocalDate firstRateDate;
+
+    private LocalDate secondRateDate;
+
+    private LocalDate signUpStartDate;
+
+    private LocalTime signUpStartTime;
 
     public Long getId() {
         return id;
@@ -49,19 +70,19 @@ public class EventDTO implements Serializable {
         this.title = title;
     }
 
-    public ZonedDateTime getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(ZonedDateTime startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 
-    public ZonedDateTime getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(ZonedDateTime endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
 
@@ -97,6 +118,86 @@ public class EventDTO implements Serializable {
         this.hours = hours;
     }
 
+    public String getCommander() {
+        return commander;
+    }
+
+    public void setCommander(String commander) {
+        this.commander = commander;
+    }
+
+    public String getCommanderEmail() {
+        return commanderEmail;
+    }
+
+    public void setCommanderEmail(String commanderEmail) {
+        this.commanderEmail = commanderEmail;
+    }
+
+    public String getCommanderPhone() {
+        return commanderPhone;
+    }
+
+    public void setCommanderPhone(String commanderPhone) {
+        this.commanderPhone = commanderPhone;
+    }
+
+    public EventType getEventType() {
+        return eventType;
+    }
+
+    public void setEventType(EventType eventType) {
+        this.eventType = eventType;
+    }
+
+    public Integer getAgeFrom() {
+        return ageFrom;
+    }
+
+    public void setAgeFrom(Integer ageFrom) {
+        this.ageFrom = ageFrom;
+    }
+
+    public Integer getAgeTo() {
+        return ageTo;
+    }
+
+    public void setAgeTo(Integer ageTo) {
+        this.ageTo = ageTo;
+    }
+
+    public LocalDate getFirstRateDate() {
+        return firstRateDate;
+    }
+
+    public void setFirstRateDate(LocalDate firstRateDate) {
+        this.firstRateDate = firstRateDate;
+    }
+
+    public LocalDate getSecondRateDate() {
+        return secondRateDate;
+    }
+
+    public void setSecondRateDate(LocalDate secondRateDate) {
+        this.secondRateDate = secondRateDate;
+    }
+
+    public LocalDate getSignUpStartDate() {
+        return signUpStartDate;
+    }
+
+    public void setSignUpStartDate(LocalDate signUpStartDate) {
+        this.signUpStartDate = signUpStartDate;
+    }
+
+    public LocalTime getSignUpStartTime() {
+        return signUpStartTime;
+    }
+
+    public void setSignUpStartTime(LocalTime signUpStartTime) {
+        this.signUpStartTime = signUpStartTime;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -121,14 +222,24 @@ public class EventDTO implements Serializable {
     @Override
     public String toString() {
         return "EventDTO{" +
-            "id=" + getId() +
-            ", title='" + getTitle() + "'" +
-            ", startDate='" + getStartDate() + "'" +
-            ", endDate='" + getEndDate() + "'" +
-            ", location='" + getLocation() + "'" +
-            ", maxParticipants=" + getMaxParticipants() +
-            ", description='" + getDescription() + "'" +
-            ", hours=" + getHours() +
-            "}";
+            "id=" + id +
+            ", title='" + title + '\'' +
+            ", startDate=" + startDate +
+            ", endDate=" + endDate +
+            ", location='" + location + '\'' +
+            ", maxParticipants=" + maxParticipants +
+            ", description='" + description + '\'' +
+            ", hours=" + hours +
+            ", commander='" + commander + '\'' +
+            ", commanderEmail='" + commanderEmail + '\'' +
+            ", commanderPhone='" + commanderPhone + '\'' +
+            ", eventType=" + eventType +
+            ", ageFrom=" + ageFrom +
+            ", ageTo=" + ageTo +
+            ", firstRateDate=" + firstRateDate +
+            ", secondRateDate=" + secondRateDate +
+            ", signUpStartDate=" + signUpStartDate +
+            ", signUpStartTime=" + signUpStartTime +
+            '}';
     }
 }

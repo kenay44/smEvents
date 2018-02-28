@@ -21,6 +21,8 @@ export class ParticipantSmEvent implements BaseEntity {
         public payed?: number,
         public personId?: number,
         public eventId?: number,
+        public firstName?: string,
+        public lastName?: string,
     ) {
     }
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
-import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
+import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 
 import { ChildSmEvent } from './child-sm-event.model';
 import { ChildSmEventService } from './child-sm-event.service';
@@ -27,7 +27,6 @@ export class ChildSmEventComponent implements OnInit, OnDestroy {
         private childService: ChildSmEventService,
         private jhiAlertService: JhiAlertService,
         private eventManager: JhiEventManager,
-        private parseLinks: JhiParseLinks,
         private principal: Principal
     ) {
         this.people = [];
@@ -42,11 +41,8 @@ export class ChildSmEventComponent implements OnInit, OnDestroy {
 
     loadAll() {
         this.childService.query({
-            page: this.page,
-            size: this.itemsPerPage,
-            sort: this.sort()
         }).subscribe(
-            (res: ResponseWrapper) => this.onSuccess(res.json, res.headers),
+            (res: ResponseWrapper) => this.onSuccess(res.json),
             (res: ResponseWrapper) => this.onError(res.json)
         );
     }
@@ -88,11 +84,11 @@ export class ChildSmEventComponent implements OnInit, OnDestroy {
         return result;
     }
 
-    private onSuccess(data, headers) {
-        this.links = this.parseLinks.parse(headers.get('link'));
-        this.totalItems = headers.get('X-Total-Count');
+    private onSuccess(data) {
         for (let i = 0; i < data.length; i++) {
-            this.people.push(data[i]);
+            if (data[i].personType === 'CHILD') {
+                this.people.push(data[i]);
+            }
         }
     }
 

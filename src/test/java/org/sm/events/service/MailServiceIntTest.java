@@ -1,4 +1,5 @@
 package org.sm.events.service;
+import org.mockito.*;
 import org.sm.events.config.Constants;
 
 import org.sm.events.SmEventsApp;
@@ -7,10 +8,7 @@ import io.github.jhipster.config.JHipsterProperties;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.MockitoAnnotations;
-import org.mockito.Spy;
+import org.sm.events.repository.ParticipantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.MessageSource;
@@ -50,11 +48,14 @@ public class MailServiceIntTest {
 
     private MailService mailService;
 
+    @Mock
+    private ParticipantRepository participantRepository;
+
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
         doNothing().when(javaMailSender).send(any(MimeMessage.class));
-        mailService = new MailService(jHipsterProperties, javaMailSender, messageSource, templateEngine);
+        mailService = new MailService(jHipsterProperties, javaMailSender, messageSource, templateEngine, participantRepository);
     }
 
     @Test

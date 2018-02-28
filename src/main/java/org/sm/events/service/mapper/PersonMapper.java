@@ -12,10 +12,9 @@ import org.mapstruct.*;
 public interface PersonMapper extends EntityMapper<PersonDTO, Person> {
 
     @Mapping(source = "family.id", target = "familyId")
+    @Mapping(target = "otherEvents", ignore = true)
     PersonDTO toDto(Person person);
 
-//    @Mapping(target = "participants", ignore = true)
-//    @Mapping(target = "eMails", ignore = true)
     @Mapping(source = "familyId", target = "family")
     Person toEntity(PersonDTO personDTO);
 

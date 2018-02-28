@@ -9,8 +9,7 @@ import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 import { ChildSmEvent } from './child-sm-event.model';
 import { ChildSmEventPopupService } from './child-sm-event-popup.service';
 import { ChildSmEventService } from './child-sm-event.service';
-import { FamilySmEvent, FamilySmEventService } from '../../entities/family-sm-event';
-import { ResponseWrapper } from '../../shared';
+import { FamilySmEvent } from '../../entities/family-sm-event';
 
 @Component({
     selector: 'jhi-child-sm-event-dialog',
@@ -22,20 +21,27 @@ export class ChildSmEventDialogComponent implements OnInit {
     isSaving: boolean;
 
     families: FamilySmEvent[];
+    clothSizes: string[];
+    birthYears: number[];
+    sexes: string[];
 
     constructor(
         public activeModal: NgbActiveModal,
         private jhiAlertService: JhiAlertService,
         private personService: ChildSmEventService,
-        private familyService: FamilySmEventService,
         private eventManager: JhiEventManager
     ) {
     }
 
     ngOnInit() {
         this.isSaving = false;
-        this.familyService.query()
-            .subscribe((res: ResponseWrapper) => { this.families = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
+        this.clothSizes = ['XS_KIDS', 'S_KIDS', 'M_KIDS', 'L_KIDS', 'XL_KIDS', 'XS', 'S', 'M', 'L', 'XL'];
+        this.sexes = ['MALE', 'FEMALE'];
+        const firstYear = new Date().getFullYear() - 8;
+        this.birthYears = [];
+        for (let i = 0; i < 10; i ++) {
+            this.birthYears.push(firstYear - i);
+        }
     }
 
     clear() {
@@ -68,9 +74,9 @@ export class ChildSmEventDialogComponent implements OnInit {
         this.isSaving = false;
     }
 
-    private onError(error: any) {
-        this.jhiAlertService.error(error.message, null, null);
-    }
+    // private onError(error: any) {
+    //     this.jhiAlertService.error(error.message, null, null);
+    // }
 
     trackFamilyById(index: number, item: FamilySmEvent) {
         return item.id;

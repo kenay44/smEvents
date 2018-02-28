@@ -1,13 +1,18 @@
 package org.sm.events.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.checkerframework.checker.units.qual.C;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.sm.events.domain.enumeration.EventType;
+import org.springframework.cglib.core.Local;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -33,11 +38,11 @@ public class Event implements Serializable {
 
     @NotNull
     @Column(name = "start_date", nullable = false)
-    private ZonedDateTime startDate;
+    private LocalDate startDate;
 
     @NotNull
     @Column(name = "end_date", nullable = false)
-    private ZonedDateTime endDate;
+    private LocalDate endDate;
 
     @NotNull
     @Column(name = "location", nullable = false)
@@ -51,6 +56,37 @@ public class Event implements Serializable {
 
     @Column(name = "hours")
     private Integer hours;
+
+    @Column(name = "commander")
+    private String commander;
+
+    @Column(name = "commander_email")
+    private String commanderEmail;
+
+    @Column(name = "commander_phone")
+    private String commanderPhone;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "event_type")
+    private EventType eventType;
+
+    @Column(name = "age_from")
+    private Integer ageFrom;
+
+    @Column(name = "ageTo")
+    private Integer ageTo;
+
+    @Column(name = "first_rate_date")
+    private LocalDate firstRateDate;
+
+    @Column(name = "second_rate_date")
+    private LocalDate secondRateDate;
+
+    @Column(name = "sign_up_start_date")
+    private LocalDate signUpStartDate;
+
+    @Column(name = "sign_up_start_time")
+    private LocalTime signUpStartTime;
 
     @OneToMany(mappedBy = "event")
     @JsonIgnore
@@ -84,29 +120,29 @@ public class Event implements Serializable {
         this.title = title;
     }
 
-    public ZonedDateTime getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public Event startDate(ZonedDateTime startDate) {
+    public Event startDate(LocalDate startDate) {
         this.startDate = startDate;
         return this;
     }
 
-    public void setStartDate(ZonedDateTime startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 
-    public ZonedDateTime getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
-    public Event endDate(ZonedDateTime endDate) {
+    public Event endDate(LocalDate endDate) {
         this.endDate = endDate;
         return this;
     }
 
-    public void setEndDate(ZonedDateTime endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
 
@@ -213,6 +249,137 @@ public class Event implements Serializable {
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
+
+    public String getCommander() {
+        return commander;
+    }
+
+    public void setCommander(String commander) {
+        this.commander = commander;
+    }
+
+    public Event commander(String commander) {
+        this.commander = commander;
+        return this;
+    }
+
+    public String getCommanderEmail() {
+        return commanderEmail;
+    }
+
+    public void setCommanderEmail(String commanderEmail) {
+        this.commanderEmail = commanderEmail;
+    }
+
+    public Event commanderEmail(String commanderEmail) {
+        this.commanderEmail = commanderEmail;
+        return this;
+    }
+
+    public String getCommanderPhone() {
+        return commanderPhone;
+    }
+
+    public Event commanderPhone(String commanderPhone) {
+        this.commanderPhone = commanderPhone;
+        return this;
+    }
+
+    public void setCommanderPhone(String commanderPhone) {
+        this.commanderPhone = commanderPhone;
+    }
+
+    public EventType getEventType() {
+        return eventType;
+    }
+
+    public Event eventType(EventType eventType) {
+        this.eventType = eventType;
+        return this;
+    }
+
+    public void setEventType(EventType eventType) {
+        this.eventType = eventType;
+    }
+
+    public Integer getAgeFrom() {
+        return ageFrom;
+    }
+
+    public Event ageFrom(Integer ageFrom) {
+        this.ageFrom = ageFrom;
+        return this;
+    }
+
+    public void setAgeFrom(Integer ageFrom) {
+        this.ageFrom = ageFrom;
+    }
+
+    public Integer getAgeTo() {
+        return ageTo;
+    }
+
+    public Event ageTo(Integer ageTo) {
+        this.ageTo = ageTo;
+        return this;
+    }
+
+    public void setAgeTo(Integer ageTo) {
+        this.ageTo = ageTo;
+    }
+
+    public LocalDate getFirstRateDate() {
+        return firstRateDate;
+    }
+
+    public Event firstRateDate(LocalDate firstRateDate) {
+        this.firstRateDate = firstRateDate;
+        return this;
+    }
+
+    public void setFirstRateDate(LocalDate firstRateDate) {
+        this.firstRateDate = firstRateDate;
+    }
+
+    public LocalDate getSecondRateDate() {
+        return secondRateDate;
+    }
+
+    public Event secondRateDate(LocalDate secondRateDate) {
+        this.secondRateDate = secondRateDate;
+        return this;
+    }
+
+    public void setSecondRateDate(LocalDate secondRateDate) {
+        this.secondRateDate = secondRateDate;
+    }
+
+    public LocalDate getSignUpStartDate() {
+        return signUpStartDate;
+    }
+
+    public Event signUpStartDate(LocalDate signUpStartDate) {
+        this.signUpStartDate = signUpStartDate;
+        return this;
+    }
+
+    public void setSignUpStartDate(LocalDate signUpStartDate) {
+        this.signUpStartDate = signUpStartDate;
+    }
+
+    public LocalTime getSignUpStartTime() {
+        return signUpStartTime;
+    }
+
+    public Event signUpStartTime(LocalTime signUpStartTime) {
+        this.signUpStartTime = signUpStartTime;
+        return this;
+    }
+
+    public void setSignUpStartTime(LocalTime signUpStartTime) {
+        this.signUpStartTime = signUpStartTime;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -236,14 +403,24 @@ public class Event implements Serializable {
     @Override
     public String toString() {
         return "Event{" +
-            "id=" + getId() +
-            ", title='" + getTitle() + "'" +
-            ", startDate='" + getStartDate() + "'" +
-            ", endDate='" + getEndDate() + "'" +
-            ", location='" + getLocation() + "'" +
-            ", maxParticipants=" + getMaxParticipants() +
-            ", description='" + getDescription() + "'" +
-            ", hours=" + getHours() +
-            "}";
+            "id=" + id +
+            ", title='" + title + '\'' +
+            ", startDate=" + startDate +
+            ", endDate=" + endDate +
+            ", location='" + location + '\'' +
+            ", maxParticipants=" + maxParticipants +
+            ", description='" + description + '\'' +
+            ", hours=" + hours +
+            ", commander='" + commander + '\'' +
+            ", commanderEmail='" + commanderEmail + '\'' +
+            ", commanderPhone='" + commanderPhone + '\'' +
+            ", eventType=" + eventType +
+            ", ageFrom=" + ageFrom +
+            ", ageTo=" + ageTo +
+            ", firstRateDate=" + firstRateDate +
+            ", secondRateDate=" + secondRateDate +
+            ", signUpStartDate=" + signUpStartDate +
+            ", signUpStartTime=" + signUpStartTime +
+            '}';
     }
 }

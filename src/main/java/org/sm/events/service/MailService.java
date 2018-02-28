@@ -1,5 +1,6 @@
 package org.sm.events.service;
 
+import org.sm.events.domain.Participant;
 import org.sm.events.domain.User;
 
 import io.github.jhipster.config.JHipsterProperties;
@@ -7,16 +8,19 @@ import io.github.jhipster.config.JHipsterProperties;
 import org.apache.commons.lang3.CharEncoding;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.sm.events.repository.ParticipantRepository;
 import org.springframework.context.MessageSource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.mail.internet.MimeMessage;
+import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 /**
@@ -41,13 +45,16 @@ public class MailService {
 
     private final SpringTemplateEngine templateEngine;
 
+    private final ParticipantRepository participantRepository;
+
     public MailService(JHipsterProperties jHipsterProperties, JavaMailSender javaMailSender,
-            MessageSource messageSource, SpringTemplateEngine templateEngine) {
+                       MessageSource messageSource, SpringTemplateEngine templateEngine, ParticipantRepository participantRepository) {
 
         this.jHipsterProperties = jHipsterProperties;
         this.javaMailSender = javaMailSender;
         this.messageSource = messageSource;
         this.templateEngine = templateEngine;
+        this.participantRepository = participantRepository;
     }
 
     @Async
@@ -84,6 +91,38 @@ public class MailService {
         String subject = messageSource.getMessage(titleKey, null, locale);
         sendEmail(user.getEmail(), subject, content, false, true);
 
+    }
+
+    @Async
+    @Transactional
+    public void sendEventSignUpEmail(User user, Participant participant) {
+        log.debug("Sending sign up email to {}", user.getEmail());
+        participant = participantRepository.findOne(participant.getId());
+        Context context = setupSignUpEmailContext(user, participant);
+        sendEmailfromTemplateWithContext(user, context, participant.getEvent().getEventType().getThymeleafTemplate(), "email.event.signup.title");
+    }
+
+    private void sendEmailfromTemplateWithContext(User user, Context context, String templateName, String titleKey) {
+        String content = templateEngine.process(templateName, context);
+        String subject = messageSource.getMessage(titleKey, null, context.getLocale());
+        sendEmail(user.getEmail(), subject, content, false, true);
+    }
+
+    private Context setupSignUpEmailContext(User user, Participant participant) {
+        Locale locale = Locale.forLanguageTag(user.getLangKey());
+        Context context = new Context(locale);
+        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
+        context.setVariable("eventName", participant.getEvent().getTitle());
+        context.setVariable("ageFrom", participant.getEvent().getAgeFrom());
+        context.setVariable("ageTo", participant.getEvent().getAgeTo());
+        context.setVariable("startDate", participant.getEvent().getStartDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy.")));
+        context.setVariable("endDate", participant.getEvent().getEndDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy.")));
+        context.setVariable("commander", participant.getEvent().getCommander());
+        context.setVariable("emailContact", participant.getEvent().getCommanderEmail());
+        context.setVariable("phoneContact", participant.getEvent().getCommanderPhone());
+        context.setVariable("dateOfFirstRate", participant.getEvent().getStartDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy.")));
+        context.setVariable("dateOfSecondRate", participant.getEvent().getStartDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy.")));
+        return context;
     }
 
     @Async

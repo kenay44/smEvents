@@ -1,17 +1,16 @@
 package org.sm.events.service.impl;
 
+import org.sm.events.domain.Event;
 import org.sm.events.domain.User;
 import org.sm.events.domain.enumeration.ParticipantStatus;
+import org.sm.events.domain.enumeration.ParticipantType;
 import org.sm.events.domain.enumeration.PersonType;
 import org.sm.events.domain.enumeration.Task;
 import org.sm.events.security.AuthoritiesConstants;
 import org.sm.events.security.SecurityUtils;
-import org.sm.events.service.EventService;
-import org.sm.events.service.ParticipantService;
+import org.sm.events.service.*;
 import org.sm.events.domain.Participant;
 import org.sm.events.repository.ParticipantRepository;
-import org.sm.events.service.PersonService;
-import org.sm.events.service.UserService;
 import org.sm.events.service.dto.EventDTO;
 import org.sm.events.service.dto.ParticipantDTO;
 import org.sm.events.service.dto.PersonDTO;
@@ -26,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 
@@ -48,12 +48,15 @@ public class ParticipantServiceImpl implements ParticipantService {
 
     private final EventService eventService;
 
-    public ParticipantServiceImpl(ParticipantRepository participantRepository, ParticipantMapper participantMapper, PersonService personService, UserService userService, EventService eventService) {
+    private final MailService mailService;
+
+    public ParticipantServiceImpl(ParticipantRepository participantRepository, ParticipantMapper participantMapper, PersonService personService, UserService userService, EventService eventService, MailService mailService) {
         this.participantRepository = participantRepository;
         this.participantMapper = participantMapper;
         this.personService = personService;
         this.userService = userService;
         this.eventService = eventService;
+        this.mailService = mailService;
     }
 
     /**
@@ -71,26 +74,46 @@ public class ParticipantServiceImpl implements ParticipantService {
 
     @Override
     public Long createParticipants(Collection<ParticipantDTO> participantDTOs) {
+        log.debug("Request to create Participants : {}", participantDTOs);
         Long eventId = ((ParticipantDTO)participantDTOs.toArray()[0]).getEventId() ;
         EventDTO eventDto = eventService.findOne(eventId);
-        participantDTOs.stream().forEach(u -> {
-            Participant participant = participantRepository.findOneByPersonIdAndEventId(u.getPersonId(), eventId);
-            if(participant != null && ParticipantStatus.SIGNED.equals(participant.getStatus()))
-                return;
-
-            if(participant == null) {
-                participant = participantMapper.toEntity(u);
-            }
-            participant.setRole(Task.ROOK);
-            participant.setSignedDate(ZonedDateTime.now());
-            participant.setStatus(ParticipantStatus.SIGNED);
-            participant.setChangedBy(null);
-            participant.setStatusChanged(null);
-            ParticipantDTO result = save(participant);
-            List<Participant> otherEventsInSameTime = findAllOthersForPersonEndEventTimeFrame(u.getPersonId(), eventDto, result.getId());
-            otherEventsInSameTime.stream().forEach(v -> delete(v.getId()));
-        });
+        User user = userService.getUserWithAuthorities().get();
+        participantDTOs.stream().map(u -> createParticipant(eventDto, u))
+            .filter(Objects::nonNull)
+            .forEach(participant -> {
+                if(eventDto.getEventType().isSendEmailAutomaticly()) {
+                    mailService.sendEventSignUpEmail(user, participant);
+                }
+            });
         return eventId;
+    }
+
+    public Participant createParticipant(EventDTO eventDto, ParticipantDTO u) {
+        Participant participant = participantRepository.findOneByPersonIdAndEventId(u.getPersonId(), eventDto.getId());
+        if(participant != null && ParticipantStatus.SIGNED.equals(participant.getStatus()))
+            return null;
+
+        if(participant == null) {
+            participant = participantMapper.toEntity(u);
+        }
+        participant.setRole(Task.ROOK);
+        participant.setSignedDate(ZonedDateTime.now());
+        participant.setStatus(ParticipantStatus.SIGNED);
+        participant.setChangedBy(null);
+        participant.setStatusChanged(null);
+        Participant result = participantRepository.save(participant);
+        List<Participant> participants = participantRepository
+            .findAllByEventIdAndStatusOrderBySignedDateAscIdAsc(eventDto.getId(), ParticipantStatus.SIGNED);
+        int position = participants.indexOf(result);
+        if(position < eventDto.getMaxParticipants()) {
+            result.setParticipantType(ParticipantType.PRIMARY);
+        } else {
+            result.setParticipantType(ParticipantType.RESERVE);
+        }
+        participant = participantRepository.save(result);
+        List<Participant> otherParticipationsInSameTime = findAllOthersForPersonEndEventTimeFrame(u.getPersonId(), eventDto);
+        otherParticipationsInSameTime.stream().forEach(v -> removeChildFromEvent(v.getId()));
+        return participant;
     }
 
     @Override
@@ -168,21 +191,63 @@ public class ParticipantServiceImpl implements ParticipantService {
         return participantRepository.findOneByPersonIdAndEventIdAndStatus(id, eventId, status);
     }
 
+    /**
+     * Finds all other participations for which the person (personId) is signed and their time frame is colliding with
+     * this event (eventDto) and where the person is signed as a primary participant and not removed
+     *
+     * @param personId id of the person - participations we are looking for
+     * @param eventDto even for which we are checking if  others are colliding
+     * @return list of colliding participations
+     */
     @Override
-    public List<Participant> findAllOthersForPersonEndEventTimeFrame(Long personId, EventDTO eventDto, Long participantId) {
-        return participantRepository.finAllOthersByPersonIdAndEventTimeFrame(personId, eventDto.getStartDate(), eventDto.getEndDate(), participantId);
+    public List<Participant> findAllOthersForPersonEndEventTimeFrame(Long personId, EventDTO eventDto) {
+        return participantRepository.finAllOthersByPersonIdAndEventTimeFrame(personId, eventDto.getStartDate(),
+            eventDto.getEndDate(), eventDto.getId(), ParticipantType.PRIMARY, ParticipantStatus.SIGNED);
     }
 
     @Override
     @Transactional
     public void removeChildFromEvent(Long participantId) {
         Participant participant = participantRepository.findOne(participantId);
+        ParticipantType type = participant.getParticipantType();
         if(personService.isCurrentUserParentOf(participant)) {
             participant.setStatus(ParticipantStatus.REMOVED);
+            participant.setParticipantType(null);
             participant.setStatusChanged(ZonedDateTime.now());
             User user = userService.getUserWithAuthorities().get();
             participant.setChangedBy(user);
             participantRepository.save(participant);
+            if(ParticipantType.PRIMARY.equals(type)) {
+                updateExistingParticipants(participant.getEvent());
+            }
+
         }
+    }
+
+    private void updateExistingParticipants(Event event) {
+        log.debug("Updating top participant in reserve for event [{}]: {}", event.getId(), event.getTitle());
+        Participant participant = participantRepository
+            .findTopByEventIdAndStatusAndParticipantTypeOrderBySignedDateAscIdAsc(event.getId(), ParticipantStatus.SIGNED, ParticipantType.RESERVE);
+        if(participant != null) {
+            log.debug("Moving participant [{}]: {} from reserve to primary", participant.getId(),
+                participant.getPerson().getFirstName() + " " + participant.getPerson().getLastName());
+            participant.setParticipantType(ParticipantType.PRIMARY);
+            participantRepository.save(participant);
+        }
+    }
+
+    @Override
+    public List<PersonDTO> validateParticipants(List<PersonDTO> children, Long eventId) {
+        EventDTO event = eventService.findOne(eventId);
+        for(PersonDTO child : children) {
+            List<Participant> otherAssignments = findAllOthersForPersonEndEventTimeFrame(child.getId(), event);
+            if(otherAssignments.size() > 0) {
+                List<String> otherEvents = otherAssignments.stream()
+                    .map(u -> u.getEvent().getTitle())
+                    .collect(Collectors.toList());
+                child.setOtherEvents(otherEvents);
+            }
+        }
+        return children;
     }
 }

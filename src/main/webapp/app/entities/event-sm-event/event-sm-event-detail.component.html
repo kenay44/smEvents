@@ -1,6 +1,6 @@
 
 <div *ngIf="event">
-    <h2><span jhiTranslate="smEventsApp.event.detail.title">Event</span> {{event.id}}</h2>
+    <h2><span jhiTranslate="smEventsApp.event.detail.title">Event</span>: {{event.title}}</h2>
     <hr>
     <jhi-alert-error></jhi-alert-error>
     <dl class="row-md jh-entity-details">
@@ -10,11 +10,11 @@
         </dd>
         <dt><span jhiTranslate="smEventsApp.event.startDate">Start Date</span></dt>
         <dd>
-            <span>{{event.startDate | date:'medium'}}</span>
+            <span>{{event.startDate | date: 'dd-MM-yyyy'}}</span>
         </dd>
         <dt><span jhiTranslate="smEventsApp.event.endDate">End Date</span></dt>
         <dd>
-            <span>{{event.endDate | date:'medium'}}</span>
+            <span>{{event.endDate | date: 'dd-MM-yyyy'}}</span>
         </dd>
         <dt><span jhiTranslate="smEventsApp.event.location">Location</span></dt>
         <dd>

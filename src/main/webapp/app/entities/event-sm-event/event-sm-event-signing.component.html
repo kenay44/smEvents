@@ -1,6 +1,6 @@
 <h1 *ngIf="event">{{event.title}}</h1>
 <div *ngIf="children.length">
-    <h3>Children</h3>
+    <h3 jhiTranslate="smEventsApp.event.signing.children"></h3>
     <ul class="list-group">
         <li *ngFor="let child of children; trackBy: trackId" class="input-group mb-1">
             <div class="input-group-prepend">
@@ -8,25 +8,38 @@
                     <input type="checkbox" aria-label="Checkbox for following text input" (click)="select(child.id)">
                 </span>
             </div>
-            <div class="input-group-text input-group-addon">{{child.firstName}} {{child.birthYear}}</div>
+            <div class="input-group-text input-group-addon">{{child.firstName}} {{child.lastName}}</div>
+            <div *ngIf="child.otherEvents" class="input-group-text input-group-addon">
+                <ul class="list-inline">
+                    <li *ngFor="let event of child.otherEvents" class="list-inline-item text-danger">{{event}}</li>
+                </ul>
+            </div>
         </li>
     </ul>
     <button type="button" class="btn btn-info" (click)="signInSelected()">Zapisz zaznaczonych</button>
 </div>
-<h1>Participants</h1>
+<h1 jhiTranslate="smEventsApp.event.participants">Participants</h1>
 <div class="table-responsive" *ngIf="participants.length">
     <table class="table table-striped">
         <thead>
             <tr>
-                <th width="30px">#</th>
-                <th width="30%">Participant</th>
+                <th>#</th>
+                <th jhiTranslate="smEventsApp.participant.detail.title">Participant</th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let participant of participants; let i=index; trackBy: trackId">
+            <tr *ngFor="let participant of participants; let i=index; trackBy: trackId"
+                [ngClass]="{'table-success': participant.participantType === 'PRIMARY'
+                            ,'table-warning': participant.participantType === 'RESERVE'}">
+
                 <td>{{i+1}}</td>
-                <td>{{participant.personId}} [{{participant.signedDate | date}}]</td>
+                <td>{{participant.firstName}} {{participant.lastName}}<br>
+                    <span>
+                        <small jhiTranslate="smEventsApp.participant.signed"></small>
+                        <small>{{participant.signedDate | date: 'dd-MM-yyyy HH:mm:ss'}}</small>
+                    </span>
+                </td>
                 <td>
                     <button class="btn btn-danger btn-sm" *ngIf="participant.canRemove"
                             type="submit"

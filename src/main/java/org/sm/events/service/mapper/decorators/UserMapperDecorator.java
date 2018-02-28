@@ -21,7 +21,7 @@ public class UserMapperDecorator extends UserMapper {
 
     @Override
     public UserDTO userToUserDTO(User user) {
-        UserDTO userDTO = super.userToUserDTO(user);
+        UserDTO userDTO = delegate.userToUserDTO(user);
         Person person = personRepository.findOneByUser(user);
         if(person != null){
             userDTO.setPhoneNumber(person.getPhone());

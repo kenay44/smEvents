@@ -46,9 +46,6 @@ export class SettingsComponent implements OnInit {
             this.success = null;
             this.error = 'ERROR';
         });
-    }
-
-    saveFamily() {
         this.account.saveFamily(this.settingsAccount).subscribe(() => {
             this.error = null;
             this.success = 'OK';
@@ -60,6 +57,19 @@ export class SettingsComponent implements OnInit {
             this.error = 'ERROR';
         })
     }
+
+    /*saveFamily() {
+        this.account.saveFamily(this.settingsAccount).subscribe(() => {
+            this.error = null;
+            this.success = 'OK';
+            this.principal.identity(true).then((account) => {
+                this.settingsAccount = this.copyAccount(account);
+            });
+        }, () => {
+            this.success = null;
+            this.error = 'ERROR';
+        })
+    }*/
 
     copyAccount(account) {
         return {

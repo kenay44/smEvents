@@ -38,6 +38,7 @@ import static org.sm.events.web.rest.TestUtil.sameInstant;
 import static org.sm.events.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.sm.events.web.rest.TestUtil.sameZoneInstant;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -193,7 +194,7 @@ public class ParticipantResourceIntTest {
             .andExpect(jsonPath("$.[*].id").value(hasItem(participant.getId().intValue())))
             .andExpect(jsonPath("$.[*].role").value(hasItem(DEFAULT_ROLE.toString())))
             .andExpect(jsonPath("$.[*].participantType").value(hasItem(DEFAULT_PARTICIPANT_TYPE.toString())))
-            .andExpect(jsonPath("$.[*].signedDate").value(hasItem(sameInstant(DEFAULT_SIGNED_DATE))))
+            .andExpect(jsonPath("$.[*].signedDate").value(hasItem(sameZoneInstant(DEFAULT_SIGNED_DATE))))
             .andExpect(jsonPath("$.[*].founding").value(hasItem(DEFAULT_FOUNDING.intValue())))
             .andExpect(jsonPath("$.[*].payed").value(hasItem(DEFAULT_PAYED.intValue())));
     }
@@ -211,7 +212,7 @@ public class ParticipantResourceIntTest {
             .andExpect(jsonPath("$.id").value(participant.getId().intValue()))
             .andExpect(jsonPath("$.role").value(DEFAULT_ROLE.toString()))
             .andExpect(jsonPath("$.participantType").value(DEFAULT_PARTICIPANT_TYPE.toString()))
-            .andExpect(jsonPath("$.signedDate").value(sameInstant(DEFAULT_SIGNED_DATE)))
+            .andExpect(jsonPath("$.signedDate").value(sameZoneInstant(DEFAULT_SIGNED_DATE)))
             .andExpect(jsonPath("$.founding").value(DEFAULT_FOUNDING.intValue()))
             .andExpect(jsonPath("$.payed").value(DEFAULT_PAYED.intValue()));
     }

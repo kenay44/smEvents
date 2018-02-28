@@ -26,11 +26,11 @@
                 <constraints nullable="false" />
             </column>
 
-            <column name="start_date" type="timestamp">
+            <column name="start_date" type="date">
                 <constraints nullable="false" />
             </column>
 
-            <column name="end_date" type="timestamp">
+            <column name="end_date" type="date">
                 <constraints nullable="false" />
             </column>
 
@@ -54,7 +54,7 @@
         </createTable>
         <dropDefaultValue tableName="event" columnName="start_date" columnDataType="datetime"/>
         <dropDefaultValue tableName="event" columnName="end_date" columnDataType="datetime"/>
-        
+
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 </databaseChangeLog>

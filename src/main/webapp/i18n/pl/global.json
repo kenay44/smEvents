@@ -3,7 +3,7 @@
         "title": "SmEvents",
         "browsehappy": "Używasz <strong>przestarzałej</strong> przeglądarki. Proszę <a href=\"http://browsehappy.com/\">uaktualnij swoją przeglądarkę</a> aby poprawić wrażenia z użytkowania tej aplikacji.",
         "menu": {
-            "home": "Strona domowa",
+            "home": "Obozy 2018",
             "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
             "entities": {
                 "main": "Encje",
@@ -18,6 +18,7 @@
                 "main": "Konto",
                 "settings": "Ustawienia",
                 "family": "Rodzina",
+                "children": "Dzieci",
                 "password": "Hasło",
                 "sessions": "Sesje",
                 "login": "Autoryzacja",
@@ -42,10 +43,10 @@
         "form": {
             "username": "Nazwa użytkownika",
             "username.placeholder": "Twój login",
-            "newpassword": "Nowe hasło",
-            "newpassword.placeholder": "Nowe hasło",
-            "confirmpassword": "Potwierdź nowe hasło",
-            "confirmpassword.placeholder": "Potwierdź nowe hasło",
+            "newpassword": "Hasło",
+            "newpassword.placeholder": "Hasło",
+            "confirmpassword": "Potwierdź hasło",
+            "confirmpassword.placeholder": "Potwierdź hasło",
             "email": "Email",
             "email.placeholder": "Twój email"
         },
@@ -134,5 +135,5 @@
         "emailexists": "Użytkownik z takim adresem email już istnieje!",
         "idexists": "Nowy {{entityName}} nie może jeszcze mieć przypisanego ID"
     },
-    "footer": "To jest stopka"
+    "footer": "KŻ Santa-Maria 2018"
 }

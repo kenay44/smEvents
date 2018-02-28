@@ -9,28 +9,7 @@
 
             <jhi-alert-error></jhi-alert-error>
 
-            <form name="familyForm" role="form" (ngSubmit)="saveFamily()" #settingsFamilyForm="ngForm" *ngIf="settingsAccount" novalidate>
-                <div class="form-group">
-                    <label class="form-control-label" for="familyName" jhiTranslate="settings.familyform.familyname">Family name</label>
-                    <input type="text" class="form-control" id="familyName" name="familyName" placeholder="{{'settings.familyform.familyname.placeholder' | translate}}"
-                    [(ngModel)]="settingsAccount.familyName" minlength=3 maxlength=50 #familyNameInput="ngModel" required>
-                    <div *ngIf="familyNameInput.dirty && familyNameInput.invalid">
-                        <small class="form-text text-danger"
-                               *ngIf="familyNameInput.errors.required" jhiTranslate="settings.message.validate.familyname.required">
-                                Your family name is required.
-                        </small>
-                        <small class="form-text text-danger"
-                               *ngIf="familyNameInput.errors.minlength" jhiTranslate="settings.message.validate.familyname.minlength">
-                                Your family name must be at least 3 character long.
-                        </small>
-                        <small class="form-text text-danger"
-                               *ngIf="familyNameInput.errors.maxlength" jhiTranslate="settings.message.validate.familyname.maxlength">
-                                Your family name cannot be longer then 50 characters.
-                        </small>
-                    </div>
-                </div>
-                <button type="submit" [disabled]="settingsFamilyForm.form.invalid" class="btn btn-primary" jhiTranslate="settings.form.button">Save</button>
-            </form>
+
             <form name="form" role="form" (ngSubmit)="save()" #settingsForm="ngForm" *ngIf="settingsAccount" novalidate>
 
                 <div class="form-group">
@@ -113,15 +92,30 @@
                         </small>
                     </div>
                 </div>
-                <div class="form-group" *ngIf="languages && languages.length > 0">
-                    <label for="langKey" jhiTranslate="settings.form.language">Language</label>
-                    <select class="form-control" id="langKey" name="langKey" [(ngModel)]="settingsAccount.langKey">
-                        <option *ngFor="let language of languages" [value]="language">{{language | findLanguageFromKey}}</option>
-                    </select>
+                <div class="form-group">
+                    <label class="form-control-label" for="familyName" jhiTranslate="settings.familyform.familyname">Family name</label>
+                    <input type="text" class="form-control" id="familyName" name="familyName" placeholder="{{'settings.familyform.familyname.placeholder' | translate}}"
+                           [(ngModel)]="settingsAccount.familyName" minlength=3 maxlength=50 #familyNameInput="ngModel" required>
+                    <div *ngIf="familyNameInput.dirty && familyNameInput.invalid">
+                        <small class="form-text text-danger"
+                               *ngIf="familyNameInput.errors.required" jhiTranslate="settings.message.validate.familyname.required">
+                            Your family name is required.
+                        </small>
+                        <small class="form-text text-danger"
+                               *ngIf="familyNameInput.errors.minlength" jhiTranslate="settings.message.validate.familyname.minlength">
+                            Your family name must be at least 3 character long.
+                        </small>
+                        <small class="form-text text-danger"
+                               *ngIf="familyNameInput.errors.maxlength" jhiTranslate="settings.message.validate.familyname.maxlength">
+                            Your family name cannot be longer then 50 characters.
+                        </small>
+                    </div>
                 </div>
                 <button type="submit" [disabled]="settingsForm.form.invalid" class="btn btn-primary" jhiTranslate="settings.form.button">Save</button>
             </form>
-
+            <!--<form name="familyForm" role="form" (ngSubmit)="saveFamily()" #settingsFamilyForm="ngForm" *ngIf="settingsAccount" novalidate>
+                <button type="submit" [disabled]="settingsFamilyForm.form.invalid" class="btn btn-primary" jhiTranslate="settings.form.button">Save</button>
+            </form>-->
         </div>
     </div>
 </div>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title th:text="#{email.event.signup.title}">Event sign up</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}" />
+    </head>
+    <body>
+        <table style="border:none;border-collapse:collapse;border-spacing:0;max-width:700px;width:100%">
+            <tbody>
+            <tr>
+                <td>
+                    <p th:text="#{email.event.signup.line0}">
+                        Dear
+                    </p>
+                    <p th:text="#{email.event.signup.line1}">
+                        Welcome to the event
+                    </p>
+                    <p th:text="#{email.cruise.event.signup.line2(${eventName}, ${ageFrom}, ${ageTo}, ${startDate}, ${endDate})}">
+                    </p>
+                    <p style="text-align:justify" th:text="#{email.cruise.event.signup.line3}">
+                    </p>
+                    <p th:text="#{email.event.signup.line4}">
+                    </p>
+                    <p style="text-align:justify" th:text="#{email.cruise.event.signup.line5(${eventName}, ${commander}, ${phoneContact}, ${emailContact})}">
+                    </p>
+                    <p th:text="#{email.event.signup.line6}">
+                    </p>
+                    <p th:text="#{email.event.signup.line7}">
+                    </p>
+                    <p th:text="#{email.cruise.event.signup.line8a}">
+                    </p>
+                    <p th:text="#{email.cruise.event.signup.line8b}">
+                    </p>
+                    <p th:text="#{email.event.signup.line9(${eventName})}">
+                    </p>
+                    <ul class="list-unstiled">
+                        <li style="text-align:justify" th:text="#{email.event.signup.line10(${dateOfFirstRate})}"></li>
+                        <li th:text="#{email.cruise.event.signup.line11(${dateOfSecondRate})}"></li>
+                    </ul>
+                    <p style="text-align:justify" th:text="#{email.event.signup.line12}">
+                    </p>
+                    <p th:text="#{email.event.signup.line13}">
+                    </p>
+                    <p th:text="#{email.event.signup.line14}">
+                    </p>
+                    <p th:text="#{email.event.signup.line15(${eventName})}">
+                    </p>
+                    <p>
+                        <span th:text="#{email.event.signup.sign1}">Regards, </span>
+                        <br/>
+                        <span th:text="#{email.event.signup.sign2}">Zarząd KŻ Santa-Maria</span>
+                        <hr/>
+                        <span th:text="#{email.event.signup.sign3}"></span><br/>
+                        <span th:text="#{email.event.signup.sign4}"></span><br/>
+                        <span th:text="#{email.event.signup.sign5}"></span><br/>
+                        <span th:text="#{email.event.signup.sign6}"></span><br/>
+                        <a th:href="@{|#{email.event.signup.sign7}|}"
+                           th:text="@{|#{email.event.signup.sign7}|}"></a>
+                    </p>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

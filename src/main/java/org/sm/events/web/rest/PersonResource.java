@@ -3,6 +3,7 @@ package org.sm.events.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import org.sm.events.domain.enumeration.ParticipantStatus;
 import org.sm.events.domain.enumeration.PersonType;
+import org.sm.events.service.EventService;
 import org.sm.events.service.ParticipantService;
 import org.sm.events.service.PersonService;
 import org.sm.events.web.rest.errors.BadRequestAlertException;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -41,9 +43,12 @@ public class PersonResource {
 
     private final ParticipantService participantService;
 
-    public PersonResource(PersonService personService, ParticipantService participantService) {
+    private final EventService eventService;
+
+    public PersonResource(PersonService personService, ParticipantService participantService, EventService eventService) {
         this.personService = personService;
         this.participantService = participantService;
+        this.eventService = eventService;
     }
 
     /**
@@ -83,8 +88,52 @@ public class PersonResource {
         personDTO = personService.createChild(personDTO);
 
         return ResponseEntity.created(new URI("/api/people/family" + personDTO.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, personDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, personDTO.getFirstName() + " " + personDTO.getLastName()))
             .body(personDTO);
+    }
+
+    /**
+     * GET  /people/family/:id  Get the child.
+     *
+     * @param  id the id of the child (Person)
+     * @return the ResponseEntity with status 200 (OK) and the list of people in body
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @GetMapping("/people/family/{id}")
+    @Timed
+    public ResponseEntity<PersonDTO> getChild(@PathVariable Long id) throws URISyntaxException {
+        log.debug("REST request to get child (Person) of id : {}", id);
+        PersonDTO childDto = personService.findOneWithCurrentUserAsParent(id);
+        if (childDto == null) {
+            throw new BadRequestAlertException("No such child or child belongs to another family ", ENTITY_NAME, "");
+        }
+
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(childDto));
+    }
+
+    /**
+     * PUT  /people/family : Updates an existing person.
+     *
+     * @param personDTO the personDTO to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated personDTO,
+     * or with status 400 (Bad Request) if the personDTO is not valid,
+     * or with status 500 (Internal Server Error) if the personDTO couldn't be updated
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PutMapping("/people/family")
+    @Timed
+    public ResponseEntity<PersonDTO> updateChild(@RequestBody PersonDTO personDTO) throws URISyntaxException {
+        log.debug("REST request to update child (Person) : {}", personDTO);
+        if (personDTO.getId() == null) {
+            return createChild(personDTO);
+        }
+        PersonDTO result = personService.updateChild(personDTO);
+        if(result == null) {
+            throw new BadRequestAlertException("No such child or child belongs to another family ", ENTITY_NAME, "");
+        }
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, result.getFirstName() + " " + result.getLastName()))
+            .body(result);
     }
 
     /**
@@ -148,7 +197,7 @@ public class PersonResource {
      */
     @GetMapping("/people/family/children")
     @Timed
-    public ResponseEntity<List<PersonDTO>> getAllChildrenInFamily() {
+    public ResponseEntity<List<PersonDTO>> getAllChildrenInFamily(Pageable pageable) {
         log.debug("REST request to get all children in family");
         PersonDTO personDTO = personService.findOneByCurrentUser();
 
@@ -168,8 +217,12 @@ public class PersonResource {
     public ResponseEntity<List<PersonDTO>> getAllChildrenInFamilyForEvent(@PathVariable Long eventId) {
         log.debug("REST request to get all children in family available for the event");
         PersonDTO personDTO = personService.findOneByCurrentUser();
-
+        if(personDTO == null) {
+            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.OK);
+        }
         List<PersonDTO> children = personService.findAllByFamilyIdAndPersonTypeOrderByFirstName(personDTO.getFamilyId(), PersonType.CHILD);
+
+        children = participantService.validateParticipants(children, eventId);
 
         return new ResponseEntity<>(children.stream()
             .filter(u -> participantService.findOneByPersonIdAndEventIdAndStatus(u.getId(), eventId, ParticipantStatus.SIGNED) == null)
@@ -204,5 +257,22 @@ public class PersonResource {
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 
-
+    /**
+     * DELETE  /people/family/:id : delete the child of current user with "id"
+     *
+     * @param id the id of the personDTO to delete
+     * @return the ResponseEntity with status 200 (OK)
+     */
+    @DeleteMapping("/people/family/{id}")
+    @Timed
+    public ResponseEntity<Void> deleteChild(@PathVariable Long id) {
+        log.debug("REST request to delete Person : {}", id);
+        PersonDTO personDTO = personService.findOneWithCurrentUserAsParent(id);
+        if(personDTO == null) {
+            throw new BadRequestAlertException("No such child or child belongs to another family ", ENTITY_NAME, "");
+        }
+        personService.delete(id);
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME,
+            personDTO.getFirstName() + " " + personDTO.getLastName())).build();
+    }
 }
