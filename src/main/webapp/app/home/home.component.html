@@ -4,9 +4,11 @@
     </div>
     <div class="col-md-9">
         <h1 class="display-4" jhiTranslate="home.title">Welcome, Java Hipster!</h1>
-        <p class="lead" jhiTranslate="home.subtitle">This is your homepage</p>
-
         <div [ngSwitch]="isAuthenticated()">
+            <div class="alert alert-warning" *ngSwitchCase="false">
+                <span jhiTranslate="global.messages.info.register.noaccount">You don't have an account yet?</span>
+                <a class="alert-link" routerLink="register" jhiTranslate="global.messages.info.register.link">Register a new account</a>
+            </div>
             <div class="table-responsive" *ngIf="events">
                 <table class="table table-striped">
                     <thead>
@@ -21,8 +23,8 @@
                     <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
                     <tr *ngFor="let event of events ;trackBy: trackId">
                         <td>{{event.title}}</td>
-                        <td>{{event.startDate | date: format: 'dd-MM-yyyy'}}</td>
-                        <td>{{event.endDate | date: format: 'dd-MM-yyyy'}}</td>
+                        <td>{{event.startDate | date: 'dd-MM-yyyy'}}</td>
+                        <td>{{event.endDate | date: 'dd-MM-yyyy'}}</td>
                         <td>{{event.location}}</td>
                         <td class="text-right">
                             <div class="btn-group flex-btn-group-container">
@@ -38,11 +40,6 @@
                     </tbody>
                 </table>
             </div>
-            <div class="alert alert-warning" *ngSwitchCase="false">
-                <span jhiTranslate="global.messages.info.register.noaccount">You don't have an account yet?</span>
-                <a class="alert-link" routerLink="register" jhiTranslate="global.messages.info.register.link">Register a new account</a>
-            </div>
         </div>
-
     </div>
 </div>
