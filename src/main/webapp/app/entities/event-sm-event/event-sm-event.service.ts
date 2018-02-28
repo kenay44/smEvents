@@ -97,10 +97,25 @@ export class EventSmEventService {
             .convertLocalDateToServer(event.secondRateDate);
         copy.signUpStartDate = this.dateUtils
             .convertLocalDateToServer(event.signUpStartDate);
-        copy.signUpStartTime = event.signUpStartTime.hour + ':'
-            + (event.signUpStartTime.minute < 10 ? '0' + event.signUpStartTime.minute : event.signUpStartTime.minute)
-            + ':00';
+        copy.signUpStartTime = this.convertNgbTimetoJSON(event.signUpStartTime)
         return copy;
+    }
+
+    private convertNgbTimetoJSON(time: any | undefined): string {
+        if (time) {
+            let result: string;
+            if (time.hour.toString().length === 1) {
+                result = '0';
+            }
+            result += time.hour + ':';
+            if (time.minute.toString().length === 1) {
+                result += '0';
+            }
+            result += time.minute.toString();
+            result += ':00';
+            return result;
+        }
+        return undefined;
     }
     /*
     private convertTimePart(time, part: string): string {
