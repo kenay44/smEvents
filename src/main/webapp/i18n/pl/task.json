@@ -2,9 +2,9 @@
     "smEventsApp": {
         "Task" : {
             "null": "",
-            "COMANDOR": "COMANDOR",
-            "OFFICER": "OFFICER",
-            "ROOK": "ROOK"
+            "COMMANDER": "Comandor",
+            "OFFICER": "Kapitan",
+            "ROOK": "Dziecko"
         }
     }
 }

@@ -4,15 +4,16 @@
     <ul class="list-group">
         <li *ngFor="let child of children; trackBy: trackId" class="input-group mb-1">
             <div class="input-group-prepend">
-                <span class="input-group-text">
-                    <input type="checkbox" aria-label="Checkbox for following text input" (click)="select(child.id)">
-                </span>
+                <div class="input-group-text">
+                    <input type="checkbox" aria-label="Checkbox for following text" (click)="select(child.id)">
+                </div>
             </div>
-            <div class="input-group-text input-group-addon">{{child.firstName}} {{child.lastName}}</div>
-            <div *ngIf="child.otherEvents" class="input-group-text input-group-addon">
-                <ul class="list-inline">
-                    <li *ngFor="let event of child.otherEvents" class="list-inline-item text-danger">{{event}}</li>
-                </ul>
+            <div [ngClass]="{'form-control': true} ">
+                <div>{{child.firstName}} {{child.lastName}}</div>
+                <div *ngIf="child.otherEvents" class="alert-danger">
+                    <div class="small" jhiTranslate="smEventsApp.event.signing.conflicting.events">Conflicting events</div>
+                    <div *ngFor="let event of child.otherEvents"><b>{{event}}</b></div>
+                </div>
             </div>
         </li>
     </ul>

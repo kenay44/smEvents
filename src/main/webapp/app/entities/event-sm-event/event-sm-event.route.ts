@@ -12,7 +12,7 @@ export const eventRoute: Routes = [
         path: 'event-sm-event',
         component: EventSmEventComponent,
         data: {
-            authorities: [],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'smEventsApp.event.home.title'
         },
         canActivate: [UserRouteAccessService]

@@ -1,7 +1,7 @@
 import { BaseEntity } from './../../shared';
 
 export const enum Task {
-    'COMANDOR',
+    'COMMANDER',
     'OFFICER',
     'ROOK'
 }

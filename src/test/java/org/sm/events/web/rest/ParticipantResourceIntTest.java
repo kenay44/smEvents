@@ -53,7 +53,7 @@ import org.sm.events.domain.enumeration.ParticipantType;
 @SpringBootTest(classes = SmEventsApp.class)
 public class ParticipantResourceIntTest {
 
-    private static final Task DEFAULT_ROLE = Task.COMANDOR;
+    private static final Task DEFAULT_ROLE = Task.COMMANDER;
     private static final Task UPDATED_ROLE = Task.OFFICER;
 
     private static final ParticipantType DEFAULT_PARTICIPANT_TYPE = ParticipantType.PRIMARY;

@@ -120,8 +120,8 @@ public class MailService {
         context.setVariable("commander", participant.getEvent().getCommander());
         context.setVariable("emailContact", participant.getEvent().getCommanderEmail());
         context.setVariable("phoneContact", participant.getEvent().getCommanderPhone());
-        context.setVariable("dateOfFirstRate", participant.getEvent().getStartDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy.")));
-        context.setVariable("dateOfSecondRate", participant.getEvent().getStartDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy.")));
+        context.setVariable("dateOfFirstRate", participant.getEvent().getFirstRateDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy.")));
+        context.setVariable("dateOfSecondRate", participant.getEvent().getSecondRateDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy.")));
         return context;
     }
 

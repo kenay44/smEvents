@@ -35,12 +35,12 @@
             "ageFrom": "Wiek od",
             "ageFrom.validation.min": "Minimalny wiek 'od' to 7 lat",
             "ageTo": "Wiek do",
-            "ageTo.validation.max": "Maxymalny wiek dla dzieci to 17 lat",
+            "ageTo.validation.max": "Maxymalny wiek dla dzieci to 18 lat",
             "firstRateDate": "Data pierwszej raty",
             "secondRateDate": "Data drugiej raty",
             "signUpStartDate": "Data rozpoczęcia zapisów",
-            "signUpStartTime": "Czas"
-
+            "signUpStartTime": "Czas",
+            "signing.conflicting.events": "UWAGA!!! Jeżeli zapiszesz to dziecko na ten wyjazd to zostanie ono skreślone z ponższych, pokrywajacych się, z tym wyjazdem obozów:"
         }
     }
 }

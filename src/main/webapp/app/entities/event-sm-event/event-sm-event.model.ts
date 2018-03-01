@@ -1,7 +1,7 @@
 import { BaseEntity } from './../../shared';
 
 export const enum EventType {
-    CRUISE, FIRST_TACK, BOSUN_WORKS
+    CRUISE, FIRST_TACK, CLASSES, BOSUN_WORKS
 }
 
 export class EventSmEvent implements BaseEntity {

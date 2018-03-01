@@ -3,6 +3,7 @@ package org.sm.events.domain.enumeration;
 public enum EventType {
     CRUISE("cruiseSignUpEmail", true),
     FIRST_TACK("firstTackSignUpEmail", true),
+    CLASSES("classesSignUpEmail", false),
     BOSUN_WORKS("bosunWorksSignUpEmail", false);
 
     private final String thymeleafTemplate;

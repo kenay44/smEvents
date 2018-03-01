@@ -115,7 +115,7 @@ export class EventSmEventDialogComponent implements OnInit {
 
     ngOnInit() {
         this.isSaving = false;
-        this.eventTypes = ['CRUISE', 'FIRST_TACK', 'BOSUN_WORKS'];
+        this.eventTypes = ['CRUISE', 'FIRST_TACK', 'CLASSES', 'BOSUN_WORKS'];
     }
 
     clear() {

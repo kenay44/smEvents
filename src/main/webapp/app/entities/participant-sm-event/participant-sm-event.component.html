@@ -28,7 +28,7 @@
             <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
             <tr *ngFor="let participant of participants ;trackBy: trackId">
                 <td jhiTranslate="{{'smEventsApp.Task.' + participant.role}}">{{participant.role}}</td>
-                <td>{{participant.signedDate | date:'medium'}}</td>
+                <td>{{participant.signedDate | date:'dd-MM-yyyy [HH:mm:ss]'}}</td>
                 <td>{{participant.founding}}</td>
                 <td>{{participant.payed}}</td>
                 <td>

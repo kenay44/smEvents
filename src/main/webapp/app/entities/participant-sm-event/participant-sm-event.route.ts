@@ -11,7 +11,7 @@ export const participantRoute: Routes = [
         path: 'participant-sm-event',
         component: ParticipantSmEventComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'smEventsApp.participant.home.title'
         },
         canActivate: [UserRouteAccessService]
@@ -19,7 +19,7 @@ export const participantRoute: Routes = [
         path: 'participant-sm-event/:id',
         component: ParticipantSmEventDetailComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'smEventsApp.participant.home.title'
         },
         canActivate: [UserRouteAccessService]
@@ -31,7 +31,7 @@ export const participantPopupRoute: Routes = [
         path: 'participant-sm-event-new',
         component: ParticipantSmEventPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN'],
             pageTitle: 'smEventsApp.participant.home.title'
         },
         canActivate: [UserRouteAccessService],
@@ -41,7 +41,7 @@ export const participantPopupRoute: Routes = [
         path: 'participant-sm-event/:id/edit',
         component: ParticipantSmEventPopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN', 'ROLE_PARENT'],
             pageTitle: 'smEventsApp.participant.home.title'
         },
         canActivate: [UserRouteAccessService],
@@ -51,7 +51,7 @@ export const participantPopupRoute: Routes = [
         path: 'participant-sm-event/:id/delete',
         component: ParticipantSmEventDeletePopupComponent,
         data: {
-            authorities: ['ROLE_USER'],
+            authorities: ['ROLE_ADMIN', 'ROLE_PARENT'],
             pageTitle: 'smEventsApp.participant.home.title'
         },
         canActivate: [UserRouteAccessService],

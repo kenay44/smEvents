@@ -101,9 +101,9 @@ export class EventSmEventService {
         return copy;
     }
 
-    private convertNgbTimetoJSON(time: any | undefined): string {
+    private convertNgbTimetoJSON(time: any): string {
         if (time) {
-            let result: string;
+            let result = '';
             if (time.hour.toString().length === 1) {
                 result = '0';
             }

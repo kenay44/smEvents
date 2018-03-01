@@ -14,18 +14,21 @@
                     <thead>
                     <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="reset.bind(this)">
                         <th jhiSortBy="title"><span jhiTranslate="smEventsApp.event.title">Title</span> <span class="fa fa-sort"></span></th>
-                        <th jhiSortBy="startDate"><span jhiTranslate="smEventsApp.event.startDate">Start Date</span> <span class="fa fa-sort"></span></th>
-                        <th jhiSortBy="endDate"><span jhiTranslate="smEventsApp.event.endDate">End Date</span> <span class="fa fa-sort"></span></th>
-                        <th jhiSortBy="location"><span jhiTranslate="smEventsApp.event.location">Location</span> <span class="fa fa-sort"></span></th>
+                        <th class="d-none d-md-table-cell" jhiSortBy="startDate"><span jhiTranslate="smEventsApp.event.startDate">Start Date</span> <span class="fa fa-sort"></span></th>
+                        <th class="d-none d-md-table-cell" jhiSortBy="endDate"><span jhiTranslate="smEventsApp.event.endDate">End Date</span> <span class="fa fa-sort"></span></th>
+                        <th class="d-none d-md-table-cell" jhiSortBy="location"><span jhiTranslate="smEventsApp.event.location">Location</span> <span class="fa fa-sort"></span></th>
                         <th></th>
                     </tr>
                     </thead>
                     <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
                     <tr *ngFor="let event of events ;trackBy: trackId">
-                        <td>{{event.title}}</td>
-                        <td>{{event.startDate | date: 'dd-MM-yyyy'}}</td>
-                        <td>{{event.endDate | date: 'dd-MM-yyyy'}}</td>
-                        <td>{{event.location}}</td>
+                        <td class="d-none d-md-table-cell">{{event.title}}</td>
+                        <td class="d-md-none">
+                            <span>{{event.title}} <blockquote>[{{event.startDate | date: 'dd-MM-yyyy'}} - {{event.endDate | date: 'dd-MM-yyyy'}}]</blockquote></span>
+                        </td>
+                        <td class="d-none d-md-table-cell">{{event.startDate | date: 'dd-MM-yyyy'}}</td>
+                        <td class="d-none d-md-table-cell">{{event.endDate | date: 'dd-MM-yyyy'}}</td>
+                        <td class="d-none d-md-table-cell">{{event.location}}</td>
                         <td class="text-right">
                             <div class="btn-group flex-btn-group-container">
                                 <button type="submit"

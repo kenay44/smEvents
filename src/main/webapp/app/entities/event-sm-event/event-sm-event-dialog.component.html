@@ -71,7 +71,7 @@
             </div>
             <div class="col-md-4 form-group">
                 <label class="form-control-label" jhiTranslate="smEventsApp.event.ageFrom" for="field_ageFrom">Age from</label>
-                <input type="number" class="form-control" name="ageFrom" id="field_ageFrom" [jhiMin]="'7'" [jhiMax]="'17'"
+                <input type="number" class="form-control" name="ageFrom" id="field_ageFrom" [jhiMin]="'7'" [jhiMax]="'18'"
                        [(ngModel)]="event.ageFrom" #ageFrom="ngModel" required />
                 <div *ngIf="ageFrom.invalid && (ageFrom.dirty || ageFrom.touched)"
                      class="alert alert-danger">
@@ -85,7 +85,7 @@
             </div>
             <div class="col-md-4 form-group">
                 <label class="form-control-label" jhiTranslate="smEventsApp.event.ageTo" for="field_ageTo">Age to</label>
-                <input type="number" class="form-control" name="ageTo" id="field_ageTo" [jhiMin]="'7'" [jhiMax]="'17'"
+                <input type="number" class="form-control" name="ageTo" id="field_ageTo" [jhiMin]="'7'" [jhiMax]="'18'"
                        [(ngModel)]="event.ageTo" #ageTo="ngModel" required />
                 <div *ngIf="ageTo.invalid && (ageTo.dirty || ageTo.touched)"
                      class="alert alert-danger">

@@ -25,7 +25,7 @@
             <span>:</span>
         </dt>
         <dd>
-            <span>{{person.tShirtSize}}</span>
+            <span jhiTranslate="{{'smEventsApp.TShirtSize.' + person.tShirtSize}}">{{person.tShirtSize}}</span>
         </dd>
         <dt>
             <span jhiTranslate="smEventsApp.person.birthYear">Birth Year</span>
@@ -34,7 +34,7 @@
         <dd>
             <span>{{person.birthYear}}</span>
         </dd>
-        <dt>
+        <dt *ngIf="person.info">
             <span jhiTranslate="smEventsApp.person.info">Info</span>
             <span>:</span>
         </dt>
