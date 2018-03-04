@@ -1,5 +1,6 @@
 package org.sm.events.repository;
 
+import org.sm.events.domain.Event;
 import org.sm.events.domain.Participant;
 import org.sm.events.domain.enumeration.ParticipantStatus;
 import org.sm.events.domain.enumeration.ParticipantType;
@@ -43,4 +44,10 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
                                                               @Param("signed") ParticipantStatus signed);
 
     List<Participant> findAllByEventIdAndStatusOrderBySignedDate(Long id, ParticipantStatus signed);
+
+    Long countByEventAndStatus(Event event, ParticipantStatus status);
+
+    Long countByEvent(Event event);
+
+
 }

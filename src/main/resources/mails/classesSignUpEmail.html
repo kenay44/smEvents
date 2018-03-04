@@ -16,33 +16,33 @@
                     <p th:text="#{email.event.signup.line1(${child})}">
                         Welcome to the event
                     </p>
-                    <p th:text="#{email.cruise.event.signup.line2(${eventName}, ${ageFrom}, ${ageTo}, ${startDate}, ${endDate})}">
+                    <p th:text="#{email.classes.event.signup.line2(${eventName}, ${ageFrom}, ${ageTo})}">
                     </p>
-                    <p style="text-align:justify" th:text="#{email.cruise.event.signup.line3}">
+                    <p style="text-align:justify" th:text="#{email.classes.event.signup.line3}">
                     </p>
-                    <p style="text-align:justify" th:text="#{email.cruise.event.signup.line4(${eventName}, ${commander}, ${phoneContact}, ${emailContact})}">
+                    <p style="text-align:justify" th:text="#{email.classes.event.signup.line4}">
                     </p>
-                    <p th:text="#{email.cruise.event.signup.line7}">
+                    <p style="text-align:justify" th:text="#{email.classes.event.signup.line5}">
                     </p>
-                    <p th:text="#{email.cruise.event.signup.line8}">
+                    <p th:text="#{email.classes.event.signup.line6(${startDate}, ${endDate})}">
                     </p>
-                    <p th:text="#{email.cruise.event.signup.line8a}">
+                    <p th:text="#{email.classes.event.signup.line7(${eventName}, ${commander}, ${phoneContact}, ${emailContact})}">
                     </p>
-                    <p th:text="#{email.cruise.event.signup.line8b}">
+                    <p th:text="#{email.classes.event.signup.line8}">
                     </p>
-                    <p th:text="#{email.cruise.event.signup.line9(${eventName})}">
+                    <p th:text="#{email.classes.event.signup.line9}">
+                    </p>
+                    <p th:text="#{email.classes.event.signup.line10}">
                     </p>
                     <ul class="list-unstiled">
-                        <li style="text-align:justify" th:text="#{email.cruise.event.signup.line10(${dateOfFirstRate})}"></li>
-                        <li th:text="#{email.cruise.event.signup.line11(${dateOfSecondRate})}"></li>
+                        <li style="text-align:justify" th:text="#{email.classes.event.signup.line11(${dateOfFirstRate}, ${dateOfFirstRate})}"></li>
+                        <li th:text="#{email.classes.event.signup.line12(${dateOfSecondRate})}"></li>
                     </ul>
-                    <p style="text-align:justify" th:text="#{email.event.signup.line12}">
+                    <p style="text-align:justify" th:text="#{email.classes.event.signup.line13}">
                     </p>
-                    <p th:text="#{email.event.signup.line13}">
+                    <p th:text="#{email.classes.event.signup.line14}">
                     </p>
-                    <p th:text="#{email.event.signup.line14}">
-                    </p>
-                    <p th:text="#{email.event.signup.line15(${eventName})}">
+                    <p th:text="#{email.classes.event.signup.line15}">
                     </p>
                     <p>
                         <span th:text="#{email.event.signup.sign1}">Regards, </span>

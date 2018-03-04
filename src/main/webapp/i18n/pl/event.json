@@ -23,6 +23,7 @@
             "maxParticipants.validation": {
                 "min": "Limit uczestników nie może być mniejszy niż zero"
             },
+            "signed": "Zapisanych",
             "description": "Opis wydarzenia",
             "hours": "Liczba godzin",
             "commander": "Komandor",
@@ -40,6 +41,7 @@
             "secondRateDate": "Data drugiej raty",
             "signUpStartDate": "Data rozpoczęcia zapisów",
             "signUpStartTime": "Czas",
+            "send.signUpEmail": "Wyślij maile",
             "signing.conflicting.events": "UWAGA!!! Jeżeli zapiszesz to dziecko na ten wyjazd to zostanie ono skreślone z ponższych, pokrywajacych się, z tym wyjazdem obozów:"
         }
     }

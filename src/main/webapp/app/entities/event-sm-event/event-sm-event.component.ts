@@ -5,6 +5,7 @@ import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
 import { EventSmEvent } from './event-sm-event.model';
 import { EventSmEventService } from './event-sm-event.service';
 import { ITEMS_PER_PAGE, Principal, ResponseWrapper } from '../../shared';
+import { ParticipantSmEventService } from '../participant-sm-event';
 
 @Component({
     selector: 'jhi-event-sm-event',
@@ -25,6 +26,7 @@ export class EventSmEventComponent implements OnInit, OnDestroy {
 
     constructor(
         private eventService: EventSmEventService,
+        private participantService: ParticipantSmEventService,
         private jhiAlertService: JhiAlertService,
         private eventManager: JhiEventManager,
         private parseLinks: JhiParseLinks,
@@ -86,6 +88,13 @@ export class EventSmEventComponent implements OnInit, OnDestroy {
             result.push('id');
         }
         return result;
+    }
+
+    notify(eventId: number) {
+        this.participantService.notify(eventId).subscribe(
+            (res: ResponseWrapper) => this.onSuccess(res.json, res.headers),
+            (res: ResponseWrapper) => this.onError(res.json)
+        );
     }
 
     private onSuccess(data, headers) {

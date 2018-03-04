@@ -168,4 +168,11 @@ public class PersonServiceImpl implements PersonService {
             return child;
         return null;
     }
+
+    @Override
+    public Person findParentForFamily(Long familyId) {
+        return personRepository.findFirstByFamilyIdAndPersonType(familyId, PersonType.PARENT);
+    }
+
+
 }

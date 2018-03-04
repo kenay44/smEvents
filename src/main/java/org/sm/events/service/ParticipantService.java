@@ -1,5 +1,6 @@
 package org.sm.events.service;
 
+import org.sm.events.domain.Event;
 import org.sm.events.domain.Participant;
 import org.sm.events.domain.enumeration.ParticipantStatus;
 import org.sm.events.service.dto.EventDTO;
@@ -65,4 +66,8 @@ public interface ParticipantService {
     Participant findOneByPersonIdAndEventIdAndStatus(Long id, Long eventId, ParticipantStatus signed);
 
     List<PersonDTO> validateParticipants(List<PersonDTO> children, Long eventId);
+
+    Long countParticipants(Event event, ParticipantStatus signed);
+
+    void notifyParticipants(Long eventId);
 }

@@ -52,6 +52,10 @@ export class ParticipantSmEventService {
         return this.http.delete(`${this.resourceUrl}/${id}/child`);
     }
 
+    notify(id: number): Observable<Response> {
+        return this.http.get(`${this.resourceUrl}/event/${id}/notify`);
+    }
+
     private convertResponse(res: Response): ResponseWrapper {
         const jsonResponse = res.json();
         const result = [];

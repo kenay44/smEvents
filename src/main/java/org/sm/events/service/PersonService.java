@@ -66,4 +66,6 @@ public interface PersonService {
     PersonDTO findOneWithCurrentUserAsParent(Long id);
 
     PersonDTO updateChild(PersonDTO personDTO);
+
+    Person findParentForFamily(Long familyId);
 }

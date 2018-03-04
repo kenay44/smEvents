@@ -158,6 +158,20 @@ public class ParticipantResource {
     }
 
     /**
+     * GET  /participants/:id : get the "id" participant.
+     *
+     * @param id the id of the participantDTO to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the participantDTO, or with status 404 (Not Found)
+     */
+    @GetMapping("/participants/event/{id}/notify")
+    @Timed
+    public ResponseEntity<Void> notifyParticipants(@PathVariable Long id) {
+        log.debug("REST request to get Participant : {}", id);
+        participantService.notifyParticipants(id);
+        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
+    }
+
+    /**
      * DELETE  /participants/:id : delete the "id" participant.
      *
      * @param id the id of the participantDTO to delete

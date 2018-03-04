@@ -13,7 +13,7 @@
                     <p th:text="#{email.event.signup.line0}">
                         Dear
                     </p>
-                    <p th:text="#{email.event.signup.line1}">
+                    <p th:text="#{email.event.signup.line1(${child})}">
                         Welcome to the event
                     </p>
                     <p th:text="#{email.event.signup.line2(${eventName}, ${ageFrom}, ${ageTo}, ${startDate}, ${endDate})}">
@@ -22,9 +22,7 @@
                     </p>
                     <p th:text="#{email.event.signup.line4}">
                     </p>
-                    <p style="text-align:justify" th:text="#{email.event.signup.line5(${eventName}, ${commander}, ${contact})}">
-                    </p>
-                    <p th:text="#{email.event.signup.line6}">
+                    <p style="text-align:justify" th:text="#{email.event.signup.line5(${eventName}, ${commander}, ${phoneContact}, ${emailContact})}">
                     </p>
                     <p th:text="#{email.event.signup.line7}">
                     </p>

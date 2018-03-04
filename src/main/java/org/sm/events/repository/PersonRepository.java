@@ -27,4 +27,6 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
     List<Person> findAllByFamilyIdAndPersonType(Long familyId, PersonType personType);
 
     Person findOneByUserLogin(String login);
+
+    Person findFirstByFamilyIdAndPersonType(Long familyId, PersonType parent);
 }

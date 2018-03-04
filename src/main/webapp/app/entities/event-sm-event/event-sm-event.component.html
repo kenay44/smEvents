@@ -21,8 +21,7 @@
             <th jhiSortBy="endDate"><span jhiTranslate="smEventsApp.event.endDate">End Date</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="location"><span jhiTranslate="smEventsApp.event.location">Location</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="maxParticipants"><span jhiTranslate="smEventsApp.event.maxParticipants">Max Participants</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="description"><span jhiTranslate="smEventsApp.event.description">Description</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="hours"><span jhiTranslate="smEventsApp.event.hours">Hours</span> <span class="fa fa-sort"></span></th>
+            <th><span jhiTranslate="smEventsApp.event.signed">Description</span> <span class="fa fa-sort"></span></th>
             <th></th>
             </tr>
             </thead>
@@ -33,10 +32,15 @@
                 <td>{{event.endDate | date: 'dd-MM-yyyy'}}</td>
                 <td>{{event.location}}</td>
                 <td>{{event.maxParticipants}}</td>
-                <td>{{event.description}}</td>
-                <td>{{event.hours}}</td>
+                <td>{{event.signedUp}} ({{event.removed}})</td>
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
+                        <button type="button"
+                                (click)="notify(event.id)"
+                                class="btn btn-info btn-sm">
+                            <span class="fa fa-envelope"></span>
+                            <span class="d-none d-md-inline" jhiTranslate="smEventsApp.event.send.signUpEmail">View</span>
+                        </button>
                         <button type="submit"
                                 [routerLink]="['../event-sm-event', event.id ]"
                                 class="btn btn-info btn-sm">

@@ -54,6 +54,10 @@ public class EventDTO implements Serializable {
 
     private LocalTime signUpStartTime;
 
+    private Long signedUp;
+
+    private Long removed;
+
     public Long getId() {
         return id;
     }
@@ -198,6 +202,22 @@ public class EventDTO implements Serializable {
         this.signUpStartTime = signUpStartTime;
     }
 
+    public Long getSignedUp() {
+        return signedUp;
+    }
+
+    public void setSignedUp(Long signedUp) {
+        this.signedUp = signedUp;
+    }
+
+    public Long getRemoved() {
+        return removed;
+    }
+
+    public void setRemoved(Long removed) {
+        this.removed = removed;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -240,6 +260,8 @@ public class EventDTO implements Serializable {
             ", secondRateDate=" + secondRateDate +
             ", signUpStartDate=" + signUpStartDate +
             ", signUpStartTime=" + signUpStartTime +
+            ", signed=" + signedUp +
+            ", removed=" + removed +
             '}';
     }
 }

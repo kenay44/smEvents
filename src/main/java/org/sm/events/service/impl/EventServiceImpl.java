@@ -1,11 +1,13 @@
 package org.sm.events.service.impl;
 
+import com.sun.java.swing.plaf.windows.WindowsTreeUI;
 import org.sm.events.config.ThymeleafConfiguration;
-import org.sm.events.security.SecurityUtils;
+import org.sm.events.domain.enumeration.ParticipantStatus;
 import org.sm.events.service.EventService;
 import org.sm.events.domain.Event;
 import org.sm.events.repository.EventRepository;
 import org.sm.events.service.MailService;
+import org.sm.events.service.ParticipantService;
 import org.sm.events.service.UserService;
 import org.sm.events.service.dto.EventDTO;
 import org.sm.events.service.mapper.EventMapper;
@@ -16,16 +18,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.spring4.SpringTemplateEngine;
-import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
-import org.thymeleaf.templateresolver.ITemplateResolver;
 
-import java.io.File;
-import java.io.FileReader;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 
 /**
@@ -49,13 +45,16 @@ public class EventServiceImpl implements EventService {
 
     private final UserService userService;
 
-    public EventServiceImpl(EventRepository eventRepository, EventMapper eventMapper, ThymeleafConfiguration thymeleafConfiguration, SpringTemplateEngine templateEngine, MailService mailService, UserService userService) {
+    private final ParticipantService participantService;
+
+    public EventServiceImpl(EventRepository eventRepository, EventMapper eventMapper, ThymeleafConfiguration thymeleafConfiguration, SpringTemplateEngine templateEngine, MailService mailService, UserService userService, ParticipantService participantService) {
         this.eventRepository = eventRepository;
         this.eventMapper = eventMapper;
         this.thymeleafConfiguration = thymeleafConfiguration;
         this.templateEngine = templateEngine;
         this.mailService = mailService;
         this.userService = userService;
+        this.participantService = participantService;
     }
 
     /**
@@ -83,7 +82,12 @@ public class EventServiceImpl implements EventService {
     public Page<EventDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Events");
         return eventRepository.findAll(pageable)
-            .map(eventMapper::toDto);
+            .map(event -> {
+                EventDTO dto = eventMapper.toDto(event);
+                dto.setSignedUp(participantService.countParticipants(event, ParticipantStatus.SIGNED));
+                dto.setRemoved(participantService.countParticipants(event, ParticipantStatus.REMOVED));
+                return dto;
+            });
     }
 
     /**
@@ -111,11 +115,22 @@ public class EventServiceImpl implements EventService {
         eventRepository.delete(id);
     }
 
+    /**
+     * Get all the events.
+     *
+     * @param pageable the pagination information
+     * @return the list of entities
+     */
     @Override
+    @Transactional(readOnly = true)
     public Page<EventDTO> findAllPublished(Pageable pageable) {
         LocalDate today = LocalDate.now();
         LocalTime now = LocalTime.now();
-        return eventRepository.finAllPublished(pageable, today, now)
-            .map(eventMapper::toDto);
+        return eventRepository.findAllPublished(pageable, today, now)
+            .map(event -> {
+                EventDTO dto = eventMapper.toDto(event);
+                dto.setSignedUp(participantService.countParticipants(event, ParticipantStatus.SIGNED));
+                return dto;
+            });
     }
 }
