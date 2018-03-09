@@ -4,6 +4,7 @@ import com.codahale.metrics.annotation.Timed;
 import org.sm.events.domain.enumeration.ParticipantStatus;
 import org.sm.events.service.EventService;
 import org.sm.events.service.ParticipantService;
+import org.sm.events.service.dto.EventDTO;
 import org.sm.events.web.rest.errors.BadRequestAlertException;
 import org.sm.events.web.rest.util.HeaderUtil;
 import org.sm.events.web.rest.util.PaginationUtil;
@@ -39,11 +40,8 @@ public class ParticipantResource {
 
     private final ParticipantService participantService;
 
-    private final EventService eventService;
-
-    public ParticipantResource(ParticipantService participantService, EventService eventService) {
+    public ParticipantResource(ParticipantService participantService) {
         this.participantService = participantService;
-        this.eventService = eventService;
     }
 
     /**
@@ -167,8 +165,9 @@ public class ParticipantResource {
     @Timed
     public ResponseEntity<Void> notifyParticipants(@PathVariable Long id) {
         log.debug("REST request to get Participant : {}", id);
-        participantService.notifyParticipants(id);
-        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
+        EventDTO eventDTO = participantService.notifyParticipants(id);
+        return ResponseEntity.ok().headers(HeaderUtil.createCustomMessage(ENTITY_NAME,
+            "notified", eventDTO.getTitle())).build();
     }
 
     /**

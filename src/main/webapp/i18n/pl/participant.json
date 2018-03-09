@@ -28,7 +28,8 @@
                 "PRIMARY": "Zapisany",
                 "RESERVE": "Rezerwowy",
                 "REMOVED": "Skreślony"
-            }
+            },
+            "notified": "Wysłano powiadomienia do wszystkich zapisanych na {{param}}"
         }
     }
 }

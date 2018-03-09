@@ -35,6 +35,10 @@ public final class HeaderUtil {
         return createAlert(APPLICATION_NAME + "." + entityName + ".deleted", param);
     }
 
+    public static HttpHeaders createCustomMessage(String source, String action, String param) {
+        return createAlert(APPLICATION_NAME + "." + source + "." + action, param);
+    }
+
     public static HttpHeaders createFailureAlert(String entityName, String errorKey, String defaultMessage) {
         log.error("Entity processing failed, {}", defaultMessage);
         HttpHeaders headers = new HttpHeaders();
