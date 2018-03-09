@@ -22,6 +22,7 @@
                 <th jhiSortBy="payed"><span jhiTranslate="smEventsApp.participant.payed">Payed</span> <span class="fa fa-sort"></span></th>
                 <th jhiSortBy="personId"><span jhiTranslate="smEventsApp.participant.person">Person</span> <span class="fa fa-sort"></span></th>
                 <th jhiSortBy="eventId"><span jhiTranslate="smEventsApp.participant.event">Event</span> <span class="fa fa-sort"></span></th>
+                <th jhiSortBy="participantType"><span jhiTranslate="smEventsApp.participant.status.name">Status</span></th>
                 <th></th>
             </tr>
             </thead>
@@ -41,6 +42,15 @@
                         <a [routerLink]="['../event-sm-event', participant.eventId  ]" >{{participant.eventName}}</a>
                     </div>
                 </td>
+
+                <td jhiTranslate="{{participant.participantType ?
+                                    'smEventsApp.participant.status.' + participant.participantType :
+                                    'smEventsApp.participant.status.' + participant.status}}"
+                    [ngClass]="{'table-cell': true,
+                                'bg-danger': participant.status==='REMOVED',
+                                'bg-success': participant.participantType==='PRIMARY',
+                                'bg-warning': participant.participantType==='RESERVE'
+                                }">{{participant.status}}, {{participant.participantType}}</td>
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">
                         <button type="submit"

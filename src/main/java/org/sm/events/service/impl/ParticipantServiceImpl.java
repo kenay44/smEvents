@@ -1,25 +1,27 @@
 package org.sm.events.service.impl;
 
-import org.sm.events.domain.Event;
-import org.sm.events.domain.Person;
-import org.sm.events.domain.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.sm.events.domain.*;
 import org.sm.events.domain.enumeration.ParticipantStatus;
 import org.sm.events.domain.enumeration.ParticipantType;
 import org.sm.events.domain.enumeration.PersonType;
 import org.sm.events.domain.enumeration.Task;
 import org.sm.events.repository.EventRepository;
+import org.sm.events.repository.FamilyRepository;
+import org.sm.events.repository.ParticipantRepository;
+import org.sm.events.repository.PersonRepository;
 import org.sm.events.security.AuthoritiesConstants;
 import org.sm.events.security.SecurityUtils;
-import org.sm.events.service.*;
-import org.sm.events.domain.Participant;
-import org.sm.events.repository.ParticipantRepository;
+import org.sm.events.service.MailService;
+import org.sm.events.service.ParticipantService;
+import org.sm.events.service.PersonService;
+import org.sm.events.service.UserService;
 import org.sm.events.service.dto.EventDTO;
 import org.sm.events.service.dto.ParticipantDTO;
 import org.sm.events.service.dto.PersonDTO;
 import org.sm.events.service.mapper.EventMapper;
 import org.sm.events.service.mapper.ParticipantMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
@@ -30,6 +32,7 @@ import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 
@@ -52,16 +55,19 @@ public class ParticipantServiceImpl implements ParticipantService {
 
     private final EventRepository eventRepository;
 
+    private final PersonRepository personRepository;
+
     private final EventMapper eventMapper;
 
     private final MailService mailService;
 
-    public ParticipantServiceImpl(ParticipantRepository participantRepository, ParticipantMapper participantMapper, PersonService personService, UserService userService, EventRepository eventRepository, EventMapper eventMapper, MailService mailService) {
+    public ParticipantServiceImpl(ParticipantRepository participantRepository, ParticipantMapper participantMapper, PersonService personService, UserService userService, EventRepository eventRepository, PersonRepository personRepository, EventMapper eventMapper, MailService mailService) {
         this.participantRepository = participantRepository;
         this.participantMapper = participantMapper;
         this.personService = personService;
         this.userService = userService;
         this.eventRepository = eventRepository;
+        this.personRepository = personRepository;
         this.eventMapper = eventMapper;
         this.mailService = mailService;
     }
@@ -80,16 +86,16 @@ public class ParticipantServiceImpl implements ParticipantService {
     }
 
     @Override
+    @Transactional
     public Long createParticipants(Collection<ParticipantDTO> participantDTOs) {
         log.debug("Request to create Participants : {}", participantDTOs);
         Long eventId = ((ParticipantDTO)participantDTOs.toArray()[0]).getEventId() ;
         EventDTO eventDto = eventMapper.toDto(eventRepository.findOne(eventId));
-        User user = userService.getUserWithAuthorities().get();
         participantDTOs.stream().map(u -> createParticipant(eventDto, u))
             .filter(Objects::nonNull)
             .forEach(participant -> {
                 if(eventDto.getEventType().isSendEmailAutomaticly()) {
-                    mailService.sendEventSignUpEmail(user, participant);
+                    notifyParticipant(participant, mailService::sendEventSignUpEmail);
                 }
             });
         return eventId;
@@ -217,7 +223,7 @@ public class ParticipantServiceImpl implements ParticipantService {
     public void removeChildFromEvent(Long participantId) {
         Participant participant = participantRepository.findOne(participantId);
         ParticipantType type = participant.getParticipantType();
-        if(personService.isCurrentUserParentOf(participant)) {
+        if(personService.isCurrentUserParentOf(participant) || SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ADMIN)) {
             participant.setStatus(ParticipantStatus.REMOVED);
             participant.setParticipantType(null);
             participant.setStatusChanged(ZonedDateTime.now());
@@ -239,7 +245,8 @@ public class ParticipantServiceImpl implements ParticipantService {
             log.debug("Moving participant [{}]: {} from reserve to primary", participant.getId(),
                 participant.getPerson().getFirstName() + " " + participant.getPerson().getLastName());
             participant.setParticipantType(ParticipantType.PRIMARY);
-            participantRepository.save(participant);
+            participant = participantRepository.save(participant);
+            notifyParticipant(participant, mailService::sendEventSignUpEmail);
         }
     }
 
@@ -269,12 +276,23 @@ public class ParticipantServiceImpl implements ParticipantService {
 
     @Override
     @Async
-    @Transactional(readOnly = true)
     public void notifyParticipants(Long eventId) {
         List<Participant> participants = participantRepository.findAllByEventIdAndStatusOrderBySignedDate(eventId, ParticipantStatus.SIGNED);
         participants.parallelStream().forEach(participant -> {
-            Person parent = personService.findParentForFamily(participant.getPerson().getFamily().getId());
-            mailService.sendEventSignUpEmail(parent.getUser(), participant);
+            notifyParticipant(participant, mailService::sendEventSignUpEmail);
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         });
+    }
+
+    @Async
+    @Transactional
+    public void notifyParticipant(Participant participant, BiConsumer<User, Participant> sender) {
+        Person child = personRepository.findOne(participant.getPerson().getId());
+        Person parent = personService.findParentForFamily(child.getFamily().getId());
+        sender.accept(parent.getUser(), participant);
     }
 }

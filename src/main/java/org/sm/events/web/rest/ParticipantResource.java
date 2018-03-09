@@ -181,7 +181,7 @@ public class ParticipantResource {
     @Timed
     public ResponseEntity<Void> deleteParticipant(@PathVariable Long id) {
         log.debug("REST request to delete Participant : {}", id);
-        participantService.delete(id);
+        participantService.removeChildFromEvent(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 

@@ -10,6 +10,7 @@ import org.apache.commons.lang3.CharEncoding;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sm.events.domain.enumeration.ParticipantStatus;
+import org.sm.events.domain.enumeration.ParticipantType;
 import org.sm.events.repository.ParticipantRepository;
 import org.springframework.context.MessageSource;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -37,6 +38,8 @@ import java.util.Optional;
 public class MailService {
 
     private final Logger log = LoggerFactory.getLogger(MailService.class);
+
+    private final String RESERVE_TEMPLATE = "reserveSignUpEmail";
 
     private static final String USER = "user";
 
@@ -101,9 +104,12 @@ public class MailService {
     @Transactional
     public void sendEventSignUpEmail(User user, Participant participant) {
         log.debug("Sending sign up email to {}", user.getEmail());
-        participant = participantRepository.findOne(participant.getId());
         Context context = setupSignUpEmailContext(user, participant);
-        sendEmailfromTemplateWithContext(user, context, participant.getEvent().getEventType().getThymeleafTemplate(), participant.getEvent().getTitle());
+        if(ParticipantType.PRIMARY.equals(participant.getParticipantType())) {
+            sendEmailfromTemplateWithContext(user, context, participant.getEvent().getEventType().getThymeleafTemplate(), participant.getEvent().getTitle());
+        } else {
+            sendEmailfromTemplateWithContext(user, context, RESERVE_TEMPLATE, participant.getEvent().getTitle());
+        }
     }
 
     private void sendEmailfromTemplateWithContext(User user, Context context, String templateName, String subject) {

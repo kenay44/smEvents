@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title th:text="#{email.event.signup.title}">Event sign up</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}" />
+    </head>
+    <body>
+        <table style="border:none;border-collapse:collapse;border-spacing:0;max-width:700px;width:100%">
+            <tbody>
+            <tr>
+                <td>
+                    <p th:text="#{email.event.signup.line0}">
+                        Dear
+                    </p>
+                    <p th:text="#{email.reserve.event.signup.line1(${eventName})}">art
+                        Welcome to the event
+                    </p>
+                    <p th:text="#{email.reserve.event.signup.line2}">
+                    </p>
+                    <p>
+                        <span th:text="#{email.event.signup.sign1}">Regards, </span>
+                        <br/>
+                        <span th:text="#{email.event.signup.sign2}">Zarząd KŻ Santa-Maria</span>
+                        <hr/>
+                        <span th:text="#{email.event.signup.sign3}"></span><br/>
+                        <span th:text="#{email.event.signup.sign4}"></span><br/>
+                        <span th:text="#{email.event.signup.sign5}"></span><br/>
+                        <span th:text="#{email.event.signup.sign6}"></span><br/>
+                        <a th:href="@{|#{email.event.signup.sign7}|}"
+                           th:text="@{|#{email.event.signup.sign7}|}"></a>
+                    </p>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </body>
+</html>

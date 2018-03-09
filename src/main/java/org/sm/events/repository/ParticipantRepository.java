@@ -4,6 +4,7 @@ import org.sm.events.domain.Event;
 import org.sm.events.domain.Participant;
 import org.sm.events.domain.enumeration.ParticipantStatus;
 import org.sm.events.domain.enumeration.ParticipantType;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -20,8 +21,6 @@ import java.util.List;
 @Repository
 public interface ParticipantRepository extends JpaRepository<Participant, Long> {
 
-    List<Participant> findAllByEventId(Long id);
-
     List<Participant> findAllByEventIdAndStatusOrderBySignedDateAscIdAsc(Long eventId, ParticipantStatus status);
 
     Participant findTopByEventIdAndStatusAndParticipantTypeOrderBySignedDateAscIdAsc(Long eventId, ParticipantStatus status, ParticipantType type);
@@ -29,8 +28,6 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
     Participant findOneByPersonIdAndEventIdAndStatus(Long id, Long eventId, ParticipantStatus status);
 
     Participant findOneByPersonIdAndEventId(Long id, Long eventId);
-
-    Participant findAllByPersonId(Long id);
 
     @Query("Select participant from Participant participant inner join participant.event e " +
         "where e.id <> :eventId and participant.person.id = :personId " +
@@ -43,11 +40,10 @@ public interface ParticipantRepository extends JpaRepository<Participant, Long> 
                                                               @Param("participantType") ParticipantType participantType,
                                                               @Param("signed") ParticipantStatus signed);
 
+    @EntityGraph(value = "Participant.detail", type = EntityGraph.EntityGraphType.FETCH, attributePaths = "person.family")
     List<Participant> findAllByEventIdAndStatusOrderBySignedDate(Long id, ParticipantStatus signed);
 
     Long countByEventAndStatus(Event event, ParticipantStatus status);
 
     Long countByEvent(Event event);
-
-
 }

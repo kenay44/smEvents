@@ -22,7 +22,13 @@
             "founding": "Dofinansowanie",
             "payed": "Zapłacone",
             "person": "Osoba",
-            "event": "Wydarzenie"
+            "event": "Wydarzenie",
+            "status": {
+                "name": "Status",
+                "PRIMARY": "Zapisany",
+                "RESERVE": "Rezerwowy",
+                "REMOVED": "Skreślony"
+            }
         }
     }
 }
