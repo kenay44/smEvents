@@ -1,32 +1,68 @@
-<h1 *ngIf="event">{{event.title}}</h1>
-<div *ngIf="children.length">
-    <h3 jhiTranslate="smEventsApp.event.signing.children"></h3>
-    <ul class="list-group">
-        <li *ngFor="let child of children; trackBy: trackId" class="input-group mb-1">
-            <div class="input-group-prepend">
-                <div class="input-group-text">
-                    <input type="checkbox" aria-label="Checkbox for following text" (click)="select(child.id)">
-                </div>
-            </div>
-            <div [ngClass]="{'form-control': true} ">
-                <div>{{child.firstName}} {{child.lastName}}</div>
-                <div *ngIf="child.otherEvents" class="alert-danger">
-                    <div class="small" jhiTranslate="smEventsApp.event.signing.conflicting.events">Conflicting events</div>
-                    <div *ngFor="let event of child.otherEvents"><b>{{event}}</b></div>
-                </div>
-            </div>
-        </li>
-    </ul>
-    <button type="button" class="btn btn-info" (click)="signInSelected()">Zapisz zaznaczonych</button>
+<div *ngIf="event.description" class="row">
+    <div class="col-md-7 block">
+        <div class="alert alert-info">
+            <h3 *ngIf="event">{{event.title}}</h3>
+            <hr>
+            <p class="text-justify" *ngIf="event">{{event.description}}</p>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <div *ngIf="children.length" class="alert alert-info">
+            <h3 jhiTranslate="smEventsApp.event.signing.children"></h3>
+            <hr>
+            <ul class="list-group">
+                <li *ngFor="let child of children; trackBy: trackId" class="input-group mb-1">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <input type="checkbox" aria-label="Checkbox for following text" (click)="select(child.id)">
+                        </div>
+                    </div>
+                    <div [ngClass]="{'form-control': true} ">
+                        <div>{{child.firstName}} {{child.lastName}}</div>
+                        <div *ngIf="child.otherEvents" class="alert-danger">
+                            <div class="small" jhiTranslate="smEventsApp.event.signing.conflicting.events">Conflicting events</div>
+                            <div *ngFor="let event of child.otherEvents"><b>{{event}}</b></div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <button type="button" class="btn btn-info" (click)="signInSelected()">Zapisz zaznaczonych</button>
+        </div>
+    </div>
 </div>
-<h1 jhiTranslate="smEventsApp.event.participants">Participants</h1>
+<div *ngIf="!event.description">
+    <div class="alert alert-info">
+        <h3 *ngIf="event">{{event.title}}</h3>
+    </div>
+    <div *ngIf="children.length" class="alert alert-info">
+        <h3 jhiTranslate="smEventsApp.event.signing.children"></h3>
+        <hr>
+        <ul class="list-group">
+            <li *ngFor="let child of children; trackBy: trackId" class="input-group mb-1">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        <input type="checkbox" aria-label="Checkbox for following text" (click)="select(child.id)">
+                    </div>
+                </div>
+                <div [ngClass]="{'form-control': true} ">
+                    <div>{{child.firstName}} {{child.lastName}}</div>
+                    <div *ngIf="child.otherEvents" class="alert-danger">
+                        <div class="small" jhiTranslate="smEventsApp.event.signing.conflicting.events">Conflicting events</div>
+                        <div *ngFor="let event of child.otherEvents"><b>{{event}}</b></div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <button type="button" class="btn btn-info" (click)="signInSelected()">Zapisz zaznaczonych</button>
+    </div>
+</div>
 <div class="table-responsive" *ngIf="participants.length">
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>#</th>
-                <th jhiTranslate="smEventsApp.participant.detail.title">Participant</th>
-                <th></th>
+                <th width="20px">#</th>
+                <th style="min-width: 200px" width="200px" jhiTranslate="smEventsApp.participant.detail.title">Participant</th>
+                <th width="100%"></th>
             </tr>
         </thead>
         <tbody>

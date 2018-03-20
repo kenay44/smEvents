@@ -12,7 +12,6 @@ import {Account, ITEMS_PER_PAGE, LoginModalService, Principal, ResponseWrapper} 
     styleUrls: [
         'home.css'
     ]
-
 })
 export class HomeComponent implements OnInit {
     account: Account;
@@ -27,12 +26,12 @@ export class HomeComponent implements OnInit {
     reverse: any;
 
     constructor(
-        private principal: Principal,
-        private loginModalService: LoginModalService,
-        private eventManager: JhiEventManager,
-        private jhiAlertService: JhiAlertService,
-        private eventSmEventService: EventSmEventService,
-        private parseLinks: JhiParseLinks
+        protected principal: Principal,
+        protected loginModalService: LoginModalService,
+        protected eventManager: JhiEventManager,
+        protected jhiAlertService: JhiAlertService,
+        protected eventSmEventService: EventSmEventService,
+        protected parseLinks: JhiParseLinks
     ) {
         this.events = [];
         this.itemsPerPage = ITEMS_PER_PAGE;
@@ -80,7 +79,7 @@ export class HomeComponent implements OnInit {
         this.modalRef = this.loginModalService.open();
     }
 
-    private onSuccess(data, headers) {
+    protected onSuccess(data, headers) {
         this.links = this.parseLinks.parse(headers.get('link'));
         this.totalItems = headers.get('X-Total-Count');
         for (let i = 0; i < data.length; i++) {
@@ -88,7 +87,7 @@ export class HomeComponent implements OnInit {
         }
     }
 
-    private onError(error) {
+    protected onError(error) {
         this.jhiAlertService.error(error.message, null, null);
     }
 
@@ -109,5 +108,38 @@ export class HomeComponent implements OnInit {
             result.push('id');
         }
         return result;
+    }
+}
+
+@Component({
+    selector: 'jhi-workshops',
+    templateUrl: './workshop.component.html',
+    styleUrls: [
+        'home.css'
+    ]
+})
+export class WorkshopComponent extends HomeComponent {
+
+    constructor(
+        protected principal: Principal,
+        protected loginModalService: LoginModalService,
+        protected eventManager: JhiEventManager,
+        protected jhiAlertService: JhiAlertService,
+        protected eventSmEventService: EventSmEventService,
+        protected parseLinks: JhiParseLinks
+    ) {
+        super(principal, loginModalService, eventManager, jhiAlertService, eventSmEventService, parseLinks);
+    }
+
+    loadAll() {
+        this.eventSmEventService.queryPublishedWorkshops({
+            page: this.page,
+            size: this.itemsPerPage,
+            sort: this.sort()
+        })
+        .subscribe(
+            (res: ResponseWrapper) => this.onSuccess(res.json, res.headers),
+            (res: ResponseWrapper) => this.onError(res.json)
+        );
     }
 }

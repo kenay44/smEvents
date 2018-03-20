@@ -1,6 +1,7 @@
 package org.sm.events.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import org.sm.events.domain.Event;
 import org.sm.events.domain.enumeration.ParticipantStatus;
 import org.sm.events.service.EventService;
 import org.sm.events.service.ParticipantService;
@@ -40,8 +41,11 @@ public class ParticipantResource {
 
     private final ParticipantService participantService;
 
-    public ParticipantResource(ParticipantService participantService) {
+    private final EventService eventService;
+
+    public ParticipantResource(ParticipantService participantService, EventService eventService) {
         this.participantService = participantService;
+        this.eventService = eventService;
     }
 
     /**
@@ -158,16 +162,17 @@ public class ParticipantResource {
     /**
      * GET  /participants/:id : get the "id" participant.
      *
-     * @param id the id of the participantDTO to retrieve
+     * @param eventId the id of the participantDTO to retrieve
      * @return the ResponseEntity with status 200 (OK) and with body the participantDTO, or with status 404 (Not Found)
      */
-    @GetMapping("/participants/event/{id}/notify")
+    @GetMapping("/participants/event/{eventId}/notify")
     @Timed
-    public ResponseEntity<Void> notifyParticipants(@PathVariable Long id) {
-        log.debug("REST request to get Participant : {}", id);
-        EventDTO eventDTO = participantService.notifyParticipants(id);
+    public ResponseEntity<Void> notifyParticipants(@PathVariable Long eventId) {
+        log.debug("REST request to notify participants form event : {}", eventId);
+        participantService.notifyParticipants(eventId);
+        EventDTO eventDto = eventService.findOne(eventId);
         return ResponseEntity.ok().headers(HeaderUtil.createCustomMessage(ENTITY_NAME,
-            "notified", eventDTO.getTitle())).build();
+            "notified", eventDto.getTitle())).build();
     }
 
     /**

@@ -46,4 +46,6 @@ public interface EventService {
     void delete(Long id);
 
     Page<EventDTO> findAllPublished(Pageable pageable);
+
+    Page<EventDTO> findAllPublishedWorkshops(Pageable pageable);
 }

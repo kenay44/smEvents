@@ -2,6 +2,7 @@ package org.sm.events.service.impl;
 
 import com.sun.java.swing.plaf.windows.WindowsTreeUI;
 import org.sm.events.config.ThymeleafConfiguration;
+import org.sm.events.domain.enumeration.EventType;
 import org.sm.events.domain.enumeration.ParticipantStatus;
 import org.sm.events.service.EventService;
 import org.sm.events.domain.Event;
@@ -126,7 +127,21 @@ public class EventServiceImpl implements EventService {
     public Page<EventDTO> findAllPublished(Pageable pageable) {
         LocalDate today = LocalDate.now();
         LocalTime now = LocalTime.now();
-        return eventRepository.findAllPublished(pageable, today, now)
+        return eventRepository.findAllPublishedNotOfType(pageable, today, now, EventType.BOSUN_WORKS)
+            .map(event -> {
+                EventDTO dto = eventMapper.toDto(event);
+                dto.setSignedUp(participantService.countParticipants(event, ParticipantStatus.SIGNED));
+                return dto;
+            });
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<EventDTO> findAllPublishedWorkshops(Pageable pageable) {
+        LocalDate today = LocalDate.now();
+        LocalTime now = LocalTime.now();
+
+        return eventRepository.findAllPublishedOfType(pageable, today, now, EventType.BOSUN_WORKS)
             .map(event -> {
                 EventDTO dto = eventMapper.toDto(event);
                 dto.setSignedUp(participantService.countParticipants(event, ParticipantStatus.SIGNED));

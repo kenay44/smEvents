@@ -115,6 +115,21 @@ public class EventResource {
     }
 
     /**
+     * GET  /public/events/workshops : get all published events of type workshop.
+     *
+     * @param pageable the pagination information
+     * @return the ResponseEntity with status 200 (OK) and the list of events in body
+     */
+    @GetMapping("/public/events/workshops")
+    @Timed
+    public ResponseEntity<List<EventDTO>> getAllPublishedWorkshops(Pageable pageable) {
+        log.debug("REST request to get a page of published Workshops");
+        Page<EventDTO> page = eventService.findAllPublishedWorkshops(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/public/events/workshops");
+        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+    }
+
+    /**
      * GET  /events/:id : get the "id" event.
      *
      * @param id the id of the eventDTO to retrieve

@@ -105,6 +105,7 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
+    @Transactional
     public PersonDTO createChild(PersonDTO personDTO) throws BadRequestAlertException {
         if(!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.PARENT))
             throw new BadRequestAlertException("Current user is not a parent.", "person", "");

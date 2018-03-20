@@ -29,7 +29,7 @@
                 "RESERVE": "Rezerwowy",
                 "REMOVED": "Skreślony"
             },
-            "notified": "Wysłano powiadomienia do wszystkich zapisanych na {{param}}"
+            "notified": "Rozpoczęto wysyłanie powiadomień do wszystkich zapisanych na {{param}}"
         }
     }
 }

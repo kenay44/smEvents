@@ -12,6 +12,7 @@ import { ResponseWrapper, createRequestOption } from '../../shared';
 export class EventSmEventService {
 
     private resourceUrl =  SERVER_API_URL + 'api/events';
+    private publicResourceUrl =  SERVER_API_URL + 'api/public/events';
 
     constructor(private http: Http, private dateUtils: JhiDateUtils) { }
 
@@ -117,9 +118,11 @@ export class EventSmEventService {
         }
         return undefined;
     }
-    /*
-    private convertTimePart(time, part: string): string {
-        time.
-        return
-    }*/
+
+    queryPublishedWorkshops(req?: any): Observable<ResponseWrapper> {
+        const options = createRequestOption(req);
+        return this.http.get(`${this.publicResourceUrl}/workshops`, options)
+            .map((res: Response) => this.convertResponse(res));
+
+    }
 }

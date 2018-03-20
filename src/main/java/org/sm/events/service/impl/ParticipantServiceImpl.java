@@ -276,10 +276,9 @@ public class ParticipantServiceImpl implements ParticipantService {
 
     @Override
     @Async
-    public EventDTO notifyParticipants(Long eventId) {
-        Event event = eventRepository.findOne(eventId);
+    public void notifyParticipants(Long eventId) {
         List<Participant> participants = participantRepository.findAllByEventIdAndStatusOrderBySignedDate(eventId, ParticipantStatus.SIGNED);
-        participants.parallelStream().forEach(participant -> {
+        participants.stream().forEach(participant -> {
             notifyParticipant(participant, mailService::sendEventSignUpEmail);
             try {
                 Thread.sleep(10000);
@@ -287,7 +286,7 @@ public class ParticipantServiceImpl implements ParticipantService {
                 e.printStackTrace();
             }
         });
-        return eventMapper.toDto(event);
+
     }
 
     @Async

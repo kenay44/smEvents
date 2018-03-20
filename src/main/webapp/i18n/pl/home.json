@@ -2,6 +2,7 @@
     "home": {
         "title": "Obozy letnie 2018 KŻ Santa-Maria",
         "subtitle": "Imprezy:",
+        "workshops.title": "Prace bosmańskie",
         "logged": {
             "message": "Jesteś zalogowany jako użytkownik \"{{username}}\"."
         },

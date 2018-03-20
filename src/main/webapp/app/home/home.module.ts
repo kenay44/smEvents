@@ -3,15 +3,21 @@ import { RouterModule } from '@angular/router';
 
 import { SmEventsSharedModule } from '../shared';
 
-import { HOME_ROUTE, HomeComponent } from './';
+import { homeRoutes, HomeComponent } from './';
+import {WorkshopComponent} from './home.component'
+
+const ENTITY_STATES = [
+    ...homeRoutes
+];
 
 @NgModule({
     imports: [
         SmEventsSharedModule,
-        RouterModule.forChild([ HOME_ROUTE ])
+        RouterModule.forChild(ENTITY_STATES)
     ],
     declarations: [
         HomeComponent,
+        WorkshopComponent
     ],
     entryComponents: [
     ],

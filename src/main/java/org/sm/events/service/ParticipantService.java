@@ -69,5 +69,5 @@ public interface ParticipantService {
 
     Long countParticipants(Event event, ParticipantStatus signed);
 
-    EventDTO notifyParticipants(Long eventId);
+    void notifyParticipants(Long eventId);
 }

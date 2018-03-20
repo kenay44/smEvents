@@ -1,5 +1,6 @@
 package org.sm.events.web.rest;
 
+import org.mockito.Mock;
 import org.sm.events.SmEventsApp;
 
 import org.sm.events.domain.Participant;
@@ -34,7 +35,6 @@ import java.time.ZoneOffset;
 import java.time.ZoneId;
 import java.util.List;
 
-import static org.sm.events.web.rest.TestUtil.sameInstant;
 import static org.sm.events.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -78,9 +78,6 @@ public class ParticipantResourceIntTest {
     private ParticipantService participantService;
 
     @Autowired
-    private EventService eventService;
-
-    @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
 
     @Autowired
@@ -95,6 +92,9 @@ public class ParticipantResourceIntTest {
     private MockMvc restParticipantMockMvc;
 
     private Participant participant;
+
+    @Mock
+    private EventService eventService;
 
     @Before
     public void setup() {
