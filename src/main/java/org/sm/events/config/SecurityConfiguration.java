@@ -102,6 +102,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers(HttpMethod.GET, "/api/events/published/**").permitAll()
             .antMatchers("/api/account").authenticated()
             .antMatchers("/api/account/family").authenticated()
+            .antMatchers(HttpMethod.GET, "/api/participants/event/*/csv")
+                .hasAnyAuthority(AuthoritiesConstants.ADMIN, AuthoritiesConstants.CADRE)
             .antMatchers(HttpMethod.GET, "/api/participants/event/**").authenticated()
             .antMatchers(HttpMethod.GET, "/api/participants/event/*/notify").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers(HttpMethod.GET, "/api/participants/*").authenticated()

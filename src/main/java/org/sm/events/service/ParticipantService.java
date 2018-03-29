@@ -9,8 +9,10 @@ import org.sm.events.service.dto.PersonDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Service Interface for managing Participant.
@@ -70,4 +72,6 @@ public interface ParticipantService {
     Long countParticipants(Event event, ParticipantStatus signed);
 
     void notifyParticipants(Long eventId);
+
+    Optional<String> formParticipantsCsv(Long eventId) throws UnsupportedEncodingException;
 }

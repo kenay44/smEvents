@@ -97,6 +97,10 @@ export class EventSmEventComponent implements OnInit, OnDestroy {
         );
     }
 
+    downloadCsv(eventId: number) {
+        this.eventService.saveFile(eventId);
+    }
+
     private onSuccess(data, headers) {
         this.links = this.parseLinks.parse(headers.get('link'));
         this.totalItems = headers.get('X-Total-Count');

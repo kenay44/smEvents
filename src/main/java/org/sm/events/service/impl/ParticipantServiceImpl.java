@@ -2,13 +2,15 @@ package org.sm.events.service.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sm.events.domain.*;
+import org.sm.events.domain.Event;
+import org.sm.events.domain.Participant;
+import org.sm.events.domain.Person;
+import org.sm.events.domain.User;
 import org.sm.events.domain.enumeration.ParticipantStatus;
 import org.sm.events.domain.enumeration.ParticipantType;
 import org.sm.events.domain.enumeration.PersonType;
 import org.sm.events.domain.enumeration.Task;
 import org.sm.events.repository.EventRepository;
-import org.sm.events.repository.FamilyRepository;
 import org.sm.events.repository.ParticipantRepository;
 import org.sm.events.repository.PersonRepository;
 import org.sm.events.security.AuthoritiesConstants;
@@ -28,10 +30,9 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.UnsupportedEncodingException;
 import java.time.ZonedDateTime;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
@@ -295,5 +296,36 @@ public class ParticipantServiceImpl implements ParticipantService {
         Person child = personRepository.findOne(participant.getPerson().getId());
         Person parent = personService.findParentForFamily(child.getFamily().getId());
         sender.accept(parent.getUser(), participant);
+    }
+
+    @Override
+    public Optional<String> formParticipantsCsv(Long eventId) throws UnsupportedEncodingException {
+        List<Participant> participants = participantRepository.findAllByEventIdAndStatusOrderBySignedDate(eventId, ParticipantStatus.SIGNED);
+        StringBuilder csv = new StringBuilder();
+        csv.append(getHeaders());
+        for(Participant participant : participants) {
+            csv.append(getCsvLine(participant));
+            csv.append("\n");
+        }
+        return Optional.of(csv.toString());
+    }
+
+    private String getHeaders() {
+        return "Imię;Nazwisko dziecka;Rozmiar koszulki;Imię;Nazwisko rodzica;Email;Telefon;Obóz;Uwagi\n";
+    }
+
+    private CharSequence getCsvLine(Participant participant) {
+        Person parent = personRepository.findFirstByFamilyIdAndPersonType(participant.getPerson().getFamily().getId(), PersonType.PARENT);
+        List<String> values = new ArrayList<>();
+        values.add(participant.getPerson().getFirstName());
+        values.add(participant.getPerson().getLastName());
+        values.add(participant.getPerson().gettShirtSize().toString());
+        values.add(parent.getFirstName());
+        values.add(parent.getLastName());
+        values.add(parent.getUser().getEmail());
+        values.add(parent.getPhone());
+        values.add(participant.getEvent().getTitle());
+        values.add(Optional.ofNullable(participant.getPerson().getInfo()).orElse(""));
+        return new StringBuilder(String.join(";", values));
     }
 }

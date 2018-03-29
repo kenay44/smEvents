@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Http, Response, Headers, RequestOptions, ResponseContentType } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { SERVER_API_URL } from '../../app.constants';
+import { saveAs } from 'file-saver/FileSaver';
 
 import { JhiDateUtils } from 'ng-jhipster';
 
@@ -124,5 +125,23 @@ export class EventSmEventService {
         return this.http.get(`${this.publicResourceUrl}/workshops`, options)
             .map((res: Response) => this.convertResponse(res));
 
+    }
+
+    saveFile(eventId: number) {
+        const headers = new Headers();
+        headers.append('Accept', 'text/plain');
+        this.http.get(`/api/participants/event/${eventId}/csv`, {headers})
+            .toPromise()
+            .then((response) => {
+                return this.saveToFileSystem(response);
+            });
+    }
+
+    private saveToFileSystem(response) {
+        const contentDispositionHeader: string = response.headers.get('Content-Disposition');
+        const parts: string[] = contentDispositionHeader.split(';');
+        const filename = parts[1].split('=')[1];
+        const blob = new Blob([response._body], { type: 'text/plain;charset=utf-8' });
+        saveAs(blob, filename);
     }
 }

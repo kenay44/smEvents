@@ -42,6 +42,7 @@
             "signUpStartDate": "Data rozpoczęcia zapisów",
             "signUpStartTime": "Czas",
             "send.signUpEmail": "Wyślij maile",
+            "csv.download": "Pobierz csv",
             "signing.conflicting.events": "UWAGA!!! Jeżeli zapiszesz to dziecko na ten wyjazd to zostanie ono skreślone z ponższych, pokrywajacych się, z tym wyjazdem obozów:"
         }
     }

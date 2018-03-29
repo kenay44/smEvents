@@ -1,30 +1,31 @@
 package org.sm.events.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import org.sm.events.domain.Event;
+import io.github.jhipster.web.util.ResponseUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sm.events.domain.enumeration.ParticipantStatus;
 import org.sm.events.service.EventService;
 import org.sm.events.service.ParticipantService;
 import org.sm.events.service.dto.EventDTO;
+import org.sm.events.service.dto.ParticipantDTO;
 import org.sm.events.web.rest.errors.BadRequestAlertException;
 import org.sm.events.web.rest.util.HeaderUtil;
 import org.sm.events.web.rest.util.PaginationUtil;
-import org.sm.events.service.dto.ParticipantDTO;
-import io.github.jhipster.web.util.ResponseUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -173,6 +174,20 @@ public class ParticipantResource {
         EventDTO eventDto = eventService.findOne(eventId);
         return ResponseEntity.ok().headers(HeaderUtil.createCustomMessage(ENTITY_NAME,
             "notified", eventDto.getTitle())).build();
+    }
+
+    @GetMapping(
+        value = "/participants/event/{eventId}/csv",
+        produces = MediaType.TEXT_PLAIN_VALUE
+    )
+    @Timed
+    public ResponseEntity downloadCsv(@PathVariable Long eventId) throws UnsupportedEncodingException {
+        log.debug("REST request to download CSV for the event {}", eventId);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setAccessControlExposeHeaders(Collections.singletonList("Content-Disposition"));
+        headers.set("Content-Disposition", "attachment; filename=" + "event_" + eventId + "_export.csv");
+        return new ResponseEntity<>(participantService.formParticipantsCsv(eventId).orElse(null), headers, HttpStatus.OK);
     }
 
     /**
